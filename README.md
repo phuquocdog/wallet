@@ -1,7 +1,7 @@
 # Phu Quoc Dog Wallet 👋
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000)
 [![Documentation](https://img.shields.io/badge/documentation-yes-brightgreen.svg)](https://phuquocdoge.com)
-[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)](LICENSE)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
 > Phu Quoc Dog wallet is aiming to provide a more convenient entrance of the polkadot network for all the users of Phu-quoc-dog/Polkadot/Substrate-based-blockchains. Join the moon mission. 🐶
 
