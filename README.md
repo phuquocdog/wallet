@@ -9,6 +9,18 @@
 
 ### ✨ [Demo](https://phuquoc.dog)
 
+### Version  to build app
+
+```sh
+$ node -v
+v14.17.4
+$ yarn -v
+1.22.11
+$ npm -v
+6.14.14
+
+```
+
 ### Running your React Native application
 First, you will need to start Metro, the JavaScript bundler that ships with React Native. Metro "takes in an entry file and various options, and returns a single JavaScript file that includes all your code and its dependencies."—Metro Docs
 
