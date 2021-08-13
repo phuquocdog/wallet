@@ -52,6 +52,9 @@ Feel free to check [issues page](https://github.com/phuquocdog/wallet/issues). Y
 
 Give a ⭐️ if this project helped you!
 
+## Project inspire and fork
+
+https://github.com/BlueWallet/BlueWallet
 
 ## 📝 License
 

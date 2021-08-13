@@ -4,16 +4,19 @@
  *
  * @format
  */
+const path = require('path');
+const exclusionList = require('metro-config/src/defaults/exclusionList');
 
 module.exports = {
-   // remap node packages to react-native packages
   resolver: {
+    blockList: exclusionList([
+      // This stops "react-native run-windows" from causing the metro server to crash if its already running
+      new RegExp(`${path.resolve(__dirname, 'windows').replace(/[/\\]/g, '/')}.*`),
+      // This prevents "react-native run-windows" from hitting: EBUSY: resource busy or locked, open msbuild.ProjectImports.zip
+      /.*\.ProjectImports\.zip/,
+    ]),
     extraNodeModules: {
-      crypto: require.resolve('react-native-crypto'),
-      os: require.resolve('os-browserify'),
-      process: require.resolve('process'),
-      stream: require.resolve('stream-http'),
-      vm: require.resolve('vm-browserify')
+      crypto: require.resolve('react-native-crypto')
     }
   },
   transformer: {
