@@ -126,24 +126,40 @@ const WalletsAdd = () => {
   };
 
   const createWallet = async () => {
-    const phrase = mnemonicGenerate(12);
-    const { address } = keyring.createFromUri(phrase);
+    setIsLoading(true);
 
-    const w = {
-      'chain': 'phuquocdog',
-      'address' : address,
-      'secret': phrase,
-      'preferredBalanceUnit': 'PQD',
-      'unconfirmed_balance': 0,
-      'use_with_hardware_wallet': false
+    let w;
+    w = new HDSegwitBech32Wallet();
+        w.setLabel(label || loc.wallets.details_title);
+
+    await w.generate();
+            addWallet(w);
+        await saveToDisk();
+        if (w.type === HDSegwitP2SHWallet.type || w.type === HDSegwitBech32Wallet.type) {
+      navigate('PleaseBackup', {
+        walletID: w.getID(),
+      });
+    } else {
+      goBack();
     }
-    AsyncStorage.setItem(address.toString(), JSON.stringify(w));
-    navigate('PleaseBackup', {
-        walletID: address,
-    });
-    //ReactNativeHapticFeedback.trigger('notificationSuccess', { ignoreAndroidSystemSettings: false });
+    // const phrase = mnemonicGenerate(12);
+    // const { address } = keyring.createFromUri(phrase);
+
+    // const w = {
+    //   'chain': 'phuquocdog',
+    //   'address' : address,
+    //   'secret': phrase,
+    //   'preferredBalanceUnit': 'PQD',
+    //   'unconfirmed_balance': 0,
+    //   'use_with_hardware_wallet': false
+    // }
+    // AsyncStorage.setItem(address.toString(), JSON.stringify(w));
+    // navigate('PleaseBackup', {
+    //     walletID: address,
+    // });
+    // //ReactNativeHapticFeedback.trigger('notificationSuccess', { ignoreAndroidSystemSettings: false });
     
-    setIsLoading(false);
+    // setIsLoading(false);
     
   };
 

@@ -242,6 +242,7 @@ const WalletsList = () => {
   };
 
   const renderWalletsCarousel = () => {
+    console.log('renderWalletsCarousel---')
     return (
       <WalletsCarousel
         data={wallets.concat(false)}

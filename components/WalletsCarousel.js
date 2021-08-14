@@ -17,7 +17,8 @@ import {
 } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
-import loc, { formatBalance, transactionTimeToReadable } from '../loc';
+import loc, {transactionTimeToReadable } from '../loc';
+import {formatBalance} from '../../helpers/pqd';
 import { LightningCustodianWallet, MultisigHDWallet, PlaceholderWallet } from '../class';
 import WalletGradient from '../class/wallet-gradient';
 import { BluePrivateBalance } from '../BlueComponents';
@@ -236,16 +237,17 @@ const WalletCarouselItem = ({ item, index, onPress, handleLongPress, isSelectedW
       image = I18nManager.isRTL ? require('../img/btc-shape-rtl.png') : require('../img/btc-shape.png');
   }
 
-  const latestTransactionText =
-    walletTransactionUpdateStatus === true || walletTransactionUpdateStatus === item.getID()
-      ? loc.transactions.updating
-      : item.getBalance() !== 0 && item.getLatestTransactionTime() === 0
-      ? loc.wallets.pull_to_refresh
-      : item.getTransactions().find(tx => tx.confirmations === 0)
-      ? loc.transactions.pending
-      : transactionTimeToReadable(item.getLatestTransactionTime());
+  // const latestTransactionText =
+  //   walletTransactionUpdateStatus === true || walletTransactionUpdateStatus === item.getID()
+  //     ? loc.transactions.updating
+  //     : item.getBalance() !== 0 && item.getLatestTransactionTime() === 0
+  //     ? loc.wallets.pull_to_refresh
+  //     : item.getTransactions().find(tx => tx.confirmations === 0)
+  //     ? loc.transactions.pending
+  //     : transactionTimeToReadable(item.getLatestTransactionTime());
+  const latestTransactionText = 'latestTransactionText';
 
-  const balance = !item.hideBalance && formatBalance(Number(item.getBalance()), item.getPreferredBalanceUnit(), true);
+  const balance = formatBalance(Number(item.getBalance()), item.getPreferredBalanceUnit(), true);
 
   return (
     <Animated.View
@@ -323,6 +325,7 @@ const cStyles = StyleSheet.create({
 });
 
 const WalletsCarousel = forwardRef((props, ref) => {
+  console.log(props)
   const { preferredFiatCurrency, language, isImportingWallet } = useContext(BlueStorageContext);
   const renderItem = useCallback(
     ({ item, index }) => (

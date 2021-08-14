@@ -34,6 +34,7 @@ function WidgetCommunication() {
   };
 
   const allWalletsBalanceAndTransactionTime = async () => {
+    return 123456;
     if ((await isStorageEncrypted()) || !(await WidgetCommunication.isBalanceDisplayAllowed())) {
       return { allWalletsBalance: 0, latestTransactionTime: 0 };
     } else {

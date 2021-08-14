@@ -95,6 +95,7 @@ const WalletTransactions = () => {
    * @returns {Array}
    */
   const getTransactionsSliced = (limit = Infinity) => {
+    return [];
     let txs = wallet.getTransactions();
     for (const tx of txs) {
       tx.sort_ts = +new Date(tx.received);

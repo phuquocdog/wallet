@@ -96,7 +96,7 @@ const App = () => {
   useEffect(() => {
     return () => {
       Linking.removeEventListener('url', handleOpenURL);
-      AppState.removeEventListener('change', handleAppStateChange);
+      //AppState.removeEventListener('change', handleAppStateChange);
       eventEmitter.removeAllListeners('onNotificationReceived');
       eventEmitter.removeAllListeners('openSettings');
     };
@@ -248,6 +248,7 @@ const App = () => {
   };
 
   const handleAppStateChange = async nextAppState => {
+    return;
     if (wallets.length > 0) {
       if ((appState.current.match(/background/) && nextAppState) === 'active' || nextAppState === undefined) {
         setTimeout(() => A(A.ENUM.APP_UNSUSPENDED), 2000);

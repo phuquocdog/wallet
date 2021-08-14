@@ -5,7 +5,6 @@ import { LayoutAnimation } from 'react-native';
 import { FiatUnit } from '../models/fiatUnit';
 import loc from '../loc';
 const BlueApp = require('../BlueApp');
-const BlueElectrum = require('./BlueElectrum');
 const currency = require('../blue_modules/currency');
 
 const _lastTimeTriedToRefetchWallet = {}; // hashmap of timestamps we _started_ refetching some wallet
@@ -33,13 +32,9 @@ export const BlueStorageProvider = ({ children }) => {
   const saveToDisk = async () => {
     BlueApp.tx_metadata = txMetadata;
     await BlueApp.saveToDisk();
-    console.log('getBlueApp.getWallets()')
-    console.log(BlueApp.getWallets());
-
     
     setWallets([...BlueApp.getWallets()]);
     txMetadata = BlueApp.tx_metadata;
-        console.log(txMetadata);
 
   };
 
@@ -103,7 +98,6 @@ export const BlueStorageProvider = ({ children }) => {
       if (showUpdateStatusIndicator) {
         setWalletTransactionUpdateStatus(WalletTransactionsStatus.ALL);
       }
-      await BlueElectrum.waitTillConnected();
       const balanceStart = +new Date();
       await fetchWalletBalances(lastSnappedTo);
       const balanceEnd = +new Date();
@@ -133,7 +127,6 @@ export const BlueStorageProvider = ({ children }) => {
       }
       _lastTimeTriedToRefetchWallet[walletID] = +new Date();
 
-      await BlueElectrum.waitTillConnected();
       const balanceStart = +new Date();
       await fetchWalletBalances(index);
       const balanceEnd = +new Date();
