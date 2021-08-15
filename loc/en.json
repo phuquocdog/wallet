@@ -94,7 +94,7 @@
     "offer_promt_fiat": "How much {currency} do you want to buy?",
     "offer_promt_fiat_e": "For example, 100",
     "offer_window": "Window",
-    "p2p": "Buy Bitcoin on a Peer-to-Peer Exchange"
+    "p2p": "Buy Phu Quoc Dog on a Peer-to-Peer Exchange"
   },
   "lnd": {
     "errorInvoiceExpired": "Invoice expired",

@@ -1,10 +1,10 @@
 {
-  "name": "bluewallet",
-  "version": "6.2.3",
-  "license": "MIT",
+  "name": "phuquocdogWallet",
+  "version": "1.0.0",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/BlueWallet/BlueWallet.git"
+    "url": "https://github.com/phuquocdog/wallet"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

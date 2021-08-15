@@ -332,6 +332,7 @@ export class AppStorage {
       data = JSON.parse(data);
       if (!data.wallets) return false;
       const wallets = data.wallets;
+      let i = 0
       for (const key of wallets) {
         console.log('-----key')
         console.log(key);
@@ -349,7 +350,7 @@ export class AppStorage {
           },
           getLabel: function () {
 
-            return 'PQD'
+            return 'Wallet 01'
           },
           getPreferredBalanceUnit: function () {
             return 'PQDUnit';
@@ -375,6 +376,7 @@ export class AppStorage {
 
         } 
         this.wallets.push(w);
+        i++
       }
 
       return true;
