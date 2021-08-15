@@ -18,3 +18,5 @@ export * from './wallets/multisig-hd-wallet';
 export * from './wallets/slip39-wallets';
 export * from './hd-segwit-bech32-transaction';
 export * from './multisig-cosigner';
+export * from './wallets/phuquocdog-wallet';
+

@@ -23,6 +23,8 @@ import {
 } from './';
 import { randomBytes } from './rng';
 const encryption = require('../blue_modules/encryption');
+
+import {PhuquocdogWallet} from './wallets/phuquocdog-wallet';
 const Realm = require('realm');
 const createHash = require('create-hash');
 let usedBucketNum = false;
@@ -303,6 +305,9 @@ export class AppStorage {
     });
   }
 
+  resetData() {
+    AsyncStorage.setItem('data', '');
+  }
   /**
    * Loads from storage all wallets and
    * maps them to `this.wallets`
@@ -311,76 +316,19 @@ export class AppStorage {
    * @returns {Promise.<boolean>}
    */
   async loadFromDisk(password) {
-    console.log('loadFromDisk---------');
-
-    let data = await this.getItemWithFallbackToRealm('data');
-
-    // this.wallets.push(data);
-    // this.tx_metadata = data.tx_metadata;
-    // console.log(data);
-
-    // return true;
-    // if (password) {
-    //   data = this.decryptData(data, password);
-    //   if (data) {
-    //     // password is good, cache it
-    //     this.cachedPassword = password;
-    //   }
-    // }
-
+    //this.resetData();
+    let data = await this.getItem('data');
+  
     if (data !== null) {
       data = JSON.parse(data);
       if (!data.wallets) return false;
-      const wallets = data.wallets;
-      let i = 0
-      for (const key of wallets) {
-        console.log('-----key')
-        console.log(key);
-        let w = {
-          key: key,
-          hideBalance: false,
-          getBalance: function () {
-            return '1000'
-          },
-          getLatestTransactionTimeEpoc: function () {
-            return 126;
-          },
-          getHideTransactionsInWalletsList: function () {
-            return 'getHideTransactionsInWalletsList';
-          },
-          getLabel: function () {
-
-            return 'Wallet 01'
-          },
-          getPreferredBalanceUnit: function () {
-            return 'PQDUnit';
-          },
-          getID:function () {
-            return 'getID'
-          },
-          getLatestTransactionTime: function () {
-            return 'getLatestTransactionTime'
-          },
-          getTransactions: function () {
-            return 'getTransactions';
-          },
-          timeToRefreshBalance: function () {
-            return 'timeToRefreshBalance'
-          },
-          allowSend: function () {
-            return true;
-          },
-          allowReceive: function () {
-            return true;
-          }
-
-        } 
-        this.wallets.push(w);
-        i++
+      for (const key of data.wallets) {
+        w = new PhuquocdogWallet(key.props);
+        this.wallets.push(w)
       }
-
       return true;
     } else {
+      console.log('>>>>>>>data_empty')
       return false; // failed loading data or loading/decryptin data
     }
   }
@@ -470,24 +418,35 @@ export class AppStorage {
     savingInProgress = 1;
 
     try {
+      const walletsToSave = [];
+      console.log('saveToDisk')
+
+      console.log(this.wallets);
+      for (const key of this.wallets) {
+        console.log('key')
+        console.log(key);
+
+        w = new PhuquocdogWallet(key.props);
+        walletsToSave.push(w)
+      }
+
+      console.log('saveToDiskwalletsToSave')
+      console.log(walletsToSave);
       
       let data = {
-        wallets: this.wallets,
+        wallets: walletsToSave,
         tx_metadata: this.tx_metadata,
       };
-
-      console.log('-----> class/app-storage.j')
       console.log(JSON.stringify(data));
      
-
       await this.setItem('data', JSON.stringify(data));
       //await this.setItem(AppStorage.FLAG_ENCRYPTED, '');
 
       // now, backing up same data in realm:
-      const realmkeyValue = await this.openRealmKeyValue();
-      this.saveToRealmKeyValue(realmkeyValue, 'data', JSON.stringify(data));
-      this.saveToRealmKeyValue(realmkeyValue, AppStorage.FLAG_ENCRYPTED, this.cachedPassword ? '1' : '');
-      realmkeyValue.close();
+      //const realmkeyValue = await this.openRealmKeyValue();
+      //this.saveToRealmKeyValue(realmkeyValue, 'data', data);
+      //this.saveToRealmKeyValue(realmkeyValue, AppStorage.FLAG_ENCRYPTED, this.cachedPassword ? '1' : '');
+      //  realmkeyValue.close();
     } catch (error) {
 
       console.error('save to disk exception:', error.message);
@@ -564,6 +523,8 @@ export class AppStorage {
    * @returns {Array.<AbstractWallet>}
    */
   getWallets = () => {
+    console.log('getWallets')
+    console.log(this.wallets)
     return this.wallets;
   };
 

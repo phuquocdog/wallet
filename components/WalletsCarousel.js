@@ -327,7 +327,10 @@ const cStyles = StyleSheet.create({
 });
 
 const WalletsCarousel = forwardRef((props, ref) => {
+  console.log('--------WalletsCarousel')
   console.log(props)
+  console.log(ref);
+  
   const { preferredFiatCurrency, language, isImportingWallet } = useContext(BlueStorageContext);
   const renderItem = useCallback(
     ({ item, index }) => (

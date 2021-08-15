@@ -36,6 +36,8 @@ import { settings } from '@polkadot/ui-settings';
 import { cryptoWaitReady, mnemonicGenerate } from '@polkadot/util-crypto';
 import { ApiPromise, WsProvider} from '@polkadot/api';
 
+import { PhuquocdogWallet } from '../../class/wallets/phuquocdog-wallet';
+
 const A = require('../../blue_modules/analytics');
 
 const ButtonSelected = Object.freeze({
@@ -47,7 +49,9 @@ const ButtonSelected = Object.freeze({
 const WalletsAdd = () => {
   const { colors } = useTheme();
   const { addWallet, saveToDisk, isAdancedModeEnabled } = useContext(BlueStorageContext);
+  const [isKeyring, setIsKeyring] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
+
   const [walletBaseURI, setWalletBaseURI] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [label, setLabel] = useState('');
@@ -79,6 +83,7 @@ const WalletsAdd = () => {
   };
 
   useEffect(() => {
+    console.log('loc.wallets.details_title' + label);
     AsyncStorage.getItem(AppStorage.LNDHUB)
       .then(url => setWalletBaseURI(url || 'https://node.phuquoc.dog'))
       .catch(() => setWalletBaseURI(''));
@@ -103,7 +108,7 @@ const WalletsAdd = () => {
     //_onClickNew();
   };
 
-  if (isLoading) {
+  if (isKeyring) {
     initialize();
   }
 
@@ -126,37 +131,28 @@ const WalletsAdd = () => {
   };
 
   const createWallet = async () => {
-    setIsLoading(true);
+    setIsKeyring(false);
+    const phrase = mnemonicGenerate(12);
+    const { address } = keyring.createFromUri(phrase);
 
-    let w;
-    w = new HDSegwitBech32Wallet();
-        w.setLabel(label || loc.wallets.details_title);
-
-    await w.generate();
-            addWallet(w);
-        await saveToDisk();
-        if (w.type === HDSegwitP2SHWallet.type || w.type === HDSegwitBech32Wallet.type) {
-      navigate('PleaseBackup', {
-        walletID: w.getID(),
-      });
-    } else {
-      goBack();
+    const w = {
+      'label': label,
+      'chain': 'phuquocdog',
+      'address' : address,
+      'secret': phrase,
+      'preferredBalanceUnit': 'PQD',
+      'unconfirmed_balance': 0,
+      'use_with_hardware_wallet': false
     }
-    // const phrase = mnemonicGenerate(12);
-    // const { address } = keyring.createFromUri(phrase);
 
-    // const w = {
-    //   'chain': 'phuquocdog',
-    //   'address' : address,
-    //   'secret': phrase,
-    //   'preferredBalanceUnit': 'PQD',
-    //   'unconfirmed_balance': 0,
-    //   'use_with_hardware_wallet': false
-    // }
-    // AsyncStorage.setItem(address.toString(), JSON.stringify(w));
-    // navigate('PleaseBackup', {
-    //     walletID: address,
-    // });
+    pqd = new PhuquocdogWallet(w);
+    addWallet(pqd);
+    
+    await saveToDisk();
+    navigate('PleaseBackup', {
+        walletID: address,
+    });
+
     // //ReactNativeHapticFeedback.trigger('notificationSuccess', { ignoreAndroidSystemSettings: false });
     
     // setIsLoading(false);
@@ -164,40 +160,7 @@ const WalletsAdd = () => {
   };
 
 
-  const createLightningWallet = async wallet => {
-    wallet = new LightningCustodianWallet();
-    wallet.setLabel(label || loc.wallets.details_title);
 
-    try {
-      const lndhub = walletBaseURI?.trim();
-      if (lndhub) {
-        const isValidNodeAddress = await LightningCustodianWallet.isValidNodeAddress(lndhub);
-        if (isValidNodeAddress) {
-          wallet.setBaseURI(lndhub);
-          wallet.init();
-        } else {
-          throw new Error('The provided node address is not valid PQD node.');
-        }
-      }
-      await wallet.createAccount();
-      await wallet.authorize();
-    } catch (Err) {
-      setIsLoading(false);
-      console.warn('lnd create failure', Err);
-      return alert(Err);
-      // giving app, not adding anything
-    }
-    A(A.ENUM.CREATED_LIGHTNING_WALLET);
-    await wallet.generate();
-    addWallet(wallet);
-    await saveToDisk();
-
-    A(A.ENUM.CREATED_WALLET);
-    ReactNativeHapticFeedback.trigger('notificationSuccess', { ignoreAndroidSystemSettings: false });
-    navigate('PleaseBackupLNDHub', {
-      walletID: wallet.getID(),
-    });
-  };
 
   const navigateToEntropy = () => {
     navigate('ProvideEntropy', { onGenerated: entropyGenerated });

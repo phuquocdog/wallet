@@ -10,10 +10,11 @@ import { BlueStorageContext } from '../../blue_modules/storage-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const PleaseBackup = () => {
+  const { wallets } = useContext(BlueStorageContext);
   const [isLoading, setIsLoading] = useState(true);
   const { walletID } = useRoute().params;
-  const [wallet, setWallet] = useState();
-
+  //const [wallet, setWallet] = useState();
+  const wallet = wallets.find(w => w.getID() === walletID);
   const navigation = useNavigation();
   const { colors } = useTheme();
   const stylesHook = StyleSheet.create({
@@ -55,14 +56,15 @@ const PleaseBackup = () => {
 
   useEffect(() => {
     (async () => {
-      
+      console.log(wallet);
       try {
         const value = await AsyncStorage.getItem(walletID);
         if (value !== null) {
-          setWallet(JSON.parse(value));
+          setWallet(new PhuquocdogWallet(value));
         }
       } catch (error) {
-        console.log('error')
+        console.log(error)
+        console.log('error wallet id: ' + walletID)
         // Error retrieving data
       }
     })();
@@ -72,7 +74,7 @@ const PleaseBackup = () => {
     const component = [];
     if (wallet) {
         
-        for (const [index, secret] of wallet.secret.split(/\s/).entries()) {
+        for (const [index, secret] of wallet.getSecret().split(/\s/).entries()) {
           const text = `${index + 1}. ${secret}  `;
           component.push(
             <View style={[styles.word, stylesHook.word]} key={`${index}`}>

@@ -145,8 +145,6 @@ export const BlueStorageProvider = ({ children }) => {
   };
 
   const addWallet = wallet => {
-    console.log('addWallet');
-    console.log(wallet);
     BlueApp.wallets.push(wallet);
     setWallets([...BlueApp.getWallets()]);
   };
