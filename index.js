@@ -12,9 +12,9 @@ if (!Error.captureStackTrace) {
 }
 
 const BlueAppComponent = () => {
-  useEffect(() => {
-    A(A.ENUM.INIT);
-  }, []);
+  // useEffect(() => {
+  //   A(A.ENUM.INIT);
+  // }, []);
 
   return (
     <BlueStorageProvider>
