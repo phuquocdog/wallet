@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useImperativeHandle, forwardRef, useContext } from 'react';
+import React, { useRef, useCallback, useImperativeHandle, forwardRef, useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   ActivityIndicator,
@@ -13,7 +13,7 @@ import {
   useWindowDimensions,
   View,
   Dimensions,
-  FlatList,
+  FlatList
 } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -191,6 +191,8 @@ const WalletCarouselItem = ({ item, index, onPress, handleLongPress, isSelectedW
   const { width } = useWindowDimensions();
   const itemWidth = width * 0.82 > 375 ? 375 : width * 0.82;
   const isLargeScreen = Platform.OS === 'android' ? isTablet() : width >= Dimensions.get('screen').width / 2 && (isTablet() || isDesktop);
+  const [balance, setBalance] = useState('');
+
   const onPressedIn = () => {
     const props = { duration: 50 };
     props.useNativeDriver = true;
@@ -204,6 +206,18 @@ const WalletCarouselItem = ({ item, index, onPress, handleLongPress, isSelectedW
     props.toValue = 1.0;
     Animated.spring(scaleValue, props).start();
   };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const result = await item.getBalanceHuman();
+        if (result) {
+          setBalance(result)
+        }
+      } catch (_) {}
+      
+    })();
+  });
 
   if (!item)
     return isImportingWallet ? (
@@ -247,10 +261,7 @@ const WalletCarouselItem = ({ item, index, onPress, handleLongPress, isSelectedW
   //     : item.getTransactions().find(tx => tx.confirmations === 0)
   //     ? loc.transactions.pending
   //     : transactionTimeToReadable(item.getLatestTransactionTime());
-  const latestTransactionText = 'latestTransactionText';
-
-  const balance = formatBalance(Number(item.getBalance()), item.getPreferredBalanceUnit(), true);
-
+  const latestTransactionText = item.latestTransactionText();
   return (
     <Animated.View
       style={[

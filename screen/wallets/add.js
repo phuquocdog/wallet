@@ -142,12 +142,13 @@ const WalletsAdd = () => {
       'secret': phrase,
       'preferredBalanceUnit': 'PQD',
       'unconfirmed_balance': 0,
+      'balance_human': 0,
       'use_with_hardware_wallet': false
     }
 
     pqd = new PhuquocdogWallet(w);
     addWallet(pqd);
-    
+
     await saveToDisk();
     navigate('PleaseBackup', {
         walletID: address,

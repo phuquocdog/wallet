@@ -328,7 +328,6 @@ export class AppStorage {
       }
       return true;
     } else {
-      console.log('>>>>>>>data_empty')
       return false; // failed loading data or loading/decryptin data
     }
   }
@@ -523,8 +522,6 @@ export class AppStorage {
    * @returns {Array.<AbstractWallet>}
    */
   getWallets = () => {
-    console.log('getWallets')
-    console.log(this.wallets)
     return this.wallets;
   };
 

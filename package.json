@@ -94,13 +94,14 @@
     ]
   },
   "dependencies": {
+    "@amplitude/node": "^1.8.0",
     "@babel/preset-env": "7.12.1",
     "@keystonehq/bc-ur-registry": "https://github.com/BlueWallet/ur-registry",
     "@ngraveio/bc-ur": "https://github.com/BlueWallet/bc-ur",
+    "@polkadot/api": "^5.5.1",
     "@polkadot/reactnative-identicon": "^0.84.3",
     "@polkadot/ui-keyring": "^0.84.3",
     "@polkadot/ui-settings": "^0.84.3",
-    "@polkadot/util-crypto": "^7.1.1",
     "@react-native-async-storage/async-storage": "1.15.5",
     "@react-native-clipboard/clipboard": "1.8.4",
     "@react-native-community/blur": "3.6.0",
