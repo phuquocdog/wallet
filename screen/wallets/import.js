@@ -18,17 +18,23 @@ import loc from '../../loc';
 import { isDesktop, isMacCatalina } from '../../blue_modules/environment';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 
+import { keyring } from '@polkadot/ui-keyring';
+import { cryptoWaitReady, mnemonicGenerate } from '@polkadot/util-crypto';
+import { PhuquocdogWallet } from '../../class/wallets/phuquocdog-wallet';
+
 const fs = require('../../blue_modules/fs');
 
 const WalletsImport = () => {
   const [isToolbarVisibleForAndroid, setIsToolbarVisibleForAndroid] = useState(false);
   const route = useRoute();
-  const { isImportingWallet } = useContext(BlueStorageContext);
+  const { isImportingWallet, addWallet,saveToDisk,setIsImportingWallet } = useContext(BlueStorageContext);
   const label = (route.params && route.params.label) || '';
   const triggerImport = (route.params && route.params.triggerImport) || false;
   const [importText, setImportText] = useState(label);
   const navigation = useNavigation();
   const { colors } = useTheme();
+  const [isKeyring, setIsKeyring] = useState(true);
+
   const styles = StyleSheet.create({
     root: {
       paddingTop: 40,
@@ -57,6 +63,27 @@ const WalletsImport = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const initialize = async (): Promise<void> => {
+    try {
+      keyring.loadAll({ ss58Format: 42, type: 'sr25519' });
+            console.log('Error loading keyring >>>>11');
+
+    } catch (e) {
+      console.log('Error loading keyring >>>>>>>', e.message);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    //await globalAny.localStorage.init();
+    await cryptoWaitReady();
+
+    //setLoading(false);
+    //_onClickNew();
+  };
+
+  if (isKeyring) {
+    initialize();
+  }
+
   const importButtonPressed = () => {
     if (importText.trim().length === 0) {
       return;
@@ -73,21 +100,29 @@ const WalletsImport = () => {
       return;
     }
 
-    let res;
+  
     try {
-      res = await WalletImport.askPasswordIfNeeded(importText);
-    } catch (e) {
-      // prompt cancelled
-      return;
-    }
-    const { text, password } = res;
+      const { address } = keyring.createFromUri(importText);
 
-    WalletImport.addPlaceholderWallet(text);
-    navigation.dangerouslyGetParent().pop();
-    await new Promise(resolve => setTimeout(resolve, 500)); // giving some time to animations
-    try {
-      await WalletImport.processImportText(text, password);
-      WalletImport.removePlaceholderWallet();
+      const w = {
+        'label': label,
+        'chain': 'phuquocdog',
+        'address' : address,
+        'secret': importText,
+        'preferredBalanceUnit': 'PQD',
+        'unconfirmed_balance': 0,
+        'balance_human': 0,
+        'use_with_hardware_wallet': false
+      }
+      setIsKeyring(false);
+
+
+      pqd = new PhuquocdogWallet(w);
+      addWallet(pqd);
+      await saveToDisk();
+      navigation.dangerouslyGetParent().pop();
+      //await new Promise(resolve => setTimeout(resolve, 500)); // giving some time to animations
+
     } catch (error) {
       console.log(error);
       ReactNativeHapticFeedback.trigger('notificationError', { ignoreAndroidSystemSettings: false });

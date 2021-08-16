@@ -143,6 +143,7 @@ const WalletsAdd = () => {
       'preferredBalanceUnit': 'PQD',
       'unconfirmed_balance': 0,
       'balance_human': 0,
+      'type': 'phuquocdog',
       'use_with_hardware_wallet': false
     }
 

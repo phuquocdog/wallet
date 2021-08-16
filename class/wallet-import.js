@@ -151,6 +151,7 @@ function WalletImport() {
    */
   WalletImport.processImportText = async (importText, password) => {
     IdleTimerManager.setIdleTimerDisabled(true);
+    return true;
     // Plan:
     // -2. check if BIP38 encrypted
     // -1a. check if multisig

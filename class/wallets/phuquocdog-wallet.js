@@ -44,7 +44,7 @@ export class PhuquocdogWallet {
     return this.balanceHuman;
   }
   latestTransactionText() {
-    return 1;
+    return '0xf6c55dcd3414664b9b3f61aeedbc304ea391cbc40ff2590ea094896c4587f67c';
   }
   getSecret() {
     return this.props.secret
@@ -92,5 +92,14 @@ export class PhuquocdogWallet {
   }
   getLastTxFetch(){
     return 'getLastTxFetch';
+  }
+  useWithHardwareWalletEnabled () {
+    return 'wallet.useWithHardwareWalletEnabled'
+  }
+  allowXpub () {
+    return 'wallet.allowXpub'
+  }
+  allowSignVerifyMessage() {
+    return 'allowSignVerifyMessage()'
   }
 }

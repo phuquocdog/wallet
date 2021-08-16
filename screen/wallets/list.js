@@ -154,7 +154,7 @@ const WalletsList = () => {
   }, []); // call refreshTransactions() only once, when screen mounts
 
   const handleClick = index => {
-    console.log('click', index);
+    console.log('click list.js', index);
     if (index <= wallets.length - 1) {
       const wallet = wallets[index];
       const walletID = wallet.getID();
@@ -243,8 +243,6 @@ const WalletsList = () => {
 
   const renderWalletsCarousel = () => {
     console.log('renderWalletsCarousel---------')
-    console.log(wallets);
-
     return (
       <WalletsCarousel
         data={wallets.concat(false)}

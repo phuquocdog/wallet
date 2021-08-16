@@ -168,97 +168,6 @@ export const BitcoinButton = props => {
   );
 };
 
-export const VaultButton = props => {
-  const { colors } = useTheme();
-  return (
-    <TouchableOpacity accessibilityRole="button" testID={props.testID} onPress={props.onPress}>
-      <View
-        style={{
-          borderColor: (props.active && colors.foregroundColor) || colors.buttonDisabledBackgroundColor,
-          borderWidth: 1.5,
-          borderRadius: 8,
-          backgroundColor: colors.buttonDisabledBackgroundColor,
-          minWidth: props.style.width,
-          minHeight: props.style.height,
-          height: props.style.height,
-          flex: 1,
-        }}
-      >
-        <View style={{ marginHorizontal: 16, marginVertical: 10, flexDirection: 'row', alignItems: 'center' }}>
-          <View>
-            <Image style={{ width: 34, height: 34, marginRight: 8 }} source={require('./img/addWallet/vault.png')} />
-          </View>
-          <View>
-            <Text
-              style={{
-                color: colors.foregroundColor,
-                fontWeight: 'bold',
-                fontSize: 18,
-                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-              }}
-            >
-              {loc.multisig.multisig_vault}
-            </Text>
-            <Text
-              style={{
-                color: colors.alternativeTextColor,
-                fontSize: 13,
-                fontWeight: '500',
-                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-              }}
-            >
-              {loc.multisig.multisig_vault_explain}
-            </Text>
-          </View>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-};
-
-export const LightningButton = props => {
-  const { colors } = useTheme();
-  return (
-    <TouchableOpacity accessibilityRole="button" onPress={props.onPress}>
-      <View
-        style={{
-          borderColor: (props.active && colors.lnborderColor) || colors.buttonDisabledBackgroundColor,
-          borderWidth: 1.5,
-          borderRadius: 8,
-          backgroundColor: colors.buttonDisabledBackgroundColor,
-          minWidth: props.style.width,
-          minHeight: props.style.height,
-          height: props.style.height,
-          flex: 1,
-          marginBottom: 8,
-        }}
-      >
-        <View style={{ marginHorizontal: 16, marginVertical: 10, flexDirection: 'row', alignItems: 'center' }}>
-          <View>
-            <Image style={{ width: 34, height: 34, marginRight: 8 }} source={require('./img/addWallet/lightning.png')} />
-          </View>
-          <View>
-            <Text
-              style={{ color: colors.lnborderColor, fontWeight: 'bold', fontSize: 18, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}
-            >
-              {loc.wallets.add_lightning}
-            </Text>
-            <Text
-              style={{
-                color: colors.alternativeTextColor,
-                fontSize: 13,
-                fontWeight: '500',
-                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-              }}
-            >
-              {loc.wallets.add_lightning_explain}
-            </Text>
-          </View>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-};
 
 export const PQDButton = props => {
   const { colors } = useTheme();
@@ -322,6 +231,7 @@ export class BlueWalletNavigationHeader extends Component {
       wallet: props.wallet,
       walletPreviousPreferredUnit: props.wallet.getPreferredBalanceUnit(),
       allowOnchainAddress: false,
+      balance: 0
     };
   }
 
@@ -330,6 +240,7 @@ export class BlueWalletNavigationHeader extends Component {
   };
 
   componentDidUpdate(prevState) {
+
     InteractionManager.runAfterInteractions(() => {
       if (prevState.wallet.getID() !== this.state.wallet.getID() && this.state.wallet.type === LightningCustodianWallet.type) {
         this.verifyIfWalletAllowsOnchainAddress();
@@ -400,10 +311,6 @@ export class BlueWalletNavigationHeader extends Component {
   };
 
   render() {
-    const balance =
-      !this.state.wallet.hideBalance &&
-      formatBalance(this.state.wallet.getBalance(), this.state.wallet.getPreferredBalanceUnit(), true).toString();
-
     return (
       <LinearGradient
         colors={WalletGradient.gradientsFor(this.state.wallet.type)}
@@ -479,7 +386,7 @@ export class BlueWalletNavigationHeader extends Component {
           ) : (
             <Text
               testID="WalletBalance"
-              key={balance} // force component recreation on balance change. To fix right-to-left languages, like Farsi
+              key={this.props.wallet.balanceHuman} // force component recreation on balance change. To fix right-to-left languages, like Farsi
               numberOfLines={1}
               adjustsFontSizeToFit
               style={{
@@ -490,7 +397,7 @@ export class BlueWalletNavigationHeader extends Component {
                 writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
               }}
             >
-              {balance}
+              {this.props.wallet.balanceHuman}
             </Text>
           )}
         </TouchableOpacity>
