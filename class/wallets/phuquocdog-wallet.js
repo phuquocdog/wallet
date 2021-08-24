@@ -9,6 +9,7 @@ export class PhuquocdogWallet {
   constructor(props) {
     this.props = props;
     this.balanceHuman = '0 PQD';
+    this.userHasSavedExport = false;
   }
 
   async connect (account) {
@@ -101,5 +102,30 @@ export class PhuquocdogWallet {
   }
   allowSignVerifyMessage() {
     return 'allowSignVerifyMessage()'
+  }
+  getUserHasSavedExport() {
+    return
+  }
+  setUserHasSavedExport(v){
+    this.setUserHasSavedExport = v
+  }
+  getType() {
+    return this.props.type;
+  }
+  allowCosignPsbt() {
+    return false;
+  }
+  /**
+   * Fetches UTXO from API. Returns VOID.
+   *
+   * @return {Promise.<void>}
+   */
+  async fetchUtxo() {
+    try {
+      return 
+      
+    } catch (Error) {
+      console.warn(Error);
+    }
   }
 }
