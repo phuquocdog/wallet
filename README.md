@@ -7,7 +7,8 @@
 
 ### 🏠 [Homepage](https://phuquoc.dog)
 
-### ✨ [Demo](https://phuquoc.dog)
+### ✨ [Demo](https://www.youtube.com/watch?v=lYhBC_bu7xg&ab_channel=Phuquocdog)
+
 
 ### Version  to build app
 
