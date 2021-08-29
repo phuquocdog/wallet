@@ -1,8 +1,6 @@
-
-const Alice = '5DFignjD1nYb11saiStmZnJTno9yTW1RGfmXLhbyaQCEoSFq';
+import { Keyring } from '@polkadot/keyring';
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 
 export class PhuquocdogWallet {
 
@@ -12,13 +10,11 @@ export class PhuquocdogWallet {
     this.userHasSavedExport = false;
   }
 
-  async connect (account) {
-      const provider = new WsProvider(process.env.WS || 'wss://node.phuquoc.dog');
-      const api = await ApiPromise.create({provider});
-      const { nonce, data: balance } = await api.query.system.account(account);
-      return balance;
+  async connect () {
+    const provider = new WsProvider(process.env.WS || 'wss://node.phuquoc.dog');
+    return await ApiPromise.create({provider});
+      
   }
-
 
   getBalance() {
     return 10;
@@ -34,10 +30,10 @@ export class PhuquocdogWallet {
   async getBalanceHuman() {
 
     try {
-      const result = await this.connect(this.props.address);
-
-      if (result) {
-        this.setBalanceHuman(result.free.toHuman());
+      const c = await this.connect();
+      const { nonce, data: balance } = await c.query.system.account(this.props.address);
+      if (balance) {
+        this.setBalanceHuman(balance.free.toHuman());
 
       }
     } catch (_) {}
@@ -130,5 +126,27 @@ export class PhuquocdogWallet {
   }
   getUserHasSavedExport() {
     return true;
+  }
+
+  async transfer(amount, address) {
+    try {
+      const c = await this.connect();
+      const transfer = api.tx.balances.transfer(address, amount);
+
+      // Constuct the keyring after the API (crypto has an async init)
+      const keyring = new Keyring({ type: 'sr25519' });
+      // Add myAccount to our keyring with a hard-deived path (empty phrase, so uses dev)
+      const myAccount = keyring.addFromUri(this.getSecret());
+      // Sign and send the transaction using our account
+      const hash = await transfer.signAndSend(myAccount);
+
+      console.log('Transfer sent with hash', hash.toHex())
+
+
+    } catch (e) {
+      console.log('Transfer Error',e.message)
+
+    }
+  
   }
 }

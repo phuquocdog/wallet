@@ -79,7 +79,7 @@ const SendDetails = () => {
   // if there are no funds for even Slow option, use 1 sat/byte fee
   const feeRate = useMemo(() => {
     if (customFee) return customFee;
-    if (feePrecalc.slowFee === null) return '1'; // wait for precalculated fees
+    if (feePrecalc.slowFee === null) return '0.0001'; // wait for precalculated fees
     let initialFee;
     if (feePrecalc.fastestFee !== null) {
       initialFee = String(networkTransactionFees.fastestFee);
@@ -369,54 +369,10 @@ const SendDetails = () => {
     Keyboard.dismiss();
     setIsLoading(true);
     const requestedSatPerByte = feeRate;
-    for (const [index, transaction] of addresses.entries()) {
-      let error;
-      if (!transaction.amount || transaction.amount < 0 || parseFloat(transaction.amount) === 0) {
-        error = loc.send.details_amount_field_is_not_valid;
-        console.log('validation error');
-      } else if (parseFloat(transaction.amountSats) <= 500) {
-        error = loc.send.details_amount_field_is_less_than_minimum_amount_sat;
-        console.log('validation error');
-      } else if (!requestedSatPerByte || parseFloat(requestedSatPerByte) < 1) {
-        error = loc.send.details_fee_field_is_not_valid;
-        console.log('validation error');
-      } else if (!transaction.address) {
-        error = loc.send.details_address_field_is_not_valid;
-        console.log('validation error');
-      } else if (balance - transaction.amountSats < 0) {
-        // first sanity check is that sending amount is not bigger than available balance
-        error = loc.send.details_total_exceeds_balance;
-        console.log('validation error');
-      } else if (transaction.address) {
-        const address = transaction.address.trim().toLowerCase();
-        if (address.startsWith('lnb') || address.startsWith('lightning:lnb')) {
-          error =
-            'This address appears to be for a Lightning invoice. Please, go to your Lightning wallet in order to make a payment for this invoice.';
-          console.log('validation error');
-        }
-      }
-
-      if (!error) {
-        try {
-          bitcoin.address.toOutputScript(transaction.address);
-        } catch (err) {
-          console.log('validation error');
-          console.log(err);
-          error = loc.send.details_address_field_is_not_valid;
-        }
-      }
-
-      if (error) {
-        scrollView.current.scrollToIndex({ index });
-        setIsLoading(false);
-        Alert.alert(loc.errors.error, error);
-        ReactNativeHapticFeedback.trigger('notificationError', { ignoreAndroidSystemSettings: false });
-        return;
-      }
-    }
-
+    
+    console.log(feeRate)
     try {
-      await createPsbtTransaction();
+      //await createPsbtTransaction();
     } catch (Err) {
       setIsLoading(false);
       Alert.alert(loc.errors.error, Err.message);
@@ -424,86 +380,6 @@ const SendDetails = () => {
     }
   };
 
-  const createPsbtTransaction = async () => {
-    const changeAddress = await getChangeAddressAsync();
-    const requestedSatPerByte = Number(feeRate);
-    const lutxo = utxo || wallet.getUtxo();
-    console.log({ requestedSatPerByte, lutxo: lutxo.length });
-
-    const targets = [];
-    for (const transaction of addresses) {
-      if (transaction.amount === BitcoinUnit.MAX) {
-        // output with MAX
-        targets.push({ address: transaction.address });
-        continue;
-      }
-      const value = parseInt(transaction.amountSats);
-      if (value > 0) {
-        targets.push({ address: transaction.address, value });
-      } else if (transaction.amount) {
-        if (currency.btcToSatoshi(transaction.amount) > 0) {
-          targets.push({ address: transaction.address, value: currency.btcToSatoshi(transaction.amount) });
-        }
-      }
-    }
-
-    const { tx, outputs, psbt, fee } = wallet.createTransaction(
-      lutxo,
-      targets,
-      requestedSatPerByte,
-      changeAddress,
-      isTransactionReplaceable ? HDSegwitBech32Wallet.defaultRBFSequence : HDSegwitBech32Wallet.finalRBFSequence,
-    );
-
-    if (wallet.type === WatchOnlyWallet.type) {
-      // watch-only wallets with enabled HW wallet support have different flow. we have to show PSBT to user as QR code
-      // so he can scan it and sign it. then we have to scan it back from user (via camera and QR code), and ask
-      // user whether he wants to broadcast it
-      navigation.navigate('PsbtWithHardwareWallet', {
-        memo,
-        fromWallet: wallet,
-        psbt,
-      });
-      setIsLoading(false);
-      return;
-    }
-
-    if (wallet.type === MultisigHDWallet.type) {
-      navigation.navigate('PsbtMultisig', {
-        memo,
-        psbtBase64: psbt.toBase64(),
-        walletID: wallet.getID(),
-      });
-      setIsLoading(false);
-      return;
-    }
-
-    txMetadata[tx.getId()] = {
-      txhex: tx.toHex(),
-      memo,
-    };
-    await saveToDisk();
-
-    let recipients = outputs.filter(({ address }) => address !== changeAddress);
-
-    if (recipients.length === 0) {
-      // special case. maybe the only destination in this transaction is our own change address..?
-      // (ez can be the case for single-address wallet when doing self-payment for consolidation)
-      recipients = outputs;
-    }
-
-    navigation.navigate('Confirm', {
-      fee: new BigNumber(fee).dividedBy(100000000).toNumber(),
-      memo,
-      walletID: wallet.getID(),
-      tx: tx.toHex(),
-      recipients,
-      satoshiPerByte: requestedSatPerByte,
-      payjoinUrl,
-      psbt,
-    });
-    setIsLoading(false);
-  };
 
   const onWalletSelect = wallet => {
     setWallet(wallet);
