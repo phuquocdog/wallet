@@ -45,7 +45,7 @@ export class PhuquocdogWallet {
     return this.balanceHuman;
   }
   latestTransactionText() {
-    return '0xf6c55dcd3414664b9b3f61aeedbc304ea391cbc40ff2590ea094896c4587f67c';
+    return 'Never';
   }
   getSecret() {
     return this.props.secret
@@ -71,13 +71,13 @@ export class PhuquocdogWallet {
     return 'getLatestTransactionTime'
   }
   getTransactions() {
-    return 'getTransactions'
+    return []
   }
   timeToRefreshBalance() {
     return 'timeToRefreshBalance';
   }
   allowSend(){
-    return 'allowSend'
+    return true;
   }
   allowReceive() {
     return 'allowReceive';
@@ -103,8 +103,8 @@ export class PhuquocdogWallet {
   allowSignVerifyMessage() {
     return 'allowSignVerifyMessage()'
   }
-  getUserHasSavedExport() {
-    return
+  getAddress() {
+    return this.props.address;
   }
   setUserHasSavedExport(v){
     this.setUserHasSavedExport = v
@@ -127,5 +127,8 @@ export class PhuquocdogWallet {
     } catch (Error) {
       console.warn(Error);
     }
+  }
+  getUserHasSavedExport() {
+    return true;
   }
 }
