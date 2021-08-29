@@ -1255,7 +1255,7 @@ const SendDetails = () => {
               ) : (
                 <View style={[styles.feeRow, stylesHook.feeRow]}>
                   <Text style={stylesHook.feeValue}>
-                    {feePrecalc.current ? formatFee(feePrecalc.current) : feeRate + ' ' + loc.units.sat_byte}
+                    {feePrecalc.current ? formatFee(feePrecalc.current) : '0.0001' + ' ' + 'PQD'}
                   </Text>
                 </View>
               )}

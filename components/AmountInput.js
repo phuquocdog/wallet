@@ -10,6 +10,7 @@ import loc, { formatBalanceWithoutSuffix, formatBalancePlain, removeTrailingZero
 const currency = require('../blue_modules/currency');
 
 class AmountInput extends Component {
+
   static propTypes = {
     isLoading: PropTypes.bool,
     /**
@@ -124,71 +125,15 @@ class AmountInput extends Component {
 
   handleChangeText = text => {
     text = text.trim();
-    if (this.props.unit !== BitcoinUnit.LOCAL_CURRENCY) {
-      text = text.replace(',', '.');
-      const split = text.split('.');
-      if (split.length >= 2) {
-        text = `${parseInt(split[0], 10)}.${split[1]}`;
-      } else {
-        text = `${parseInt(split[0], 10)}`;
-      }
-
-      text = this.props.unit === BitcoinUnit.BTC ? text.replace(/[^0-9.]/g, '') : text.replace(/[^0-9]/g, '');
-
-      if (text.startsWith('.')) {
-        text = '0.';
-      }
-    } else if (this.props.unit === BitcoinUnit.LOCAL_CURRENCY) {
-      text = text.replace(/,/gi, '');
-      if (text.split('.').length > 2) {
-        // too many dots. stupid code to remove all but first dot:
-        let rez = '';
-        let first = true;
-        for (const part of text.split('.')) {
-          rez += part;
-          if (first) {
-            rez += '.';
-            first = false;
-          }
-        }
-        text = rez;
-      }
-      if (text.startsWith('0') && !(text.includes('.') || text.includes(','))) {
-        text = text.replace(/^(0+)/g, '');
-      }
-      text = text.replace(/[^\d.,-]/g, ''); // remove all but numbers, dots & commas
-      text = text.replace(/(\..*)\./g, '$1');
-    }
     this.props.onChangeText(text);
   };
 
   render() {
     const { colors, disabled, unit } = this.props;
     const amount = this.props.amount || 0;
-    let secondaryDisplayCurrency = formatBalanceWithoutSuffix(amount, BitcoinUnit.LOCAL_CURRENCY, false);
+    let secondaryDisplayCurrency = amount*0.00001;
+    secondaryDisplayCurrency += '$'
 
-    // if main display is sat or btc - secondary display is fiat
-    // if main display is fiat - secondary dislay is btc
-    let sat;
-    switch (unit) {
-      case BitcoinUnit.BTC:
-        sat = new BigNumber(amount).multipliedBy(100000000).toString();
-        secondaryDisplayCurrency = formatBalanceWithoutSuffix(sat, BitcoinUnit.LOCAL_CURRENCY, false);
-        break;
-      case BitcoinUnit.SATS:
-        secondaryDisplayCurrency = formatBalanceWithoutSuffix((isNaN(amount) ? 0 : amount).toString(), BitcoinUnit.LOCAL_CURRENCY, false);
-        break;
-      case BitcoinUnit.LOCAL_CURRENCY:
-        secondaryDisplayCurrency = currency.fiatToBTC(parseFloat(isNaN(amount) ? 0 : amount));
-        if (AmountInput.conversionCache[isNaN(amount) ? 0 : amount + BitcoinUnit.LOCAL_CURRENCY]) {
-          // cache hit! we reuse old value that supposedly doesn't have rounding errors
-          const sats = AmountInput.conversionCache[isNaN(amount) ? 0 : amount + BitcoinUnit.LOCAL_CURRENCY];
-          secondaryDisplayCurrency = currency.satoshiToBTC(sats);
-        }
-        break;
-    }
-
-    if (amount === BitcoinUnit.MAX) secondaryDisplayCurrency = ''; // we don't want to display NaN
 
     const stylesHook = StyleSheet.create({
       center: { padding: amount === BitcoinUnit.MAX ? 0 : 15 },
@@ -222,13 +167,12 @@ class AmountInput extends Component {
                 maxLength={this.maxLength()}
                 ref={textInput => (this.textInput = textInput)}
                 editable={!this.props.isLoading && !disabled}
-                value={amount === BitcoinUnit.MAX ? loc.units.MAX : parseFloat(amount) >= 0 ? String(amount) : undefined}
+                value={amount}
                 placeholderTextColor={disabled ? colors.buttonDisabledTextColor : colors.alternativeTextColor2}
                 style={[styles.input, stylesHook.input]}
               />
-              {unit !== BitcoinUnit.LOCAL_CURRENCY && amount !== BitcoinUnit.MAX && (
-                <Text style={[styles.cryptoCurrency, stylesHook.cryptoCurrency]}>{' ' + loc.units[unit]}</Text>
-              )}
+              <Text style={[styles.cryptoCurrency, stylesHook.cryptoCurrency]}>{' PQD'}</Text>
+
             </View>
             <View style={styles.secondaryRoot}>
               <Text style={styles.secondaryText}>
