@@ -116,7 +116,7 @@ const About = () => {
     <ScrollView testID="AboutScrollView" contentInsetAdjustmentBehavior="automatic">
       <BlueCard>
         <View style={styles.center}>
-          <Image style={styles.logo} source={require('../../img/bluebeast.png')} />
+          <Image style={styles.logo} source={require('../../img/icon.png')} />
           <Text style={styles.textFree}>{loc.settings.about_free}</Text>
           <Text style={styles.textBackup}>{formatStringAddTwoWhiteSpaces(loc.settings.about_backup)}</Text>
           <BlueButton onPress={handleOnRatePress} title={loc.settings.about_review + ' ⭐🙏'} />
