@@ -302,23 +302,6 @@ const WalletsList = () => {
     }
   };
 
-  const renderScanButton = () => {
-    if (wallets.length > 0 && !isImportingWallet) {
-      return (
-        <FContainer ref={walletActionButtonsRef}>
-          <FButton
-            onPress={onScanButtonPressed}
-            onLongPress={isMacCatalina ? undefined : sendButtonLongPress}
-            icon={<Image resizeMode="stretch" source={scanImage} />}
-            text={loc.send.details_scan}
-          />
-        </FContainer>
-      );
-    } else {
-      return null;
-    }
-  };
-
   const sectionListKeyExtractor = (item, index) => {
     return `${item}${index}}`;
   };
@@ -423,7 +406,6 @@ const WalletsList = () => {
             { key: WalletsListSections.TRANSACTIONS, data: dataSource },
           ]}
         />
-        {renderScanButton()}
       </View>
     </View>
   );

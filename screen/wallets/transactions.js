@@ -46,7 +46,7 @@ const buttonFontSize =
     ? 22
     : PixelRatio.roundToNearestPixel(Dimensions.get('window').width / 26);
 
-const WalletTransactions = () => {
+const WalletTransactions = ({navigation}) => {
   const { wallets, saveToDisk, setSelectedWallet, walletTransactionUpdateStatus } = useContext(BlueStorageContext);
   const [isLoading, setIsLoading] = useState(false);
   const [isManageFundsModalVisible, setIsManageFundsModalVisible] = useState(false);
@@ -132,11 +132,9 @@ const WalletTransactions = () => {
     setOptions({
       headerStyle: {
         backgroundColor: WalletGradient.headerColorFor(wallet.getType()),
-        borderBottomWidth: 0,
-        elevation: 0,
-        // shadowRadius: 0,
-        shadowOffset: { height: 0, width: 0 },
+        shadowColor: 'transparent'
       },
+      headerTintColor: '#fff'
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wallets, wallet, walletID]);
@@ -487,7 +485,7 @@ const WalletTransactions = () => {
   };
 
   const sendButtonPress = () => {
-    navigate('SendDetailsRoot', {
+    navigate('Home', {
       screen: 'SendDetails',
       params: {
         walletID: wallet.getID(),
@@ -660,11 +658,7 @@ const WalletTransactions = () => {
             testID="ReceiveButton"
             text={loc.receive.header}
             onPress={() => {
-              if (wallet.chain === Chain.OFFCHAIN) {
-                navigate('LNDCreateInvoiceRoot', { screen: 'LNDCreateInvoice', params: { walletID: wallet.getID() } });
-              } else {
-                navigate('ReceiveDetailsRoot', { screen: 'ReceiveDetails', params: { walletID: wallet.getID(), address: wallet.getAddress()} });
-              }
+              navigate('Home', { screen: 'ReceiveDetails', params: { walletID: wallet.getID(), address: wallet.getAddress()} });
             }}
             icon={
               <View style={styles.receiveIcon}>
@@ -692,36 +686,6 @@ const WalletTransactions = () => {
 };
 
 export default WalletTransactions;
-
-WalletTransactions.navigationOptions = navigationStyle({}, (options, { theme, navigation, route }) => {
-  return {
-    headerRight: () => (
-      <TouchableOpacity
-        accessibilityRole="button"
-        testID="WalletDetails"
-        disabled={route.params.isLoading === true}
-        style={styles.walletDetails}
-        onPress={() =>
-          navigation.navigate('WalletDetails', {
-            walletID: route.params.walletID,
-          })
-        }
-      >
-        <Icon name="kebab-horizontal" type="octicon" size={22} color="#FFFFFF" />
-      </TouchableOpacity>
-    ),
-    title: '',
-    headerStyle: {
-      backgroundColor: WalletGradient.headerColorFor(route.params.walletType),
-      borderBottomWidth: 0,
-      elevation: 0,
-      // shadowRadius: 0,
-      shadowOffset: { height: 0, width: 0 },
-    },
-    headerTintColor: '#FFFFFF',
-    headerBackTitleVisible: false,
-  };
-});
 
 const styles = StyleSheet.create({
   flex: {

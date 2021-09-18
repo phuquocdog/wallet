@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useRef, useState } from 'react';
+import React, { useCallback, useContext, useRef, useState, useEffect } from 'react';
 import {
   InteractionManager,
   Keyboard,
@@ -8,7 +8,7 @@ import {
   StatusBar,
   StyleSheet,
   TextInput,
-  View,
+  View
 } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { useNavigation, useRoute, useTheme, useFocusEffect } from '@react-navigation/native';
@@ -136,6 +136,14 @@ const ReceiveDetails = () => {
       fontWeight: '700',
     },
   });
+
+  
+  useEffect(() => {
+    (async () => {
+      console.log(address)
+    })();
+  }, []);
+
 
   const handleShareQRCode = () => {
     qrCode.current.toDataURL(data => {

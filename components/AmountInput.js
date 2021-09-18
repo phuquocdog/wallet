@@ -130,7 +130,7 @@ class AmountInput extends Component {
 
   render() {
     const { colors, disabled, unit } = this.props;
-    const amount = this.props.amount || 0;
+    const amount = this.props.amount || '0';
     let secondaryDisplayCurrency = amount*0.00001;
     secondaryDisplayCurrency += '$'
 

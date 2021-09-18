@@ -75,21 +75,16 @@ const SendDetails = () => {
   const [payjoinUrl, setPayjoinUrl] = useState(null);
   const [changeAddress, setChangeAddress] = useState();
   const [dumb, setDumb] = useState(false);
+  const [balance, setBalance] = useState('');
+
+  const [amount, setAmount] = useState('0');
+
+
   // if cutomFee is not set, we need to choose highest possible fee for wallet balance
   // if there are no funds for even Slow option, use 1 sat/byte fee
   const feeRate = useMemo(() => {
-    if (customFee) return customFee;
-    if (feePrecalc.slowFee === null) return '0.0001'; // wait for precalculated fees
-    let initialFee;
-    if (feePrecalc.fastestFee !== null) {
-      initialFee = String(networkTransactionFees.fastestFee);
-    } else if (feePrecalc.mediumFee !== null) {
-      initialFee = String(networkTransactionFees.mediumFee);
-    } else {
-      initialFee = String(networkTransactionFees.slowFee);
-    }
-    return initialFee;
-  }, [customFee, feePrecalc, networkTransactionFees]);
+    return '0.000001494576'
+  }, []);
 
   // keyboad effects
   useEffect(() => {
@@ -112,160 +107,34 @@ const SendDetails = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    
     const wallet = (routeParams.walletID && wallets.find(w => w.getID() === routeParams.walletID));
     setWallet(wallet);
-    //setFeeUnit(wallet.getPreferredBalanceUnit());
-    //setAmountUnit(); // default for whole screen
-
-    // decode route params
-    if (routeParams.uri) {
-      try {
-        const { address, amount, memo: initialMemo, payjoinUrl } = DeeplinkSchemaMatch.decodeBitcoinUri(routeParams.uri);
-        setAddresses([{ address, amount, amountSats: currency.btcToSatoshi(amount), key: String(Math.random()) }]);
-        setMemo(initialMemo || '');
-        setAmountUnit(BitcoinUnit.BTC);
-        setPayjoinUrl(payjoinUrl);
-      } catch (error) {
-        console.log(error);
-        Alert.alert(loc.errors.error, loc.send.details_error_decode);
-      }
-    } else if (routeParams.address) {
-      setAddresses([{ address: routeParams.address, key: String(Math.random()) }]);
-      setMemo(routeParams.memo || '');
-      setAmountUnit(BitcoinUnit.BTC);
-    } else {
-      setAddresses([{ address: '', key: String(Math.random()) }]); // key is for the FlatList
-    }
-
+    setAddresses([{ address: '', key: String(Math.random()) }]); // key is for the FlatList
     // we are ready!
-    setIsLoading(false);
-
-    // load cached fees
-    AsyncStorage.getItem(NetworkTransactionFee.StorageKey)
-      .then(res => {
-        const fees = JSON.parse(res);
-        if (!fees?.fastestFee) return;
-        setNetworkTransactionFees(fees);
-      })
-      .catch(e => console.log('loading cached recommendedFees error', e));
-
-    // load fresh fees from servers
-
-    setNetworkTransactionFeesIsLoading(true);
-    NetworkTransactionFees.recommendedFees()
-      .then(async fees => {
-        if (!fees?.fastestFee) return;
-        setNetworkTransactionFees(fees);
-        await AsyncStorage.setItem(NetworkTransactionFee.StorageKey, JSON.stringify(fees));
-      })
-      .catch(e => console.log('loading recommendedFees error', e))
-      .finally(() => {
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-        setNetworkTransactionFeesIsLoading(false);
-      });
+    setIsLoading(false);    
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // change header and reset state on wallet change
+  const mountedRef = useRef(true)
   useEffect(() => {
-    if (!wallet) return;
-    setSelectedWallet(wallet.getID());
-    // navigation.setParams({
-    //   advancedOptionsMenuButtonAction: () => {
-    //     Keyboard.dismiss();
-    //     setOptionsVisible(true);
-    //   },
-    // });
+    // CALL YOUR API OR ASYNC FUNCTION HERE
+    (async () => {
+      if (wallet) {
+        try {
+          const result = await wallet.getBalance();
+          if (result) {
+            setBalance(result)
+          }
+          console.log(balance)
 
-    // reset other values
-    setUtxo(null);
-    setChangeAddress(null);
-    setIsTransactionReplaceable(wallet.type === HDSegwitBech32Wallet.type);
+        } catch (e) {
+          console.log(e)
+        }
+      }
+    });
 
-    // update wallet UTXO
-    wallet
-      .fetchUtxo()
-      .then(() => {
-        // we need to re-calculate fees
-        setDumb(v => !v);
-      })
-      .catch(e => console.log('fetchUtxo error', e));
-  }, [wallet]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // recalc fees in effect so we don't block render
-  // useEffect(() => {
-  //   if (!wallet) return; // wait for it
-  //   const fees = networkTransactionFees;
-  //   const changeAddress = getChangeAddressFast();
-  //   const requestedSatPerByte = Number(feeRate);
-  //   const lutxo = utxo || wallet.getUtxo();
-
-  //   const options = [
-  //     { key: 'current', fee: requestedSatPerByte },
-  //     { key: 'slowFee', fee: fees.slowFee },
-  //     { key: 'mediumFee', fee: fees.mediumFee },
-  //     { key: 'fastestFee', fee: fees.fastestFee },
-  //   ];
-
-  //   const newFeePrecalc = { ...feePrecalc };
-
-  //   for (const opt of options) {
-  //     let targets = [];
-  //     for (const transaction of addresses) {
-  //       if (transaction.amount === BitcoinUnit.MAX) {
-  //         // single output with MAX
-  //         targets = [{ address: transaction.address }];
-  //         break;
-  //       }
-  //       const value = parseInt(transaction.amountSats);
-  //       if (value > 0) {
-  //         targets.push({ address: transaction.address, value });
-  //       } else if (transaction.amount) {
-  //         if (currency.btcToSatoshi(transaction.amount) > 0) {
-  //           targets.push({ address: transaction.address, value: currency.btcToSatoshi(transaction.amount) });
-  //         }
-  //       }
-  //     }
-
-  //     // if targets is empty, insert dust
-  //     if (targets.length === 0) {
-  //       targets.push({ address: '36JxaUrpDzkEerkTf1FzwHNE1Hb7cCjgJV', value: 546 });
-  //     }
-
-  //     // replace wrong addresses with dump
-  //     targets = targets.map(t => {
-  //       try {
-  //         bitcoin.address.toOutputScript(t.address);
-  //         return t;
-  //       } catch (e) {
-  //         return { ...t, address: '36JxaUrpDzkEerkTf1FzwHNE1Hb7cCjgJV' };
-  //       }
-  //     });
-
-  //     let flag = false;
-  //     while (true) {
-  //       try {
-  //         const { fee } = wallet.coinselect(lutxo, targets, opt.fee, changeAddress);
-
-  //         newFeePrecalc[opt.key] = fee;
-  //         break;
-  //       } catch (e) {
-  //         if (e.message.includes('Not enough') && !flag) {
-  //           flag = true;
-  //           // if we don't have enough funds, construct maximum possible transaction
-  //           targets = targets.map((t, index) => (index > 0 ? { ...t, value: 546 } : { address: t.address }));
-  //           continue;
-  //         }
-
-  //         newFeePrecalc[opt.key] = null;
-  //         break;
-  //       }
-  //     }
-  //   }
-
-  //   setFeePrecalc(newFeePrecalc);
-  // }, [wallet, networkTransactionFees, utxo, addresses, feeRate, dumb]); // eslint-disable-line react-hooks/exhaustive-deps
-
+    return () => { mountedRef.current = false }
+  }, [])
+  
   const getChangeAddressFast = () => {
     if (changeAddress) return changeAddress; // cache
 
@@ -368,18 +237,106 @@ const SendDetails = () => {
   const createTransaction = async () => {
     Keyboard.dismiss();
     setIsLoading(true);
-    const requestedSatPerByte = feeRate;
+
+    //alert('createTransaction');
+
+    navigation.navigate('SendConfirm', {
+      fee:feeRate,
+      memo,
+      amount,
+      walletID: wallet.getID()
+    });
+    setIsLoading(false);
     
-    console.log(feeRate)
-    try {
-      //await createPsbtTransaction();
-    } catch (Err) {
-      setIsLoading(false);
-      Alert.alert(loc.errors.error, Err.message);
-      ReactNativeHapticFeedback.trigger('notificationError', { ignoreAndroidSystemSettings: false });
-    }
+    // try {
+    //   await createPsbtTransaction();
+    // } catch (Err) {
+    //   setIsLoading(false);
+    //   Alert.alert(loc.errors.error, Err.message);
+    //   ReactNativeHapticFeedback.trigger('notificationError', { ignoreAndroidSystemSettings: false });
+    // }
   };
 
+  const createPsbtTransaction = async () => {
+    const changeAddress = await getChangeAddressAsync();
+    const requestedSatPerByte = Number(feeRate);
+    const lutxo = utxo || wallet.getUtxo();
+    console.log({ requestedSatPerByte, lutxo: lutxo.length });
+
+    const targets = [];
+    for (const transaction of addresses) {
+      if (transaction.amount === BitcoinUnit.MAX) {
+        // output with MAX
+        targets.push({ address: transaction.address });
+        continue;
+      }
+      const value = parseInt(transaction.amountSats);
+      if (value > 0) {
+        targets.push({ address: transaction.address, value });
+      } else if (transaction.amount) {
+        if (currency.btcToSatoshi(transaction.amount) > 0) {
+          targets.push({ address: transaction.address, value: currency.btcToSatoshi(transaction.amount) });
+        }
+      }
+    }
+
+    const { tx, outputs, psbt, fee } = wallet.createTransaction(
+      lutxo,
+      targets,
+      requestedSatPerByte,
+      changeAddress,
+      isTransactionReplaceable ? HDSegwitBech32Wallet.defaultRBFSequence : HDSegwitBech32Wallet.finalRBFSequence,
+    );
+
+    if (wallet.type === WatchOnlyWallet.type) {
+      // watch-only wallets with enabled HW wallet support have different flow. we have to show PSBT to user as QR code
+      // so he can scan it and sign it. then we have to scan it back from user (via camera and QR code), and ask
+      // user whether he wants to broadcast it
+      navigation.navigate('PsbtWithHardwareWallet', {
+        memo,
+        fromWallet: wallet,
+        psbt,
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    if (wallet.type === MultisigHDWallet.type) {
+      navigation.navigate('PsbtMultisig', {
+        memo,
+        psbtBase64: psbt.toBase64(),
+        walletID: wallet.getID(),
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    txMetadata[tx.getId()] = {
+      txhex: tx.toHex(),
+      memo,
+    };
+    await saveToDisk();
+
+    let recipients = outputs.filter(({ address }) => address !== changeAddress);
+
+    if (recipients.length === 0) {
+      // special case. maybe the only destination in this transaction is our own change address..?
+      // (ez can be the case for single-address wallet when doing self-payment for consolidation)
+      recipients = outputs;
+    }
+
+    navigation.navigate('Confirm', {
+      fee: new BigNumber(fee).dividedBy(100000000).toNumber(),
+      memo,
+      walletID: wallet.getID(),
+      tx: tx.toHex(),
+      recipients,
+      satoshiPerByte: requestedSatPerByte,
+      payjoinUrl,
+      psbt,
+    });
+    setIsLoading(false);
+  };
 
   const onWalletSelect = wallet => {
     setWallet(wallet);
@@ -991,54 +948,23 @@ const SendDetails = () => {
   const renderBitcoinTransactionInfoFields = params => {
     console.log('renderBitcoinTransactionInfoFields')
     const { item, index } = params;
+
     return (
       <View style={{ width }} testID={'Transaction' + index}>
         <AmountInput
           isLoading={isLoading}
           amount={item.amount ? item.amount.toString() : null}
           onAmountUnitChange={unit => {
-            setAddresses(addresses => {
-              const item = addresses[index];
-
-              switch (unit) {
-                case BitcoinUnit.SATS:
-                  item.amountSats = parseInt(item.amount);
-                  break;
-                case BitcoinUnit.BTC:
-                  item.amountSats = currency.btcToSatoshi(item.amount);
-                  break;
-                case BitcoinUnit.LOCAL_CURRENCY:
-                  // also accounting for cached fiat->sat conversion to avoid rounding error
-                  item.amountSats = AmountInput.getCachedSatoshis(item.amount) || currency.btcToSatoshi(currency.fiatToBTC(item.amount));
-                  break;
-              }
-
-              addresses[index] = item;
-              return [...addresses];
-            });
-            setUnits(units => {
-              units[index] = unit;
-              return [...units];
-            });
+            
           }}
           onChangeText={text => {
             setAddresses(addresses => {
               item.amount = text;
-              switch (units[index] || amountUnit) {
-                case BitcoinUnit.BTC:
-                  item.amountSats = currency.btcToSatoshi(item.amount);
-                  break;
-                case BitcoinUnit.LOCAL_CURRENCY:
-                  item.amountSats = currency.btcToSatoshi(currency.fiatToBTC(item.amount));
-                  break;
-                case BitcoinUnit.SATS:
-                default:
-                  item.amountSats = parseInt(text);
-                  break;
-              }
+              item.amountSats = parseInt(text);
               addresses[index] = item;
               return [...addresses];
             });
+            setAmount(text)
           }}
           unit={units[index] || amountUnit}
           inputAccessoryViewID={InputAccessoryAllFunds.InputAccessoryViewID}
@@ -1078,10 +1004,7 @@ const SendDetails = () => {
     );
   }
 
-  // if utxo is limited we use it to calculate available balance
-  const balance = utxo ? utxo.reduce((prev, curr) => prev + curr.value, 0) : wallet.getBalance();
-  const allBalance = formatBalanceWithoutSuffix(balance, BitcoinUnit.BTC, true);
-
+  const allBalance = balance
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={[styles.root, stylesHook.root]} onLayout={e => setWidth(e.nativeEvent.layout.width)}>
@@ -1131,7 +1054,7 @@ const SendDetails = () => {
               ) : (
                 <View style={[styles.feeRow, stylesHook.feeRow]}>
                   <Text style={stylesHook.feeValue}>
-                    {feePrecalc.current ? formatFee(feePrecalc.current) : '0.0001' + ' ' + 'PQD'}
+                    {feePrecalc.current ? formatFee(feePrecalc.current) : '1525392.0' + ' ' + loc.units.winston}
                   </Text>
                 </View>
               )}
