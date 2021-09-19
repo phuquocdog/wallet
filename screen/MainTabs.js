@@ -35,7 +35,10 @@ const MainTabs = () => {
 	            if (route.name === 'Apps') {
 	              iconName = 'apps-outline';
 	            }
-	            size = 25;
+	            if (route.name === 'Setting') {
+	              iconName = 'settings-outline';
+	            }
+	            size = 24;
 
 	            // You can return any component that you like here!
 	            return <Ionicons name={iconName} size={size} color={color} />;
@@ -51,6 +54,7 @@ const MainTabs = () => {
       <Tab.Screen component={DappStack} name="Dapp" options={{ headerShown: false }} />
       <Tab.Screen component={AppStack}  name="Apps" options={{ headerShown: false }} />
     	<Tab.Screen component={StakingStack} name="Staking" options={{ headerShown: false }} />
+    	<Tab.Screen component={StakingStack} name="Setting" options={{ headerShown: false }} />
     </Tab.Navigator>
   )
 }
