@@ -77,9 +77,19 @@ const SendConfirm = () => {
       
       //amount = formatBalanceWithoutSuffix(amount, BitcoinUnit.BTC, false);
       amount = params.amount;
+      let r = await wallet.transfer(amount, recipients[0].address);
+      if (!r) {
+        ReactNativeHapticFeedback.trigger('notificationError', {
+          ignoreAndroidSystemSettings: false,
+        });
+        setIsLoading(false);
+        alert('Something wrong transfer!');
+        return;
+      }
       navigate('SendSuccess', {
         fee: Number(fee),
         amount,
+        txtUrl: 'https://block.phuquoc.dog/transfer/' + r.toHex()
       });
 
       setIsLoading(false);

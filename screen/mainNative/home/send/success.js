@@ -17,7 +17,7 @@ const SendSuccess = ({navigation}) => {
   };
   const { colors } = useTheme();
   const { dangerouslyGetParent } = useNavigation();
-  const { amount, fee, amountUnit = BitcoinUnit.BTC, invoiceDescription = '', onDonePressed = pop } = useRoute().params;
+  const { amount, fee, txtUrl = BitcoinUnit.BTC, invoiceDescription = '', onDonePressed = pop } = useRoute().params;
   const stylesHook = StyleSheet.create({
     root: {
       backgroundColor: colors.elevated,
@@ -45,7 +45,7 @@ const SendSuccess = ({navigation}) => {
     <SafeAreaView style={[styles.root, stylesHook.root]}>
       <SuccessView
         amount={amount}
-        amountUnit={amountUnit}
+        txtUrl={txtUrl}
         fee={fee}
         invoiceDescription={invoiceDescription}
         onDonePressed={onDonePressed}
@@ -59,7 +59,7 @@ const SendSuccess = ({navigation}) => {
 
 export default SendSuccess;
 
-export const SuccessView = ({ amount, amountUnit, fee, invoiceDescription, shouldAnimate = true }) => {
+export const SuccessView = ({ amount, txtUrl, fee, invoiceDescription, shouldAnimate = true }) => {
   const animationRef = useRef();
   const { colors } = useTheme();
 
@@ -86,8 +86,7 @@ export const SuccessView = ({ amount, amountUnit, fee, invoiceDescription, shoul
         <View style={styles.view}>
           {amount && (
             <>
-              <Text style={[styles.amountValue, stylesHook.amountValue]}>{amount}</Text>
-              <Text style={[styles.amountUnit, stylesHook.amountUnit]}>{' PQD'}</Text>
+              <Text style={[styles.amountValue, stylesHook.amountValue]}>{amount} PQD</Text>
             </>
           )}
         </View>
@@ -96,6 +95,10 @@ export const SuccessView = ({ amount, amountUnit, fee, invoiceDescription, shoul
             {loc.send.create_fee}: {fee} PQD
           </Text>
         )}
+        <Text numberOfLines={0}>
+          {txtUrl}
+        </Text>
+        
         <Text numberOfLines={0} style={styles.feeText}>
           {invoiceDescription}
         </Text>
