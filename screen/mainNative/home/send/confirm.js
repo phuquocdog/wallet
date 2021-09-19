@@ -9,20 +9,12 @@ import PropTypes from 'prop-types';
 import PayjoinTransaction from '../../class/payjoin-transaction';
 import { BlueButton, BlueText, SafeBlueArea, BlueCard } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
-import { BitcoinUnit } from '../../models/bitcoinUnits';
 import Biometric from '../../class/biometrics';
 import loc, {formatBalanceWithoutSuffix } from '../../loc';
 import {formatBalance, formatAmountFiat} from '../../helpers/pqd'
 import Notifications from '../../blue_modules/notifications';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
-import { Psbt } from 'bitcoinjs-lib';
-import { isTorCapable } from '../../blue_modules/environment';
 import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
-const currency = require('../../blue_modules/currency');
-const BlueElectrum = require('../../blue_modules/BlueElectrum');
-const Bignumber = require('bignumber.js');
-const bitcoin = require('bitcoinjs-lib');
-const torrific = require('../../blue_modules/torrific');
 
 const SendConfirm = () => {
   const { wallets, fetchAndSaveWalletTransactions } = useContext(BlueStorageContext);
@@ -77,9 +69,6 @@ const SendConfirm = () => {
             amount = params.amount;
       let r = await wallet.transfer(amount, recipients[0].address);
       if (!r) {
-        ReactNativeHapticFeedback.trigger('notificationError', {
-          ignoreAndroidSystemSettings: false,
-        });
         setIsLoading(false);
         alert('Something wrong transfer!');
         return;

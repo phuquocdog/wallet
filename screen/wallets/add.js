@@ -28,7 +28,6 @@ import navigationStyle from '../../components/navigationStyle';
 import { HDSegwitBech32Wallet, SegwitP2SHWallet, HDSegwitP2SHWallet, LightningCustodianWallet, AppStorage } from '../../class';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { useTheme, useNavigation } from '@react-navigation/native';
-import { Chain } from '../../models/bitcoinUnits';
 import loc from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 import { keyring } from '@polkadot/ui-keyring';
@@ -41,9 +40,9 @@ import { PhuquocdogWallet } from '../../class/wallets/phuquocdog-wallet';
 const A = require('../../blue_modules/analytics');
 
 const ButtonSelected = Object.freeze({
-  ONCHAIN: Chain.ONCHAIN,
-  OFFCHAIN: Chain.OFFCHAIN,
-  VAULT: 'VAULT',
+  PQD: 'phuquocdog',
+  BTC: 'btc',
+  PDEX: 'pdex',
 });
 
 const WalletsAdd = () => {
@@ -134,7 +133,10 @@ const WalletsAdd = () => {
     setIsKeyring(false);
     const phrase = mnemonicGenerate(12);
     const { address } = keyring.createFromUri(phrase);
-
+    if (selectedWalletType === ButtonSelected.BTC) {
+      alert('We have not supported at the moment!')
+      return;
+    }
     const w = {
       'label': label,
       'chain': 'phuquocdog',
@@ -172,19 +174,16 @@ const WalletsAdd = () => {
     navigate('ImportWallet');
   };
 
-  const handleOnVaultButtonPressed = () => {
-    Keyboard.dismiss();
-    setSelectedWalletType(ButtonSelected.VAULT);
-  };
+  
 
   const handleOnBitcoinButtonPressed = () => {
     Keyboard.dismiss();
-    setSelectedWalletType(ButtonSelected.ONCHAIN);
+    setSelectedWalletType(ButtonSelected.BTC);
   };
 
   const handlePQDButtonPressed = () => {
     Keyboard.dismiss();
-    setSelectedWalletType(ButtonSelected.OFFCHAIN);
+    setSelectedWalletType(ButtonSelected.PQD);
   };
 
   return (
@@ -209,14 +208,14 @@ const WalletsAdd = () => {
         <View style={styles.buttons}>
 
           <PQDButton
-            active={selectedWalletType === ButtonSelected.OFFCHAIN}
+            active={selectedWalletType === ButtonSelected.PQD}
             onPress={handlePQDButtonPressed}
             style={styles.button}
           />
 
           <BitcoinButton
             testID="ActivateBitcoinButton"
-            active={selectedWalletType === ButtonSelected.ONCHAIN}
+            active={selectedWalletType === ButtonSelected.BTC}
             onPress={handleOnBitcoinButtonPressed}
             style={styles.button}
           />
@@ -225,7 +224,7 @@ const WalletsAdd = () => {
 
         <View style={styles.advanced}>
           {(() => {
-            if (selectedWalletType === ButtonSelected.ONCHAIN && isAdvancedOptionsEnabled) {
+            if (selectedWalletType === ButtonSelected.BTC && isAdvancedOptionsEnabled) {
               return (
                 <View>
                   <BlueSpacing20 />
@@ -253,7 +252,7 @@ const WalletsAdd = () => {
                   />
                 </View>
               );
-            } else if (selectedWalletType === ButtonSelected.OFFCHAIN) {
+            } else if (selectedWalletType === ButtonSelected.PQD) {
               return (
                 <>
                   <BlueSpacing20 />
@@ -280,7 +279,7 @@ const WalletsAdd = () => {
               );
             }
           })()}
-          {isAdvancedOptionsEnabled && selectedWalletType === ButtonSelected.ONCHAIN && !isLoading && (
+          {isAdvancedOptionsEnabled && selectedWalletType === ButtonSelected.BTC && !isLoading && (
             <BlueButtonLink style={styles.import} title={entropyButtonText} onPress={navigateToEntropy} />
           )}
           <BlueSpacing20 />
@@ -289,7 +288,7 @@ const WalletsAdd = () => {
               <BlueButton
                 testID="Create"
                 title={loc.wallets.add_create}
-                disabled={!selectedWalletType || (selectedWalletType === Chain.OFFCHAIN && (walletBaseURI ?? '').trim().length === 0)}
+                disabled={!selectedWalletType}
                 onPress={createWallet}
               />
             ) : (

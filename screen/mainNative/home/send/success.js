@@ -38,7 +38,6 @@ const SendSuccess = ({navigation}) => {
 
   const goHome = () => {
     navigation.popToTop()
-
   }
 
   return (

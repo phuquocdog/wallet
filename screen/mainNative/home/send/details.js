@@ -108,14 +108,11 @@ const SendDetails = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    console.log('balance---->', balance)
-
     const wallet = (routeParams.walletID && wallets.find(w => w.getID() === routeParams.walletID));
     setWallet(wallet);
     setBalance(wallet.balanceHuman);
     setAddresses([{ address: '', key: String(Math.random()) }]); // key is for the FlatList
-    
-
+  
     // we are ready!
     setIsLoading(false);    
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -404,7 +401,6 @@ const SendDetails = () => {
         {
           text: loc._.ok,
           onPress: () => {
-            console.log('onUseAllPressed')
             Keyboard.dismiss();
             setAddresses(addresses => {
               addresses[scrollIndex.current].amount = BitcoinUnit.MAX;

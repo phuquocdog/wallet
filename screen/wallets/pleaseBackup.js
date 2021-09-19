@@ -38,7 +38,7 @@ const PleaseBackup = () => {
 
 
   const handleBackButton = useCallback(() => {
-    navigation.dangerouslyGetParent().pop();
+    navigation.popToTop();
     return true;
   }, [navigation]);
 
