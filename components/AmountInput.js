@@ -56,7 +56,7 @@ class AmountInput extends Component {
    * @param newUnit {string} one of {BitcoinUnit.*}
    */
   onAmountUnitChange(previousUnit, newUnit) {
-    const amount = this.props.amount || 0;
+    const amount = this.props.amount || '0';
     console.log('was:', amount, previousUnit, '; converting to', newUnit);
     let sats = 0;
     switch (previousUnit) {
@@ -130,7 +130,7 @@ class AmountInput extends Component {
 
   render() {
     const { colors, disabled, unit } = this.props;
-    const amount = this.props.amount || 0;
+    const amount = this.props.amount || '0';
     let secondaryDisplayCurrency = amount*0.00001;
     secondaryDisplayCurrency += '$'
 

@@ -27,13 +27,9 @@ const InputAccessoryAllFunds = ({ balance, canUseAll, onUseAllPressed }) => {
     <View style={[styles.root, stylesHook.root]}>
       <View style={styles.left}>
         <Text style={[styles.totalLabel, stylesHook.totalLabel]}>{loc.send.input_total}</Text>
-        {canUseAll ? (
-          <BlueButtonLink onPress={onUseAllPressed} style={styles.totalCan} title={`${balance} ${BitcoinUnit.BTC}`} />
-        ) : (
-          <Text style={[styles.totalCanNot, stylesHook.totalCanNot]}>
-            {balance} {BitcoinUnit.BTC}
-          </Text>
-        )}
+        <Text style={[styles.totalCanNot, stylesHook.totalCanNot]}>
+            {balance}
+        </Text>
       </View>
       <View style={styles.right}>
         <BlueButtonLink style={styles.done} title={loc.send.input_done} onPress={Keyboard.dismiss} />

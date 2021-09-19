@@ -2,6 +2,8 @@ import { Keyring } from '@polkadot/keyring';
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const BN = require('bn.js');
+
 export class PhuquocdogWallet {
 
   constructor(props) {
@@ -130,23 +132,30 @@ export class PhuquocdogWallet {
 
   async transfer(amount, address) {
     try {
-      const c = await this.connect();
-      const transfer = api.tx.balances.transfer(address, amount);
+      const api = await this.connect();
 
       // Constuct the keyring after the API (crypto has an async init)
       const keyring = new Keyring({ type: 'sr25519' });
       // Add myAccount to our keyring with a hard-deived path (empty phrase, so uses dev)
       const myAccount = keyring.addFromUri(this.getSecret());
+
+      const decims = new BN(api.registry.chainDecimals);
+      const factor = new BN(10).pow(decims);
+      const amountUnit = new BN(amount).mul(factor);
+
+      const transfer = api.tx.balances.transfer(address, amountUnit);
       // Sign and send the transaction using our account
       const hash = await transfer.signAndSend(myAccount);
 
       console.log('Transfer sent with hash', hash.toHex())
 
+      return hash;
 
     } catch (e) {
       console.log('Transfer Error',e.message)
 
     }
+    return false;
   
   }
 }
