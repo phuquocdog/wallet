@@ -74,9 +74,7 @@ const SendConfirm = () => {
   const send = async () => {
     setIsLoading(true);
     try {
-      
-      //amount = formatBalanceWithoutSuffix(amount, BitcoinUnit.BTC, false);
-      amount = params.amount;
+            amount = params.amount;
       let r = await wallet.transfer(amount, recipients[0].address);
       if (!r) {
         ReactNativeHapticFeedback.trigger('notificationError', {

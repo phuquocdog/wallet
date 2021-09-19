@@ -84,7 +84,7 @@ const SendDetails = () => {
   // if there are no funds for even Slow option, use 1 sat/byte fee
   //@TODO
   const feeRate = useMemo(() => {
-    return '0.000001494576'
+    return '0.01'
   }, []);
 
   // keyboad effects
@@ -108,33 +108,18 @@ const SendDetails = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
+    console.log('balance---->', balance)
+
     const wallet = (routeParams.walletID && wallets.find(w => w.getID() === routeParams.walletID));
     setWallet(wallet);
+    setBalance(wallet.balanceHuman);
     setAddresses([{ address: '', key: String(Math.random()) }]); // key is for the FlatList
+    
+
     // we are ready!
     setIsLoading(false);    
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const mountedRef = useRef(true)
-  useEffect(() => {
-    // CALL YOUR API OR ASYNC FUNCTION HERE
-    (async () => {
-      if (wallet) {
-        try {
-          const result = await wallet.getBalance();
-          if (result) {
-            setBalance(result)
-          }
-          console.log(balance)
-
-        } catch (e) {
-          console.log(e)
-        }
-      }
-    });
-
-    return () => { mountedRef.current = false }
-  }, [])
   
 
   const processAddressData = () => {
@@ -419,16 +404,14 @@ const SendDetails = () => {
         {
           text: loc._.ok,
           onPress: () => {
+            console.log('onUseAllPressed')
             Keyboard.dismiss();
             setAddresses(addresses => {
               addresses[scrollIndex.current].amount = BitcoinUnit.MAX;
               addresses[scrollIndex.current].amountSats = BitcoinUnit.MAX;
               return [...addresses];
             });
-            setUnits(units => {
-              units[scrollIndex.current] = BitcoinUnit.BTC;
-              return [...units];
-            });
+            
             LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
             setOptionsVisible(false);
           },
