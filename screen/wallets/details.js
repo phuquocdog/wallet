@@ -24,15 +24,7 @@ import { BlueCard, BlueLoading, BlueSpacing10, BlueSpacing20, BlueText, SecondBu
 import navigationStyle from '../../components/navigationStyle';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import Biometric from '../../class/biometrics';
-import {
-  HDSegwitBech32Wallet,
-  SegwitP2SHWallet,
-  LegacyWallet,
-  SegwitBech32Wallet,
-  WatchOnlyWallet,
-  MultisigHDWallet,
-  HDAezeedWallet,
-} from '../../class';
+
 import loc from '../../loc';
 import { useTheme, useRoute, useNavigation } from '@react-navigation/native';
 import RNFS from 'react-native-fs';
@@ -526,27 +518,7 @@ const WalletDetails = () => {
                 <BlueSpacing20 />
                 <SecondButton onPress={navigateToWalletExport} testID="WalletExport" title={loc.wallets.details_export_backup} />
 
-                {wallet.type === MultisigHDWallet.type && (
-                  <>
-                    <BlueSpacing20 />
-                    <SecondButton
-                      onPress={navigateToMultisigCoordinationSetup}
-                      testID="MultisigCoordinationSetup"
-                      title={loc.multisig.export_coordination_setup.replace(/^\w/, c => c.toUpperCase())}
-                    />
-                  </>
-                )}
-
-                {wallet.type === MultisigHDWallet.type && (
-                  <>
-                    <BlueSpacing20 />
-                    <SecondButton
-                      onPress={navigateToViewEditCosigners}
-                      testID="ViewEditCosigners"
-                      title={loc.multisig.view_edit_cosigners}
-                    />
-                  </>
-                )}
+  
 
                 {wallet.allowXpub() && (
                   <>

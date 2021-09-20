@@ -23,41 +23,19 @@ export default class WalletGradient {
 
   static gradientsFor(type) {
     let gradient;
-    console.log('type----->' + type);
-
-    switch (type) {
-      default:
-        gradient = WalletGradient.PQDWallet;
-        break;
-    }
+    gradient = WalletGradient.PQDWallet;
     return gradient;
   }
 
   static linearGradientProps(type) {
     let props;
-    switch (type) {
-      case MultisigHDWallet.type:
-        /* Example
-        props = { start: { x: 0, y: 0 } };
-        https://github.com/react-native-linear-gradient/react-native-linear-gradient
-        */
-        break;
-      default:
-        break;
-    }
+    
     return props;
   }
 
   static headerColorFor(type) {
     let gradient;
-    switch (type) {
-      case HDAezeedWallet.type:
-        gradient = WalletGradient.aezeedWallet;
-        break;
-      default:
-        gradient = WalletGradient.PQDWallet;
-        break;
-    }
+    gradient = WalletGradient.PQDWallet;
     return gradient[0];
   }
 }
