@@ -16,7 +16,6 @@ import {
   SLIP39LegacyP2PKHWallet,
 } from '../class';
 const bitcoin = require('bitcoinjs-lib');
-const BlueCrypto = require('react-native-blue-crypto');
 const encryption = require('../blue_modules/encryption');
 const BlueElectrum = require('../blue_modules/BlueElectrum');
 
@@ -203,12 +202,7 @@ export default class Selftest extends Component {
         // skipping RN-specific test
       }
 
-      // BlueCrypto test
-      if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
-        const hex = await BlueCrypto.scrypt('717765727479', '4749345a22b23cf3', 64, 8, 8, 32); // using non-default parameters to speed it up (not-bip38 compliant)
-        if (hex.toUpperCase() !== 'F36AB2DC12377C788D61E6770126D8A01028C8F6D8FE01871CE0489A1F696A90')
-          throw new Error('react-native-blue-crypto is not ok');
-      }
+      
 
       // bip38 test
       if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {

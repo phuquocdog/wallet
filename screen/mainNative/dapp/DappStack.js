@@ -21,7 +21,7 @@ const DappStack = () => {
 
 
   return (
-    <stack.Navigator {...(Platform.OS === 'android' ? { screenOptions: defaultScreenOptions } : null)}>
+    <stack.Navigator>
       <stack.Screen
         name="LappBrowser"
         component={LappBrowser}
