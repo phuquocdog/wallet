@@ -1,0 +1,4 @@
+* Add init fastlane 
+* Clean code 
+* add config react-native-vector-icons for android 
+* Add app for android 

@@ -7,7 +7,6 @@ import {
   HDSegwitP2SHWallet,
   HDLegacyP2PKHWallet,
   WatchOnlyWallet,
-  LegacyWallet,
   SegwitP2SHWallet,
   SegwitBech32Wallet,
   HDSegwitBech32Wallet,

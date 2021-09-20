@@ -5,10 +5,10 @@ import { Platform } from 'react-native';
 const BlueApp = require('../BlueApp');
 
 if (process.env.NODE_ENV !== 'development') {
-  Sentry.init({
-    dsn: 'https://23377936131848ca8003448a893cb622@sentry.io/1295736',
-  });
-  Sentry.setUser({ id: getUniqueId() });
+  // Sentry.init({
+  //   dsn: 'https://23377936131848ca8003448a893cb622@sentry.io/1295736',
+  // });
+  // Sentry.setUser({ id: getUniqueId() });
 }
 
 amplitude.getInstance().init('8b7cf19e8eea3cdcf16340f5fbf16330', null, {
