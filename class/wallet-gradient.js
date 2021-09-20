@@ -26,9 +26,6 @@ export default class WalletGradient {
     console.log('type----->' + type);
 
     switch (type) {
-      case WatchOnlyWallet.type:
-        gradient = WalletGradient.watchOnlyWallet;
-        break;
       default:
         gradient = WalletGradient.PQDWallet;
         break;

@@ -241,12 +241,6 @@ const WalletCarouselItem = ({ item, index, onPress, handleLongPress, isSelectedW
   const opacity = isSelectedWallet === false ? 0.5 : 1.0;
   let image;
   switch (item.type) {
-    case LightningCustodianWallet.type:
-      image = I18nManager.isRTL ? require('../img/lnd-shape-rtl.png') : require('../img/lnd-shape.png');
-      break;
-    case MultisigHDWallet.type:
-      image = I18nManager.isRTL ? require('../img/vault-shape-rtl.png') : require('../img/vault-shape.png');
-      break;
     default:
       image = I18nManager.isRTL ? require('../img/lnd-shape-rtl.png') : require('../img/lnd-shape.png');
 

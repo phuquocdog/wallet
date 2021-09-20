@@ -2,24 +2,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNSecureKeyStore, { ACCESSIBLE } from 'react-native-secure-key-store';
 import * as Keychain from 'react-native-keychain';
-import {
-  HDLegacyBreadwalletWallet,
-  HDSegwitP2SHWallet,
-  HDLegacyP2PKHWallet,
-  WatchOnlyWallet,
-  SegwitP2SHWallet,
-  SegwitBech32Wallet,
-  HDSegwitBech32Wallet,
-  PlaceholderWallet,
-  LightningCustodianWallet,
-  HDLegacyElectrumSeedP2PKHWallet,
-  HDSegwitElectrumSeedP2WPKHWallet,
-  HDAezeedWallet,
-  MultisigHDWallet,
-  SLIP39SegwitP2SHWallet,
-  SLIP39LegacyP2PKHWallet,
-  SLIP39SegwitBech32Wallet,
-} from './';
 import { randomBytes } from './rng';
 const encryption = require('../blue_modules/encryption');
 

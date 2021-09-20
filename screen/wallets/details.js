@@ -22,7 +22,6 @@ import {
 } from 'react-native';
 import { BlueCard, BlueLoading, BlueSpacing10, BlueSpacing20, BlueText, SecondButton, BlueListItem } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
-import { LightningCustodianWallet } from '../../class/wallets/lightning-custodian-wallet';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import Biometric from '../../class/biometrics';
 import {
@@ -41,7 +40,6 @@ import Share from 'react-native-share';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 import Notifications from '../../blue_modules/notifications';
 import { isDesktop } from '../../blue_modules/environment';
-import { AbstractHDElectrumWallet } from '../../class/wallets/abstract-hd-electrum-wallet';
 
 const prompt = require('../../blue_modules/prompt');
 
@@ -471,39 +469,7 @@ const WalletDetails = () => {
               <BlueSpacing20 />
               <Text style={[styles.textLabel1, stylesHook.textLabel1]}>{loc.wallets.details_type.toLowerCase()}</Text>
               <Text style={[styles.textValue, stylesHook.textValue]}>{wallet.typeReadable}</Text>
-
-              {wallet.type === MultisigHDWallet.type && (
-                <>
-                  <Text style={[styles.textLabel2, stylesHook.textLabel2]}>{loc.wallets.details_multisig_type}</Text>
-                  <BlueText>
-                    {loc.formatString(loc.wallets[`details_ms_${wallet.isNativeSegwit() ? 'ns' : wallet.isWrappedSegwit() ? 'ws' : 'l'}`], {
-                      m: wallet.getM(),
-                      n: wallet.getN(),
-                    })}
-                  </BlueText>
-                </>
-              )}
-
-              {wallet.type === MultisigHDWallet.type && (
-                <>
-                  <Text style={[styles.textLabel2, stylesHook.textLabel2]}>{loc.multisig.how_many_signatures_can_bluewallet_make}</Text>
-                  <BlueText>{wallet.howManySignaturesCanWeMake()}</BlueText>
-                </>
-              )}
-
-              {wallet.type === LightningCustodianWallet.type && (
-                <>
-                  <Text style={[styles.textLabel1, stylesHook.textLabel1]}>{loc.wallets.details_connected_to.toLowerCase()}</Text>
-                  <BlueText>{wallet.getBaseURI()}</BlueText>
-                </>
-              )}
-
-              {wallet.type === HDAezeedWallet.type && (
-                <>
-                  <Text style={[styles.textLabel1, stylesHook.textLabel1]}>{loc.wallets.identity_pubkey.toLowerCase()}</Text>
-                  <BlueText>{wallet.getIdentityPubkey()}</BlueText>
-                </>
-              )}
+              
               <>
                 <Text onPress={exportInternals} style={[styles.textLabel2, stylesHook.textLabel2]}>
                   {loc.transactions.list_title.toLowerCase()}

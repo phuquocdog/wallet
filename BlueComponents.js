@@ -27,14 +27,12 @@ import {
 } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import LinearGradient from 'react-native-linear-gradient';
-import { LightningCustodianWallet, MultisigHDWallet } from './class';
 import { BitcoinUnit } from './models/bitcoinUnits';
 import * as NavigationService from './NavigationService';
 import WalletGradient from './class/wallet-gradient';
 import { BlurView } from '@react-native-community/blur';
 import NetworkTransactionFees, { NetworkTransactionFee, NetworkTransactionFeeType } from './models/networkTransactionFees';
 import Biometric from './class/biometrics';
-import { encodeUR } from './blue_modules/ur';
 import QRCode from 'react-native-qrcode-svg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useTheme } from '@react-navigation/native';
@@ -242,26 +240,13 @@ export class BlueWalletNavigationHeader extends Component {
   componentDidUpdate(prevState) {
 
     InteractionManager.runAfterInteractions(() => {
-      if (prevState.wallet.getID() !== this.state.wallet.getID() && this.state.wallet.type === LightningCustodianWallet.type) {
-        this.verifyIfWalletAllowsOnchainAddress();
-      }
+      
     });
   }
 
-  verifyIfWalletAllowsOnchainAddress = () => {
-    if (this.state.wallet.type === LightningCustodianWallet.type) {
-      this.state.wallet
-        .allowOnchainAddress()
-        .then(value => this.setState({ allowOnchainAddress: value }))
-        .catch(e => {
-          console.log('This Lndhub wallet does not have an onchain address API.');
-          this.setState({ allowOnchainAddress: false });
-        });
-    }
-  };
+  
 
   componentDidMount() {
-    this.verifyIfWalletAllowsOnchainAddress();
   }
 
   handleBalanceVisibility = async _item => {
@@ -320,10 +305,6 @@ export class BlueWalletNavigationHeader extends Component {
         <Image
           source={(() => {
             switch (this.state.wallet.type) {
-              case LightningCustodianWallet.type:
-                return I18nManager.isRTL ? require('./img/lnd-shape-rtl.png') : require('./img/lnd-shape.png');
-              case MultisigHDWallet.type:
-                return I18nManager.isRTL ? require('./img/vault-shape-rtl.png') : require('./img/vault-shape.png');
               default:
                 return I18nManager.isRTL ? require('./img/btc-shape-rtl.png') : require('./img/btc-shape.png');
             }
@@ -401,62 +382,6 @@ export class BlueWalletNavigationHeader extends Component {
             </Text>
           )}
         </TouchableOpacity>
-        {this.state.wallet.type === LightningCustodianWallet.type && this.state.allowOnchainAddress && (
-          <TouchableOpacity accessibilityRole="button" onPress={this.manageFundsPressed}>
-            <View
-              style={{
-                marginTop: 14,
-                marginBottom: 10,
-                backgroundColor: 'rgba(255,255,255,0.2)',
-                borderRadius: 9,
-                minHeight: 39,
-                alignSelf: 'flex-start',
-                paddingHorizontal: 12,
-                height: 39,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <Text
-                style={{
-                  fontWeight: '500',
-                  fontSize: 14,
-                  color: '#FFFFFF',
-                }}
-              >
-                {loc.lnd.title}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        )}
-        {this.state.wallet.type === MultisigHDWallet.type && (
-          <TouchableOpacity accessibilityRole="button" onPress={this.manageFundsPressed}>
-            <View
-              style={{
-                marginTop: 14,
-                marginBottom: 10,
-                backgroundColor: 'rgba(255,255,255,0.2)',
-                borderRadius: 9,
-                minHeight: 39,
-                alignSelf: 'flex-start',
-                paddingHorizontal: 12,
-                height: 39,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <Text
-                style={{
-                  fontWeight: '500',
-                  fontSize: 14,
-                  color: '#FFFFFF',
-                }}
-              >
-                {loc.multisig.manage_keys}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        )}
       </LinearGradient>
     );
   }
@@ -1754,7 +1679,6 @@ export class DynamicQRCode extends Component {
 
   componentDidMount() {
     const { value, capacity = 200 } = this.props;
-    this.fragments = encodeUR(value, capacity);
     this.setState(
       {
         total: this.fragments.length,
