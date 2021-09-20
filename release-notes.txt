@@ -1,8 +1,0 @@
-* Add method transfer 
-* Add layout send PQD 
-* add color for header when see detail wallet 
-* Update img 
-* Update README.md 
-* Add layout transaction 
-* Clean up 
-* No need for window 

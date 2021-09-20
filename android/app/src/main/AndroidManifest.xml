@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   android:installLocation="auto"
-  package="io.bluewallet.bluewallet">
+  package="dog.phuquoc.wallet">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
@@ -12,7 +12,6 @@
       android:name=".MainApplication"
       android:label="@string/app_name"
       android:icon="@mipmap/ic_launcher"
-      android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:extractNativeLibs="true"
       android:requestLegacyExternalStorage="true"
@@ -67,7 +66,7 @@
           <category android:name="android.intent.category.BROWSABLE" />
           <data android:scheme="bitcoin" />
           <data android:scheme="lightning" />
-          <data android:scheme="bluewallet" />
+          <data android:scheme="phuquoc" />
           <data android:scheme="lapp" />
           <data android:scheme="blue" />
           <data android:scheme="aopp" />

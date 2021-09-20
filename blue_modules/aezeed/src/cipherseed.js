@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CipherSeed = void 0;
-const BlueCrypto = require('react-native-blue-crypto');
+
 const scrypt = require("scryptsy");
 const rng = require("randombytes");
 const mn = require("./mnemonic");
@@ -12,15 +12,8 @@ const BITCOIN_GENESIS = new Date('2009-01-03T18:15:05.000Z').getTime();
 const daysSinceGenesis = (time) => Math.floor((time.getTime() - BITCOIN_GENESIS) / params_1.ONE_DAY);
 
 async function scryptWrapper(secret, salt, N, r, p, dkLen, progressCallback) {
-  if (BlueCrypto.isAvailable()) {
-    secret = Buffer.from(secret).toString('hex');
-    salt = Buffer.from(salt).toString('hex');
-    const hex = await BlueCrypto.scrypt(secret, salt, N, r, p, dkLen);
-    return Buffer.from(hex, 'hex');
-  } else {
-    // fallback to js implementation
     return scrypt(secret, salt, N, r, p, dkLen, progressCallback);
-  }
+
 }
 
 class CipherSeed {
