@@ -7,7 +7,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { StackActions, useNavigation, useRoute } from '@react-navigation/native';
 import { BlueStorageContext } from './blue_modules/storage-context';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
-import SplashScreen from 'react-native-splash-screen';
 
 const styles = StyleSheet.create({
   root: {
@@ -95,7 +94,6 @@ const UnlockWith = () => {
     if (isAuthenticating) {
       return <ActivityIndicator />;
     } else {
-      SplashScreen.hide();
       const color = colorScheme === 'dark' ? '#FFFFFF' : '#000000';
       if ((biometricType === Biometric.TouchID || biometricType === Biometric.Biometrics) && !isStorageEncryptedEnabled) {
         return (
