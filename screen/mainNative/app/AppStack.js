@@ -11,6 +11,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import Merchant from './Merchant';
 import IpfsUser from './IpfsUser';
 import StorageUser from './StorageUser';
+import Soon from '../Soon';
 
 const Container = styled(SafeAreaView)`
   flex: 1;
@@ -48,7 +49,7 @@ const Stack = createStackNavigator()
 export default function AppStack() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="AppTabs" component={AppTabs} options={{ headerShown: false }}/>
+      <Stack.Screen name="Soon" component={Soon} options={{ headerShown: false }}/>
     </Stack.Navigator>
   )
 }
