@@ -142,11 +142,7 @@ const WalletsAdd = () => {
       'chain': 'phuquocdog',
       'address' : address,
       'secret': phrase,
-      'preferredBalanceUnit': 'PQD',
-      'unconfirmed_balance': 0,
-      'balance_human': 0,
-      'type': 'phuquocdog',
-      'use_with_hardware_wallet': false
+      'type': 'phuquocdog'
     }
 
     pqd = new PhuquocdogWallet(w);

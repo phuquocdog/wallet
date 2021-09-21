@@ -297,7 +297,7 @@ export class AppStorage {
    * @returns {Promise.<boolean>}
    */
   async loadFromDisk(password) {
-    //this.resetData();
+    this.resetData();
     let data = await this.getItem('data');
   
     if (data !== null) {
@@ -403,7 +403,7 @@ export class AppStorage {
         wallets: walletsToSave,
         tx_metadata: this.tx_metadata,
       };
-      console.log(JSON.stringify(data));
+      //console.log(JSON.stringify(data));
      
       await this.setItem('data', JSON.stringify(data));
       //await this.setItem(AppStorage.FLAG_ENCRYPTED, '');

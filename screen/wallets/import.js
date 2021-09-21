@@ -109,10 +109,7 @@ const WalletsImport = () => {
         'chain': 'phuquocdog',
         'address' : address,
         'secret': importText,
-        'preferredBalanceUnit': 'PQD',
-        'unconfirmed_balance': 0,
-        'balance_human': 0,
-        'use_with_hardware_wallet': false
+        'type': 'phuquocdog'
       }
       setIsKeyring(false);
 

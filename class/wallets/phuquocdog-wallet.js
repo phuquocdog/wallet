@@ -32,13 +32,27 @@ export class PhuquocdogWallet {
   async getBalanceHuman() {
 
     try {
-      const c = await this.connect();
-      const { nonce, data: balance } = await c.query.system.account(this.props.address);
-      if (balance) {
-        this.setBalanceHuman(balance.free.toHuman());
+      let b = await AsyncStorage.getItem(this.getAddress);
+      if (b !== null) {
+        console.log('get data cache');
+        this.setBalanceHuman(b.balanceHuman);
+      } else {
+        console.log('set data cache');
+        const c = await this.connect();
+        const { nonce, data: balance } = await c.query.system.account(this.props.address);
+        if (balance) {
+          this.setBalanceHuman(balance.free.toHuman());
+          //Cache data to Store
+          await AsyncStorage.setItem(this.getAddress, JSON.stringify({
+            'balance' : balance.free,
+            'balanceHuman': balance.free.toHuman()
+          }));
 
+        }
       }
-    } catch (_) {}
+    } catch (e) {
+      console.log('error', e)
+    }
   
     return this.balanceHuman;
   }
