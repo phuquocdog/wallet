@@ -6,12 +6,11 @@ import { getApplicationName, getVersion, getBundleId, getBuildNumber, getUniqueI
 import Rate, { AndroidMarket } from 'react-native-rate';
 
 import { BlueButton, BlueCard, BlueListItem, BlueSpacing20, BlueTextCentered } from '../../BlueComponents';
-import navigationStyle from '../../components/navigationStyle';
 import loc, { formatStringAddTwoWhiteSpaces } from '../../loc';
 import Clipboard from '@react-native-clipboard/clipboard';
 import * as Sentry from '@sentry/react-native';
 
-const About = () => {
+const Soon = () => {
   const { navigate } = useNavigation();
   const { colors } = useTheme();
   const { width, height } = useWindowDimensions();
@@ -117,8 +116,9 @@ const About = () => {
       <BlueCard>
         <View style={styles.center}>
           <Image style={styles.logo} source={require('../../img/black120x120.png')} />
-          <Text style={styles.textFree}>{loc.settings.about_free}</Text>
-          <Text style={styles.textBackup}>{formatStringAddTwoWhiteSpaces(loc.settings.about_backup)}</Text>
+          <Text style={styles.textFree}>
+          The current feature is not complete. We will update the next version!
+          </Text>
           <BlueButton onPress={handleOnRatePress} title={loc.settings.about_review + ' ⭐🙏'} />
         </View>
       </BlueCard>
@@ -149,83 +149,14 @@ const About = () => {
         onPress={handleOnDiscordPress}
         title={loc.settings.about_sm_discord}
       />
-      <BlueCard>
-        <View style={styles.buildWith}>
-          <BlueSpacing20 />
-
-          <BlueTextCentered>{loc.settings.about_awesome} 👍</BlueTextCentered>
-          <BlueSpacing20 />
-          <BlueTextCentered>React Native</BlueTextCentered>
-          <BlueTextCentered>Polkadot js</BlueTextCentered>
-          <BlueTextCentered>Nodejs</BlueTextCentered>
-          <BlueTextCentered>Phu Quoc Dog server</BlueTextCentered>
-          <BlueSpacing20 />
-
-          <TouchableOpacity accessibilityRole="button" onPress={handleOnGithubPress} style={styles.buttonLink}>
-            <Icon size={22} name="github" type="font-awesome-5" color={colors.foregroundColor} />
-            <Text style={styles.textLink}>{formatStringAddTwoWhiteSpaces(loc.settings.about_sm_github)}</Text>
-          </TouchableOpacity>
-        </View>
-      </BlueCard>
-      <BlueListItem
-        leftIcon={{
-          name: 'book',
-          type: 'font-awesome',
-          color: '#9AA0AA',
-        }}
-        chevron
-        onPress={handleOnReleaseNotesPress}
-        title={loc.settings.about_release_notes}
-      />
-      <BlueListItem
-        leftIcon={{
-          name: 'law',
-          type: 'octicon',
-          color: colors.foregroundColor,
-        }}
-        chevron
-        onPress={handleOnLicensingPress}
-        title={loc.settings.about_license}
-      />
-      <BlueListItem
-        leftIcon={{
-          name: 'flask',
-          type: 'font-awesome',
-          color: '#FC0D44',
-        }}
-        chevron
-        onPress={handleOnSelfTestPress}
-        testID="RunSelfTestButton"
-        title={loc.settings.about_selftest}
-      />
+      
       <BlueSpacing20 />
-      <BlueSpacing20 />
-      <BlueTextCentered>
-        {getApplicationName()} ver {getVersion()} (build {getBuildNumber()})
-      </BlueTextCentered>
-      <BlueTextCentered>{new Date(getBuildNumber() * 1000).toGMTString()}</BlueTextCentered>
-      <BlueTextCentered>{getBundleId()}</BlueTextCentered>
-      <BlueTextCentered>
-        w, h = {width}, {height}
-      </BlueTextCentered>
-      <BlueTextCentered>Unique ID: {getUniqueId()}</BlueTextCentered>
-      <View style={styles.copyToClipboard}>
-        <TouchableOpacity
-          accessibilityRole="button"
-          onPress={() => {
-            const stringToCopy = 'user.id:' + getUniqueId();
-            Sentry.captureMessage('copied unique id');
-            Clipboard.setString(stringToCopy);
-          }}
-        >
-          <Text style={styles.copyToClipboardText}>{loc.transactions.details_copy}</Text>
-        </TouchableOpacity>
-      </View>
+      
+      
       <BlueSpacing20 />
       <BlueSpacing20 />
     </ScrollView>
   );
 };
 
-About.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.settings.about }));
-export default About;
+export default Soon;
