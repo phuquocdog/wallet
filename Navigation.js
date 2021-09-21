@@ -4,21 +4,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Platform, useWindowDimensions, Dimensions, I18nManager } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 
-
-
-import TransactionDetails from './screen/transactions/details';
-import TransactionStatus from './screen/transactions/transactionStatus';
-import CPFP from './screen/transactions/CPFP';
-import RBFBumpFee from './screen/transactions/RBFBumpFee';
-import RBFCancel from './screen/transactions/RBFCancel';
-
-
 import UnlockWith from './UnlockWith';
-import DrawerList from './screen/wallets/drawerList';
-import { isDesktop, isTablet } from './blue_modules/environment';
-import SettingsPrivacy from './screen/settings/SettingsPrivacy';
-import LNDViewAdditionalInvoicePreImage from './screen/lnd/lndViewAdditionalInvoicePreImage';
-
 import MainTabs from './screen/MainTabs'
 
 

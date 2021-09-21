@@ -19,7 +19,6 @@ import { useTheme } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import loc, {transactionTimeToReadable } from '../loc';
 import {formatBalance} from '../../helpers/pqd';
-import { LightningCustodianWallet, MultisigHDWallet, PlaceholderWallet } from '../class';
 import WalletGradient from '../class/wallet-gradient';
 import { BluePrivateBalance } from '../BlueComponents';
 import { BlueStorageContext } from '../blue_modules/storage-context';
@@ -70,8 +69,8 @@ const PlaceholderWalletCarouselItem = props => {
       onPressOut={isImportingWallet && isImportingWallet.getIsFailure() ? props.onPressedOut : null}
       onPress={isImportingWallet && isImportingWallet.getIsFailure() ? props.onPress : null}
     >
-      <LinearGradient shadowColor={colors.shadowColor} colors={WalletGradient.gradientsFor(PlaceholderWallet.type)} style={iStyles.grad}>
-        <Image source={I18nManager.isRTL ? require('../img/btc-shape-rtl.png') : require('../img/btc-shape.png')} style={iStyles.image} />
+      <LinearGradient shadowColor={colors.shadowColor} colors={WalletGradient.gradientsFor('pqd')} style={iStyles.grad}>
+        <Image source={I18nManager.isRTL ? require('../img/lnd-shape.png') : require('../img/lnd-shape.png')} style={iStyles.image} />
         <Text style={iStyles.br} />
         <Text numberOfLines={1} style={[iStyles.label, { color: colors.inverseForegroundColor }]}>
           {isImportingWallet.getIsFailure() ? loc.wallets.import_placeholder_fail : loc.wallets.import_placeholder_inprogress}

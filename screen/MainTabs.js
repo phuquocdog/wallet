@@ -11,7 +11,7 @@ import HomeStack from './mainNative//home/HomeStack';
 import AppStack from './mainNative//app/AppStack';
 import DappStack from './mainNative//dapp/DappStack';
 import StakingStack from './mainNative/staking/StakingStack';
-
+import SettingStack from './mainNative/settings/SettingStack';
 
 const Tab = createBottomTabNavigator();
 const MainTabs = () => {
@@ -54,7 +54,7 @@ const MainTabs = () => {
       <Tab.Screen component={DappStack} name="Dapp" options={{ headerShown: false }} />
       <Tab.Screen component={AppStack}  name="Apps" options={{ headerShown: false }} />
     	<Tab.Screen component={StakingStack} name="Staking" options={{ headerShown: false }} />
-    	<Tab.Screen component={StakingStack} name="Setting" options={{ headerShown: false }} />
+    	<Tab.Screen component={SettingStack} name="Setting" options={{ headerShown: false }} />
     </Tab.Navigator>
   )
 }

@@ -6,7 +6,6 @@ import { BlueLoading, BlueText, BlueSpacing20, BlueListItem, BlueCard } from '..
 import { useNavigation, useTheme } from '@react-navigation/native';
 import loc from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
-import { isURv1Enabled, clearUseURv1, setUseURv1 } from '../../blue_modules/ur';
 
 const styles = StyleSheet.create({
   root: {
@@ -35,7 +34,7 @@ const GeneralSettings = () => {
   useEffect(() => {
     (async () => {
       setIsAdancedModeSwitchEnabled(await isAdancedModeEnabled());
-      setIsURv1SwitchEnabled(await isURv1Enabled());
+      //setIsURv1SwitchEnabled(await isURv1Enabled());
       setIsLoading(false);
     })();
   });

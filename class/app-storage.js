@@ -324,15 +324,7 @@ export class AppStorage {
     const tempWallets = [];
 
     for (const value of this.wallets) {
-      if (value.type === PlaceholderWallet.type) {
-        continue;
-      } else if (value.getSecret() === secret) {
-        // the one we should delete
-        // nop
-      } else {
-        // the one we must keep
-        tempWallets.push(value);
-      }
+      tempWallets.push(value);
     }
     this.wallets = tempWallets;
   };
@@ -403,16 +395,10 @@ export class AppStorage {
 
       console.log(this.wallets);
       for (const key of this.wallets) {
-        console.log('key')
-        console.log(key);
-
         w = new PhuquocdogWallet(key.props);
         walletsToSave.push(w)
       }
-
-      console.log('saveToDiskwalletsToSave')
-      console.log(walletsToSave);
-      
+       
       let data = {
         wallets: walletsToSave,
         tx_metadata: this.tx_metadata,
@@ -446,18 +432,7 @@ export class AppStorage {
    */
   fetchWalletBalances = async index => {
     console.log('fetchWalletBalances for wallet#', typeof index === 'undefined' ? '(all)' : index);
-    if (index || index === 0) {
-      let c = 0;
-      for (const wallet of this.wallets.filter(wallet => wallet.type !== PlaceholderWallet.type)) {
-        if (c++ === index) {
-          await wallet.fetchBalance();
-        }
-      }
-    } else {
-      for (const wallet of this.wallets.filter(wallet => wallet.type !== PlaceholderWallet.type)) {
-        await wallet.fetchBalance();
-      }
-    }
+    await wallet.fetchBalance();
   };
 
   /**
@@ -472,29 +447,12 @@ export class AppStorage {
    */
   fetchWalletTransactions = async index => {
     console.log('fetchWalletTransactions for wallet#', typeof index === 'undefined' ? '(all)' : index);
-    if (index || index === 0) {
-      let c = 0;
-      for (const wallet of this.wallets.filter(wallet => wallet.type !== PlaceholderWallet.type)) {
-        if (c++ === index) {
-          await wallet.fetchTransactions();
-          if (wallet.fetchPendingTransactions) {
-            await wallet.fetchPendingTransactions();
-          }
-          if (wallet.fetchUserInvoices) {
-            await wallet.fetchUserInvoices();
-          }
-        }
-      }
-    } else {
-      for (const wallet of this.wallets) {
-        await wallet.fetchTransactions();
-        if (wallet.fetchPendingTransactions) {
-          await wallet.fetchPendingTransactions();
-        }
-        if (wallet.fetchUserInvoices) {
-          await wallet.fetchUserInvoices();
-        }
-      }
+    await wallet.fetchTransactions();
+    if (wallet.fetchPendingTransactions) {
+      await wallet.fetchPendingTransactions();
+    }
+    if (wallet.fetchUserInvoices) {
+      await wallet.fetchUserInvoices();
     }
   };
 

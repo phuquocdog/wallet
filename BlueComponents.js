@@ -306,7 +306,8 @@ export class BlueWalletNavigationHeader extends Component {
           source={(() => {
             switch (this.state.wallet.type) {
               default:
-                return I18nManager.isRTL ? require('./img/btc-shape-rtl.png') : require('./img/btc-shape.png');
+                return require('./img/lnd-shape.png')
+                // return I18nManager.isRTL ? require('./img/btc-shape-rtl.png') : require('./img/btc-shape.png');
             }
           })()}
           style={{

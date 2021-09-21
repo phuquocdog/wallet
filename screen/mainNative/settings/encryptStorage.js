@@ -30,8 +30,8 @@ const EncryptStorage = () => {
     const isDeviceBiometricCapable = await Biometric.isDeviceBiometricCapable();
     const biometricsType = (await Biometric.biometricType()) || loc.settings.biometrics;
     const isStorageEncryptedSwitchEnabled = await isStorageEncrypted();
-    setStorageIsEncryptedSwitchEnabled(isStorageEncryptedSwitchEnabled);
-    setBiometrics({ isBiometricsEnabled, isDeviceBiometricCapable, biometricsType });
+    // setStorageIsEncryptedSwitchEnabled(isStorageEncryptedSwitchEnabled);
+    // setBiometrics({ isBiometricsEnabled, isDeviceBiometricCapable, biometricsType });
     setIsLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
