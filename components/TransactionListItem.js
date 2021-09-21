@@ -335,7 +335,20 @@ export const TransactionListItem = React.memo(({ item, itemPriceUnit = 'PQD', ti
       <View style={{ marginHorizontal: 4 }}>
         <ToolTipMenu ref={toolTip} anchorRef={listItemRef} actions={toolTipActions} />
         <ToolTipMenu ref={copyToolTip} anchorRef={listItemRef} actions={copyToolTipActions} />
-        
+        <BlueListItem
+          leftAvatar={avatar}
+          title={title}
+          subtitleNumberOfLines={subtitleNumberOfLines}
+          subtitle={subtitle}
+          subtitleProps={subtitleProps}
+          onPress={onPress}
+          chevron={false}
+          Component={TouchableOpacity}
+          rightTitle={rowTitle}
+          rightTitleStyle={rowTitleStyle}
+          containerStyle={containerStyle}
+          onLongPress={onLongPress}
+        />
       </View>
     </TouchableWithoutFeedback>
   );

@@ -10,6 +10,7 @@ export class PhuquocdogWallet {
     this.props = props;
     this.balanceHuman = '0 PQD';
     this.userHasSavedExport = false;
+    this.latestTransaction = 'Never'
   }
 
   async connect () {
@@ -79,7 +80,10 @@ export class PhuquocdogWallet {
 
   }
   latestTransactionText() {
-    return 'Never';
+    this.getTransactions(1).then(data => {
+      this.latestTransaction = data;
+    })
+    return this.latestTransaction;
   }
   getSecret() {
     return this.props.secret
