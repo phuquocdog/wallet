@@ -144,9 +144,7 @@ const App = () => {
     } else {
       const url = await Linking.getInitialURL();
       if (url) {
-        if (DeeplinkSchemaMatch.hasSchema(url)) {
-          handleOpenURL({ url });
-        }
+        handleOpenURL({ url });
       } else {
         const isViewAllWalletsEnabled = await OnAppLaunch.isViewAllWalletsEnabled();
         if (!isViewAllWalletsEnabled) {

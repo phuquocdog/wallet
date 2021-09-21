@@ -1,23 +1,5 @@
 /* global alert */
-import {
-  SegwitP2SHWallet,
-  LegacyWallet,
-  WatchOnlyWallet,
-  HDLegacyBreadwalletWallet,
-  HDSegwitP2SHWallet,
-  HDLegacyP2PKHWallet,
-  HDSegwitBech32Wallet,
-  LightningCustodianWallet,
-  SegwitBech32Wallet,
-  HDLegacyElectrumSeedP2PKHWallet,
-  HDSegwitElectrumSeedP2WPKHWallet,
-  HDAezeedWallet,
-  MultisigHDWallet,
-  SLIP39LegacyP2PKHWallet,
-  PlaceholderWallet,
-  SLIP39SegwitP2SHWallet,
-  SLIP39SegwitBech32Wallet,
-} from '.';
+
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import loc from '../loc';
 import { useContext } from 'react';

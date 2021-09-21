@@ -46,10 +46,8 @@ const ReceiveDetails = () => {
   const [customLabel, setCustomLabel] = useState();
   const [customAmount, setCustomAmount] = useState();
   const [customUnit, setCustomUnit] = useState(BitcoinUnit.BTC);
-  const [bip21encoded, setBip21encoded] = useState();
   const [isCustom, setIsCustom] = useState(false);
   const [isCustomModalVisible, setIsCustomModalVisible] = useState(false);
-  const [showAddress, setShowAddress] = useState(false);
   const { navigate, goBack, setParams } = useNavigation();
   const { colors } = useTheme();
   const toolTip = useRef();
@@ -186,8 +184,8 @@ const ReceiveDetails = () => {
               />
 
               <QRCode
-                value={bip21encoded}
-                logo={require('../../img/qr-code.png')}
+                value={'bip21encoded'}
+                logo={require('../../img/black120x120.png')}
                 size={(is.ipad() && 300) || 300}
                 logoSize={90}
                 color="#000000"
@@ -198,7 +196,7 @@ const ReceiveDetails = () => {
               />
             </>
           </TouchableWithoutFeedback>
-          <BlueCopyTextToClipboard text={isCustom ? bip21encoded : address} />
+          <BlueCopyTextToClipboard text={isCustom ? 'bip21encoded' : address} />
         </View>
         <View style={styles.share}>
           <BlueCard>
@@ -219,50 +217,11 @@ const ReceiveDetails = () => {
   const obtainWalletAddress = useCallback(async () => {
     Privacy.enableBlur();
     console.log('receive/details - componentDidMount');
-    wallet.setUserHasSavedExport(true);
-    await saveToDisk();
-    let newAddress;
-    if (address) {
-      setAddressBIP21Encoded(address);
-      await Notifications.tryToObtainPermissions();
-      Notifications.majorTomToGroundControl([address], [], []);
-    } else {
-      if (wallet.chain === Chain.ONCHAIN) {
-        try {
-          newAddress = await Promise.race([wallet.getAddressAsync(), sleep(1000)]);
-        } catch (_) {}
-        if (newAddress === undefined) {
-          // either sleep expired or getAddressAsync threw an exception
-          console.warn('either sleep expired or getAddressAsync threw an exception');
-          newAddress = wallet._getExternalAddressByIndex(wallet.getNextFreeAddressIndex());
-        } else {
-          saveToDisk(); // caching whatever getAddressAsync() generated internally
-        }
-      } else if (wallet.chain === Chain.OFFCHAIN) {
-        try {
-          await Promise.race([wallet.getAddressAsync(), sleep(1000)]);
-          newAddress = wallet.getAddress();
-        } catch (_) {}
-        if (newAddress === undefined) {
-          // either sleep expired or getAddressAsync threw an exception
-          console.warn('either sleep expired or getAddressAsync threw an exception');
-          newAddress = wallet.getAddress();
-        } else {
-          saveToDisk(); // caching whatever getAddressAsync() generated internally
-        }
-      }
-      setAddressBIP21Encoded(newAddress);
-      await Notifications.tryToObtainPermissions();
-      Notifications.majorTomToGroundControl([newAddress], [], []);
-    }
+        
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const setAddressBIP21Encoded = address => {
-    const bip21encoded = DeeplinkSchemaMatch.bip21encode(address);
-    setParams({ address });
-    setBip21encoded(bip21encoded);
-    setShowAddress(true);
   };
 
   useFocusEffect(
@@ -325,7 +284,6 @@ const ReceiveDetails = () => {
         break;
     }
     setBip21encoded(DeeplinkSchemaMatch.bip21encode(address, { amount, label: customLabel }));
-    setShowAddress(true);
   };
 
   const renderCustomAmountModal = () => {
@@ -384,14 +342,14 @@ const ReceiveDetails = () => {
   return (
     <View style={styles.root}>
       <StatusBar barStyle="light-content" />
-      {address !== undefined && showAddress && (
+      {address !== undefined && (
         <HandoffComponent
           title={`Bitcoin Transaction ${address}`}
           type="io.bluewallet.bluewallet"
           url={`https://blockstream.info/address/${address}`}
         />
       )}
-      {showAddress ? renderReceiveDetails() : <BlueLoading />}
+      {renderReceiveDetails()}
     </View>
   );
 };

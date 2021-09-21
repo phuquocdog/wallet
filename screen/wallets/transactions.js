@@ -27,7 +27,6 @@ import { Chain } from '../../models/bitcoinUnits';
 import { BlueTransactionListItem, BlueWalletNavigationHeader, BlueAlertWalletExportReminder, BlueListItem } from '../../BlueComponents';
 import WalletGradient from '../../class/wallet-gradient';
 import navigationStyle from '../../components/navigationStyle';
-import { LightningCustodianWallet, MultisigHDWallet, WatchOnlyWallet } from '../../class';
 import HandoffComponent from '../../components/handoff';
 import ActionSheet from '../ActionSheet';
 import loc from '../../loc';
@@ -583,10 +582,7 @@ const WalletTransactions = ({navigation}) => {
         }
         onManageFundsPressed={() => {
           console.log('onManageFundsPressed')
-          if (wallet.getType() === MultisigHDWallet.type) {
-            navigateToViewEditCosigners();
-          } else if (wallet.getType() === LightningCustodianWallet.type) {
-            if (wallet.getUserHasSavedExport()) {
+          if (wallet.getUserHasSavedExport()) {
               setIsManageFundsModalVisible(true);
             } else {
               BlueAlertWalletExportReminder({
@@ -604,7 +600,6 @@ const WalletTransactions = ({navigation}) => {
                   }),
               });
             }
-          }
         }}
       />
       <View style={[styles.list, stylesHook.list]}>
@@ -632,13 +627,6 @@ const WalletTransactions = ({navigation}) => {
               </Text>
               {isLightning() && <Text style={styles.emptyTxsLightning}>{loc.wallets.list_empty_txs2_lightning}</Text>}
 
-              {!isLightning() && (
-                <TouchableOpacity onPress={navigateToBuyBitcoin} style={styles.buyBitcoin} accessibilityRole="button">
-                  <Text testID="NoTxBuyBitcoin" style={styles.buyBitcoinText}>
-                    {loc.wallets.list_tap_here_to_buy}
-                  </Text>
-                </TouchableOpacity>
-              )}
             </ScrollView>
           }
           onRefresh={refreshTransactions}
