@@ -334,7 +334,7 @@ export function _leaveNumbersAndDots(newInputValue) {
   return newInputValue;
 }
 
-// https://github.com/BlueWallet/BlueWallet/issues/3466
+// https://github.com/Phu Quoc Dog Wallet/Phu Quoc Dog Wallet/issues/3466
 export function formatStringAddTwoWhiteSpaces(text) {
   return `${text}  `;
 }
