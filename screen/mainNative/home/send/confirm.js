@@ -81,6 +81,8 @@ const SendConfirm = () => {
 
       setIsLoading(false);
 
+      wallet.saveTransaction(r.toHex())
+
       await new Promise(resolve => setTimeout(resolve, 3000)); // sleep to make sure network propagates
       fetchAndSaveWalletTransactions(walletID);
     } catch (error) {

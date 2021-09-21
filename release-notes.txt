@@ -1,3 +1,11 @@
+* Add cache 
+* Updaet soon 
+* Update qr 
+* Update about 
+* Add settings 
+* Cleanup 
+* Remove code 
+* Cleanup 
 * Add init fastlane 
 * Clean code 
 * add config react-native-vector-icons for android 

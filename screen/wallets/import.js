@@ -33,7 +33,7 @@ const WalletsImport = () => {
   const [importText, setImportText] = useState(label);
   const navigation = useNavigation();
   const { colors } = useTheme();
-  const [isKeyring, setIsKeyring] = useState(true);
+  const [isKeyring, setIsKeyring] = useState(false);
 
   const styles = StyleSheet.create({
     root: {
@@ -60,14 +60,17 @@ const WalletsImport = () => {
 
   useEffect(() => {
     if (triggerImport) importButtonPressed();
+
+    if (isKeyring) {
+      initialize();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const initialize = async (): Promise<void> => {
+    console.log('->>>>>>>', keyring)
     try {
       keyring.loadAll({ ss58Format: 42, type: 'sr25519' });
-            console.log('Error loading keyring >>>>11');
-
     } catch (e) {
       console.log('Error loading keyring >>>>>>>', e.message);
     }
@@ -75,14 +78,11 @@ const WalletsImport = () => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     //await globalAny.localStorage.init();
     await cryptoWaitReady();
+    setIsKeyring(false);
 
     //setLoading(false);
     //_onClickNew();
   };
-
-  if (isKeyring) {
-    initialize();
-  }
 
   const importButtonPressed = () => {
     if (importText.trim().length === 0) {
@@ -117,7 +117,7 @@ const WalletsImport = () => {
       pqd = new PhuquocdogWallet(w);
       addWallet(pqd);
       await saveToDisk();
-      navigation.dangerouslyGetParent().pop();
+      navigation.popToTop();
       //await new Promise(resolve => setTimeout(resolve, 500)); // giving some time to animations
 
     } catch (error) {

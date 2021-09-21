@@ -32,9 +32,10 @@ export class PhuquocdogWallet {
   async getBalanceHuman() {
 
     try {
-      let b = await AsyncStorage.getItem(this.getAddress);
+      let b = await AsyncStorage.getItem(this.getAddress());
       if (b !== null) {
-        console.log('get data cache');
+        b = JSON.parse(b)
+        console.log('get data cache',b);
         this.setBalanceHuman(b.balanceHuman);
       } else {
         console.log('set data cache');
@@ -42,9 +43,9 @@ export class PhuquocdogWallet {
         const { nonce, data: balance } = await c.query.system.account(this.props.address);
         if (balance) {
           this.setBalanceHuman(balance.free.toHuman());
+  
           //Cache data to Store
-          await AsyncStorage.setItem(this.getAddress, JSON.stringify({
-            'balance' : balance.free,
+          await AsyncStorage.setItem(this.getAddress(), JSON.stringify({
             'balanceHuman': balance.free.toHuman()
           }));
 
@@ -55,6 +56,27 @@ export class PhuquocdogWallet {
     }
   
     return this.balanceHuman;
+  }
+  async saveTransaction(id) {
+
+    try {
+      let b = await AsyncStorage.getItem(this.getAddress());
+      let transactions = [];
+      if (b !== null) {
+        data = JSON.parse(b);
+        transactions.push(id);
+        data.transactions = transactions;
+
+        console.log('----->', data);
+        console.log('>>>>>>'. transactions);
+
+        //Cache data to Store
+        await AsyncStorage.setItem(this.getAddress(), JSON.stringify(data));
+      }
+    } catch (e) {
+      console.log('saveTransaction error', e)
+    }
+
   }
   latestTransactionText() {
     return 'Never';
@@ -82,8 +104,18 @@ export class PhuquocdogWallet {
   getLatestTransactionTime() {
     return 'getLatestTransactionTime'
   }
-  getTransactions() {
-    return []
+  async getTransactions(limit) {
+    try {
+      let result = await AsyncStorage.getItem(this.getAddress());
+      if (result !== null) {
+        data = JSON.parse(result);
+        return data.transactions
+      }
+    } catch (e) {
+      console.log('saveTransaction error', e)
+      return [];
+    }
+    
   }
   timeToRefreshBalance() {
     return 'timeToRefreshBalance';
