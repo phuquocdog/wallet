@@ -33,11 +33,9 @@ import { BlueStorageContext } from './blue_modules/storage-context';
 import WatchConnectivity from './WatchConnectivity';
 import DeviceQuickActions from './class/quick-actions';
 import Notifications from './blue_modules/notifications';
-import WalletImport from './class/wallet-import';
 import Biometric from './class/biometrics';
 import WidgetCommunication from './blue_modules/WidgetCommunication';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
-const A = require('./blue_modules/analytics');
 
 const eventEmitter = new NativeEventEmitter(NativeModules.EventEmitter);
 
@@ -249,7 +247,6 @@ const App = () => {
     return;
     if (wallets.length > 0) {
       if ((appState.current.match(/background/) && nextAppState) === 'active' || nextAppState === undefined) {
-        setTimeout(() => A(A.ENUM.APP_UNSUSPENDED), 2000);
         const processed = await processPushNotifications();
         if (processed) return;
         const clipboard = await BlueClipboard.getClipboardContent();
@@ -338,7 +335,6 @@ const App = () => {
         {walletsInitialized && !isDesktop && <WatchConnectivity />}
       </View>
       <DeviceQuickActions />
-      <WalletImport />
       <Biometric />
       <WidgetCommunication />
     </SafeAreaProvider>

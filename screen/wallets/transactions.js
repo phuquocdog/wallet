@@ -94,19 +94,17 @@ const WalletTransactions = ({navigation}) => {
    * @returns {Array}
    */
   const getTransactionsSliced = (limit = Infinity) => {
+    wallet.getTransactions().then(data => {
+      setDataSource(data);
+      console.log('dataSource->>>>', data);
+
+    })
+    console.log('dataSource', dataSource)
     return [];
-    let txs = wallet.getTransactions();
-    for (const tx of txs) {
-      tx.sort_ts = +new Date(tx.received);
-    }
-    txs = txs.sort(function (a, b) {
-      return b.sort_ts - a.sort_ts;
-    });
-    return txs.slice(0, limit);
   };
 
   useEffect(() => {
-    console.log('>>>>>>>>transactions.js')
+    console.log('--------->transactions.js')
     const interval = setInterval(() => setTimeElapsed(prev => prev + 1), 60000);
     return () => {
       clearInterval(interval);
@@ -131,8 +129,6 @@ const WalletTransactions = ({navigation}) => {
     
     (async () => {
       let r = await wallet.getTransactions();
-          console.log('aaaaaarrr', r)
-
       setDataSource(r);
     })()
 

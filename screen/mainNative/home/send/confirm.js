@@ -77,10 +77,10 @@ const SendConfirm = () => {
         txtUrl: 'https://block.phuquoc.dog/transfer/' + r.toHex()
       });
 
-      setIsLoading(false);
 
       wallet.saveTransaction(r.toHex())
-
+      setIsLoading(false);
+      Sentry.captureMessage('Something went wrong' + r.toHex());
       await new Promise(resolve => setTimeout(resolve, 3000)); // sleep to make sure network propagates
       fetchAndSaveWalletTransactions(walletID);
     } catch (error) {
@@ -89,6 +89,7 @@ const SendConfirm = () => {
       });
       setIsLoading(false);
       alert(error.message);
+      Sentry.captureException(error);
     }
   };
 

@@ -8,7 +8,6 @@ import Rate, { AndroidMarket } from 'react-native-rate';
 import { BlueButton, BlueCard, BlueListItem, BlueSpacing20, BlueTextCentered } from '../../BlueComponents';
 import loc, { formatStringAddTwoWhiteSpaces } from '../../loc';
 import Clipboard from '@react-native-clipboard/clipboard';
-import * as Sentry from '@sentry/react-native';
 
 const Soon = () => {
   const { navigate } = useNavigation();

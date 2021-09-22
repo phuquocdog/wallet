@@ -31,8 +31,7 @@ import { useTheme, useNavigation } from '@react-navigation/native';
 import loc from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 import { keyring } from '@polkadot/ui-keyring';
-import { settings } from '@polkadot/ui-settings';
-import { cryptoWaitReady, mnemonicGenerate } from '@polkadot/util-crypto';
+import { mnemonicGenerate } from '@polkadot/util-crypto';
 import { ApiPromise, WsProvider} from '@polkadot/api';
 
 import { PhuquocdogWallet } from '../../class/wallets/phuquocdog-wallet';
@@ -82,36 +81,25 @@ const WalletsAdd = () => {
   };
 
   useEffect(() => {
-    console.log('loc.wallets.details_title' + label);
-    AsyncStorage.getItem(AppStorage.LNDHUB)
-      .then(url => setWalletBaseURI(url || 'https://node.phuquoc.dog'))
-      .catch(() => setWalletBaseURI(''));
-    isAdancedModeEnabled()
-      .then(setIsAdvancedOptionsEnabled)
-      .finally(() => setIsLoading(false));
-
-    if (isKeyring) {
-      initialize();
-    }
+    setWalletBaseURI('https://node.phuquoc.dog');
+    setIsLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAdvancedOptionsEnabled]);
+  }, [isLoading]);
 
-  const initialize = async (): Promise<void> => {
-    console.log('->>>>>>>', keyring)
-    try {
-      keyring.loadAll({ ss58Format: 42, type: 'sr25519' });
-    } catch (e) {
-      console.log('Error loading keyring ', e);
-    }
+  // if (isKeyring) {
+  //     initialize();
+  // }
+  // const initialize = async (): Promise<void> => {
+  //   try {
+  //     keyring.loadAll({ ss58Format: 42, type: 'sr25519' });
+  //   } catch (e) {
+  //     console.log('Error loading keyring ', e);
+  //   }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    //await globalAny.localStorage.init();
-    await cryptoWaitReady();
-    setIsKeyring(false);
-
-    //setLoading(false);
-    //_onClickNew();
-  };
+  //   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  //   //await globalAny.localStorage.init();
+  //   await cryptoWaitReady();
+  // };
 
   
 
@@ -134,13 +122,16 @@ const WalletsAdd = () => {
   };
 
   const createWallet = async () => {
-    setIsKeyring(false);
+    setIsLoading(true);
+    if (selectedWalletType === ButtonSelected.BTC) {
+        alert('We have not supported at the moment!')
+        return;
+    }
+
+    
     const phrase = mnemonicGenerate(12);
     const { address } = keyring.createFromUri(phrase);
-    if (selectedWalletType === ButtonSelected.BTC) {
-      alert('We have not supported at the moment!')
-      return;
-    }
+    
     const w = {
       'label': label,
       'chain': 'phuquocdog',
@@ -149,7 +140,7 @@ const WalletsAdd = () => {
       'type': 'phuquocdog'
     }
 
-    pqd = new PhuquocdogWallet(w);
+    let pqd = new PhuquocdogWallet(w);
     addWallet(pqd);
 
     await saveToDisk();

@@ -1,3 +1,4 @@
+* Setup sentry 
 * Update build android 
 * CLean code 
 * Fix update balance after send payment 

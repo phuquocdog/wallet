@@ -100,11 +100,7 @@ const WalletsList = () => {
   }, [isImportingWallet]);
 
   const verifyBalance = () => {
-    if (getBalance() !== 0) {
-      A(A.ENUM.GOT_NONZERO_BALANCE);
-    } else {
-      A(A.ENUM.GOT_ZERO_BALANCE);
-    }
+    
   };
 
   useEffect(() => {

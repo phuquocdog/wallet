@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Platform, View, Keyboard, StatusBar, StyleSheet, Alert } from 'react-native';
+import { Platform, View, Keyboard, StatusBar, StyleSheet, Alert,ActivityIndicator } from 'react-native';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
 import {
@@ -13,13 +13,12 @@ import {
 } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
 import Privacy from '../../blue_modules/Privacy';
-import WalletImport from '../../class/wallet-import';
 import loc from '../../loc';
 import { isDesktop, isMacCatalina } from '../../blue_modules/environment';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 
 import { keyring } from '@polkadot/ui-keyring';
-import { cryptoWaitReady, mnemonicGenerate } from '@polkadot/util-crypto';
+import { mnemonicGenerate } from '@polkadot/util-crypto';
 import { PhuquocdogWallet } from '../../class/wallets/phuquocdog-wallet';
 
 const fs = require('../../blue_modules/fs');
@@ -33,7 +32,7 @@ const WalletsImport = () => {
   const [importText, setImportText] = useState(label);
   const navigation = useNavigation();
   const { colors } = useTheme();
-  const [isKeyring, setIsKeyring] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const styles = StyleSheet.create({
     root: {
@@ -59,32 +58,15 @@ const WalletsImport = () => {
   }, []);
 
   useEffect(() => {
-    if (triggerImport) importButtonPressed();
-
-    if (isKeyring) {
-      initialize();
-    }
+    setIsLoading(false)
+    console.log('setIsLoadinguseEffect', isLoading);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isLoading]);
 
-  const initialize = async (): Promise<void> => {
-    console.log('->>>>>>>', keyring)
-    try {
-      keyring.loadAll({ ss58Format: 42, type: 'sr25519' });
-    } catch (e) {
-      console.log('Error loading keyring >>>>>>>', e.message);
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    //await globalAny.localStorage.init();
-    await cryptoWaitReady();
-    setIsKeyring(false);
-
-    //setLoading(false);
-    //_onClickNew();
-  };
+  
 
   const importButtonPressed = () => {
+    setIsLoading(true);
     if (importText.trim().length === 0) {
       return;
     }
@@ -96,11 +78,9 @@ const WalletsImport = () => {
    * @param importText
    */
   const importMnemonic = async importText => {
-    if (isImportingWallet && isImportingWallet.isFailure === false) {
-      return;
-    }
+    setIsLoading(true);
+    console.log('importMnemonic', isLoading)
 
-  
     try {
       const { address } = keyring.createFromUri(importText);
 
@@ -111,40 +91,14 @@ const WalletsImport = () => {
         'secret': importText,
         'type': 'phuquocdog'
       }
-      setIsKeyring(false);
-
-
-      pqd = new PhuquocdogWallet(w);
+      let pqd = new PhuquocdogWallet(w);
       addWallet(pqd);
       await saveToDisk();
       navigation.popToTop();
-      //await new Promise(resolve => setTimeout(resolve, 500)); // giving some time to animations
 
     } catch (error) {
       console.log(error);
       ReactNativeHapticFeedback.trigger('notificationError', { ignoreAndroidSystemSettings: false });
-      Alert.alert(
-        loc.wallets.add_details,
-        loc.wallets.list_import_problem,
-        [
-          {
-            text: loc.wallets.list_tryagain,
-            onPress: () => {
-              navigation.navigate('AddWalletRoot', { screen: 'ImportWallet', params: { label: importText } });
-              WalletImport.removePlaceholderWallet();
-            },
-            style: 'default',
-          },
-          {
-            text: loc._.cancel,
-            onPress: () => {
-              WalletImport.removePlaceholderWallet();
-            },
-            style: 'cancel',
-          },
-        ],
-        { cancelable: false },
-      );
     }
   };
 
@@ -189,13 +143,18 @@ const WalletsImport = () => {
 
       <BlueSpacing20 />
       <View style={styles.center}>
+
         <>
-          <BlueButton
+          { !isLoading ?<BlueButton
             testID="DoImport"
             disabled={importText.trim().length === 0}
             title={loc.wallets.import_do_import}
             onPress={importButtonPressed}
-          />
+          /> :
+
+          <ActivityIndicator />
+
+          }
           <BlueSpacing20 />
           <BlueButtonLink title={loc.wallets.import_scan_qr} onPress={importScan} testID="ScanImport" />
         </>
