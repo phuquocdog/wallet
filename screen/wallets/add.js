@@ -89,10 +89,15 @@ const WalletsAdd = () => {
     isAdancedModeEnabled()
       .then(setIsAdvancedOptionsEnabled)
       .finally(() => setIsLoading(false));
+
+    if (isKeyring) {
+      initialize();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAdvancedOptionsEnabled]);
 
   const initialize = async (): Promise<void> => {
+    console.log('->>>>>>>', keyring)
     try {
       keyring.loadAll({ ss58Format: 42, type: 'sr25519' });
     } catch (e) {
@@ -102,14 +107,13 @@ const WalletsAdd = () => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     //await globalAny.localStorage.init();
     await cryptoWaitReady();
+    setIsKeyring(false);
 
     //setLoading(false);
     //_onClickNew();
   };
 
-  if (isKeyring) {
-    initialize();
-  }
+  
 
   const entropyGenerated = newEntropy => {
     let entropyTitle;
@@ -142,11 +146,7 @@ const WalletsAdd = () => {
       'chain': 'phuquocdog',
       'address' : address,
       'secret': phrase,
-      'preferredBalanceUnit': 'PQD',
-      'unconfirmed_balance': 0,
-      'balance_human': 0,
-      'type': 'phuquocdog',
-      'use_with_hardware_wallet': false
+      'type': 'phuquocdog'
     }
 
     pqd = new PhuquocdogWallet(w);

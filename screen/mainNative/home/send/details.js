@@ -28,9 +28,7 @@ import * as bitcoin from 'bitcoinjs-lib';
 import { BlueButton, BlueDismissKeyboardInputAccessory, BlueListItem, BlueLoading } from '../../BlueComponents';
 import { navigationStyleTx } from '../../components/navigationStyle';
 import NetworkTransactionFees, { NetworkTransactionFee } from '../../models/networkTransactionFees';
-import { BitcoinUnit, Chain } from '../../models/bitcoinUnits';
 import DocumentPicker from 'react-native-document-picker';
-import DeeplinkSchemaMatch from '../../class/deeplink-schema-match';
 import loc, { formatBalance, formatBalanceWithoutSuffix } from '../../loc';
 import CoinsSelected from '../../components/CoinsSelected';
 import BottomModal from '../../components/BottomModal';
@@ -42,7 +40,6 @@ const currency = require('../../blue_modules/currency');
 const prompt = require('../../blue_modules/prompt');
 const fs = require('../../blue_modules/fs');
 const scanqr = require('../../helpers/scan-qr');
-const btcAddressRx = /^[a-zA-Z0-9]{26,35}$/;
 
 const SendDetails = () => {
   const { wallets, setSelectedWallet, sleep, txMetadata, saveToDisk } = useContext(BlueStorageContext);
@@ -613,16 +610,14 @@ const SendDetails = () => {
         <AddressInput
           onChangeText={text => {
             text = text.trim();
-            const { address, amount, memo: lmemo, payjoinUrl } = DeeplinkSchemaMatch.decodeBitcoinUri(text);
+
             setAddresses(addresses => {
-              item.address = address || text;
-              item.amount = amount || item.amount;
+              item.address = text;
+              item.amount = item.amount;
               addresses[index] = item;
               return [...addresses];
             });
-            setMemo(lmemo || memo);
-            setIsLoading(false);
-            setPayjoinUrl(payjoinUrl);
+            setMemo(memo);
           }}
           onBarScanned={processAddressData}
           address={item.address}

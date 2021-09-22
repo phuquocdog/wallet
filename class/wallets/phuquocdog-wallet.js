@@ -10,6 +10,7 @@ export class PhuquocdogWallet {
     this.props = props;
     this.balanceHuman = '0 PQD';
     this.userHasSavedExport = false;
+    this.latestTransaction = 'Never'
   }
 
   async connect () {
@@ -32,18 +33,62 @@ export class PhuquocdogWallet {
   async getBalanceHuman() {
 
     try {
-      const c = await this.connect();
-      const { nonce, data: balance } = await c.query.system.account(this.props.address);
-      if (balance) {
-        this.setBalanceHuman(balance.free.toHuman());
+      let b = await AsyncStorage.getItem(this.getAddress());
+      if (b !== null) {
+        b = JSON.parse(b)
+        console.log('get data cache',b);
+        this.setBalanceHuman(b.balanceHuman);
+      } else {
+        console.log('set data cache');
+        const c = await this.connect();
+        const { nonce, data: balance } = await c.query.system.account(this.props.address);
+        if (balance) {
+          this.setBalanceHuman(balance.free.toHuman());
+  
+          //Cache data to Store
+          await AsyncStorage.setItem(this.getAddress(), JSON.stringify({
+            'balanceHuman': balance.free.toHuman()
+          }));
 
+        }
       }
-    } catch (_) {}
+    } catch (e) {
+      console.log('error', e)
+    }
   
     return this.balanceHuman;
   }
+  async saveTransaction(id) {
+
+    try {
+      let b = await AsyncStorage.getItem(this.getAddress());
+      let transactions = [];
+      if (b !== null) {
+        data = JSON.parse(b);
+        transactions = data.transactions;
+        transactions.push(id);
+        data.transactions = transactions;
+
+        //Update balance
+        const c = await this.connect();
+        const { nonce, data: balance } = await c.query.system.account(this.getAddress());
+        data.balanceHuman = balance.free.toHuman();
+        
+        //Cache data to Store
+        await AsyncStorage.setItem(this.getAddress(), JSON.stringify(data));
+      }
+    } catch (e) {
+      console.log('saveTransaction error', e)
+    }
+
+  }
   latestTransactionText() {
-    return 'Never';
+    this.getTransactions(1).then(data => {
+      if (data) {
+        this.latestTransaction = data;
+      }
+    })
+    return this.latestTransaction;
   }
   getSecret() {
     return this.props.secret
@@ -68,8 +113,18 @@ export class PhuquocdogWallet {
   getLatestTransactionTime() {
     return 'getLatestTransactionTime'
   }
-  getTransactions() {
-    return []
+  async getTransactions(limit) {
+    try {
+      let result = await AsyncStorage.getItem(this.getAddress());
+      if (result !== null) {
+        data = JSON.parse(result);
+        return data.transactions
+      }
+    } catch (e) {
+      console.log('saveTransaction error', e)
+      return [];
+    }
+    
   }
   timeToRefreshBalance() {
     return 'timeToRefreshBalance';

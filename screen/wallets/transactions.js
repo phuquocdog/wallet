@@ -37,6 +37,7 @@ import { BlueStorageContext } from '../../blue_modules/storage-context';
 import { isDesktop, isMacCatalina } from '../../blue_modules/environment';
 import BlueClipboard from '../../blue_modules/clipboard';
 
+
 const fs = require('../../blue_modules/fs');
 const LocalQRCode = require('@remobile/react-native-qrcode-local-image');
 
@@ -53,7 +54,7 @@ const WalletTransactions = ({navigation}) => {
   const { name } = useRoute();
   const wallet = wallets.find(w => w.getID() === walletID);
   const [itemPriceUnit, setItemPriceUnit] = useState(wallet.getPreferredBalanceUnit());
-  const [dataSource, setDataSource] = useState(wallet.getTransactions(15));
+  const [dataSource, setDataSource] = useState([])
   const [timeElapsed, setTimeElapsed] = useState(0);
   const [limit, setLimit] = useState(15);
   const [pageSize, setPageSize] = useState(20);
@@ -126,7 +127,15 @@ const WalletTransactions = ({navigation}) => {
     setItemPriceUnit(wallet.getPreferredBalanceUnit());
     setIsLoading(false);
     setSelectedWallet(wallet.getID());
-    setDataSource(wallet.getTransactions(15));
+
+    
+    (async () => {
+      let r = await wallet.getTransactions();
+          console.log('aaaaaarrr', r)
+
+      setDataSource(r);
+    })()
+
 
     setOptions({
       headerStyle: {
@@ -438,6 +447,8 @@ const WalletTransactions = ({navigation}) => {
 
   const renderItem = item => <BlueTransactionListItem item={item.item} itemPriceUnit={itemPriceUnit} timeElapsed={timeElapsed} />;
 
+
+
   const onBarCodeRead = ret => {
     console.log('Recevied')
     if (!isLoading) {
@@ -606,19 +617,7 @@ const WalletTransactions = ({navigation}) => {
         <FlatList
           ListHeaderComponent={renderListHeaderComponent}
           onEndReachedThreshold={0.3}
-          onEndReached={async () => {
-            // pagination in works. in this block we will add more txs to FlatList
-            // so as user scrolls closer to bottom it will render mode transactions
-
-            if (getTransactionsSliced(Infinity).length < limit) {
-              // all list rendered. nop
-              return;
-            }
-
-            setDataSource(getTransactionsSliced(limit + pageSize));
-            setLimit(prev => prev + pageSize);
-            setPageSize(prev => prev * 2);
-          }}
+          
           ListFooterComponent={renderListFooterComponent}
           ListEmptyComponent={
             <ScrollView style={styles.flex} contentContainerStyle={styles.scrollViewContent}>
