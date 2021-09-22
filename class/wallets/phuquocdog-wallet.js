@@ -69,9 +69,11 @@ export class PhuquocdogWallet {
         transactions.push(id);
         data.transactions = transactions;
 
-        console.log('----->', data);
-        console.log('saveTransaction----->', transactions);
-
+        //Update balance
+        const c = await this.connect();
+        const { nonce, data: balance } = await c.query.system.account(this.getAddress());
+        data.balanceHuman = balance.free.toHuman();
+        
         //Cache data to Store
         await AsyncStorage.setItem(this.getAddress(), JSON.stringify(data));
       }
