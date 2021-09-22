@@ -81,7 +81,9 @@ export class PhuquocdogWallet {
   }
   latestTransactionText() {
     this.getTransactions(1).then(data => {
-      this.latestTransaction = data;
+      if (data) {
+        this.latestTransaction = data;
+      }
     })
     return this.latestTransaction;
   }
