@@ -1,3 +1,9 @@
+* CLean code 
+* Fix update balance after send payment 
+* Fix list transaction 
+* Fix small display last transaction 
+* Add latestTransaction 
+* Update 
 * Add cache 
 * Updaet soon 
 * Update qr 
