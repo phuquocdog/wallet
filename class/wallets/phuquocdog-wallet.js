@@ -65,11 +65,12 @@ export class PhuquocdogWallet {
       let transactions = [];
       if (b !== null) {
         data = JSON.parse(b);
+        transactions = data.transactions;
         transactions.push(id);
         data.transactions = transactions;
 
         console.log('----->', data);
-        console.log('>>>>>>'. transactions);
+        console.log('saveTransaction----->', transactions);
 
         //Cache data to Store
         await AsyncStorage.setItem(this.getAddress(), JSON.stringify(data));
