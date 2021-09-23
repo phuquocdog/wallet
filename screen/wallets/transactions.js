@@ -52,7 +52,6 @@ const WalletTransactions = ({navigation}) => {
   const { walletID } = useRoute().params;
   const { name } = useRoute();
   const wallet = wallets.find(w => w.getID() === walletID);
-  const [itemPriceUnit, setItemPriceUnit] = useState(wallet.getPreferredBalanceUnit());
   const [dataSource, setDataSource] = useState([])
   const [timeElapsed, setTimeElapsed] = useState(0);
   const [limit, setLimit] = useState(15);
@@ -93,12 +92,6 @@ const WalletTransactions = ({navigation}) => {
    * @returns {Array}
    */
   const getTransactionsSliced = (limit = Infinity) => {
-    wallet.getTransactions().then(data => {
-      setDataSource(data);
-      console.log('dataSource->>>>', data);
-
-    })
-    console.log('dataSource', dataSource)
     return [];
   };
 
@@ -121,7 +114,6 @@ const WalletTransactions = ({navigation}) => {
     setLimit(15);
     setPageSize(20);
     setTimeElapsed(0);
-    setItemPriceUnit(wallet.getPreferredBalanceUnit());
     setIsLoading(false);
     setSelectedWallet(wallet.getID());
 
@@ -440,7 +432,7 @@ const WalletTransactions = ({navigation}) => {
   };
   
 
-  const renderItem = item => <BlueTransactionListItem item={item.item} itemPriceUnit={itemPriceUnit} timeElapsed={timeElapsed} />;
+  const renderItem = item => <BlueTransactionListItem item={item.item}  timeElapsed={timeElapsed} />;
 
 
 
@@ -580,12 +572,6 @@ const WalletTransactions = ({navigation}) => {
       
       <BlueWalletNavigationHeader
         wallet={wallet}
-        onWalletUnitChange={passedWallet =>
-          InteractionManager.runAfterInteractions(async () => {
-            setItemPriceUnit(passedWallet.getPreferredBalanceUnit());
-            saveToDisk();
-          })
-        }
         onManageFundsPressed={() => {
           console.log('onManageFundsPressed')
           if (wallet.getUserHasSavedExport()) {

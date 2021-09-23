@@ -1,7 +1,6 @@
 package dog.phuquoc.wallet;
 
 import android.os.Bundle;
-import org.devio.rn.splashscreen.SplashScreen;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.PersistableBundle;

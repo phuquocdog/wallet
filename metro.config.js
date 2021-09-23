@@ -14,10 +14,10 @@ module.exports = {
       new RegExp(`${path.resolve(__dirname, 'windows').replace(/[/\\]/g, '/')}.*`),
       // This prevents "react-native run-windows" from hitting: EBUSY: resource busy or locked, open msbuild.ProjectImports.zip
       /.*\.ProjectImports\.zip/,
-    ]),
-    extraNodeModules: {
-      crypto: require.resolve('react-native-crypto')
-    }
+    ])
+    // extraNodeModules: {
+    //   crypto: require.resolve('react-native-crypto')
+    // }
   },
   transformer: {
     getTransformOptions: async () => ({

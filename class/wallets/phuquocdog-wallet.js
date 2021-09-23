@@ -62,13 +62,17 @@ export class PhuquocdogWallet {
 
     try {
       let b = await AsyncStorage.getItem(this.getAddress());
-      let transactions = [];
+      let txt = [id];
       if (b !== null) {
         data = JSON.parse(b);
         transactions = data.transactions;
-        transactions.push(id);
-        data.transactions = transactions;
 
+        if (data.transactions) {
+          txt.push(id);
+          
+        }
+        data.transactions = txt;
+        
         //Update balance
         const c = await this.connect();
         const { nonce, data: balance } = await c.query.system.account(this.getAddress());
@@ -207,7 +211,7 @@ export class PhuquocdogWallet {
       return hash;
 
     } catch (e) {
-      console.log('Transfer Error',e.message)
+      console.log('Transfer Error------>',e.message)
 
     }
     return false;

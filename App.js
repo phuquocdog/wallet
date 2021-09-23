@@ -34,7 +34,6 @@ import WatchConnectivity from './WatchConnectivity';
 import DeviceQuickActions from './class/quick-actions';
 import Notifications from './blue_modules/notifications';
 import Biometric from './class/biometrics';
-import WidgetCommunication from './blue_modules/WidgetCommunication';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
 
 const eventEmitter = new NativeEventEmitter(NativeModules.EventEmitter);
@@ -336,7 +335,6 @@ const App = () => {
       </View>
       <DeviceQuickActions />
       <Biometric />
-      <WidgetCommunication />
     </SafeAreaProvider>
   );
 };

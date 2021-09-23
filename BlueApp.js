@@ -3,7 +3,6 @@ import Biometric from './class/biometrics';
 import { Platform } from 'react-native';
 import loc from './loc';
 const prompt = require('./blue_modules/prompt');
-const currency = require('./blue_modules/currency');
 const BlueApp = new AppStorage();
 import { cryptoWaitReady, mnemonicGenerate } from '@polkadot/util-crypto';
 import { keyring } from '@polkadot/ui-keyring';
@@ -76,6 +75,5 @@ const startAndDecrypt = async retry => {
 };
 
 BlueApp.startAndDecrypt = startAndDecrypt;
-currency.startUpdater();
 
 module.exports = BlueApp;

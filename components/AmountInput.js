@@ -22,10 +22,7 @@ class AmountInput extends Component {
      * (btc, sat, fiat)
      */
     onChangeText: PropTypes.func.isRequired,
-    /**
-     * callback thats fired to notify of currently selected denomination, returns <BitcoinUnit.*>
-     */
-    onAmountUnitChange: PropTypes.func.isRequired,
+    
     disabled: PropTypes.bool,
     colors: PropTypes.object.isRequired,
     pointerEvents: PropTypes.string,
@@ -48,44 +45,7 @@ class AmountInput extends Component {
     AmountInput.conversionCache[amount + BitcoinUnit.LOCAL_CURRENCY] = sats;
   };
 
-  /**
-   * here we must recalculate old amont value (which was denominated in `previousUnit`) to new denomination `newUnit`
-   * and fill this value in input box, so user can switch between, for example, 0.001 BTC <=> 100000 sats
-   *
-   * @param previousUnit {string} one of {BitcoinUnit.*}
-   * @param newUnit {string} one of {BitcoinUnit.*}
-   */
-  onAmountUnitChange(previousUnit, newUnit) {
-    const amount = this.props.amount || '0';
-    console.log('was:', amount, previousUnit, '; converting to', newUnit);
-    let sats = 0;
-    switch (previousUnit) {
-      case BitcoinUnit.BTC:
-        sats = new BigNumber(amount).multipliedBy(100000000).toString();
-        break;
-      case BitcoinUnit.SATS:
-        sats = amount;
-        break;
-      case BitcoinUnit.LOCAL_CURRENCY:
-        sats = new BigNumber(currency.fiatToBTC(amount)).multipliedBy(100000000).toString();
-        break;
-    }
-    if (previousUnit === BitcoinUnit.LOCAL_CURRENCY && AmountInput.conversionCache[amount + previousUnit]) {
-      // cache hit! we reuse old value that supposedly doesnt have rounding errors
-      sats = AmountInput.conversionCache[amount + previousUnit];
-    }
-    console.log('so, in sats its', sats);
-
-    const newInputValue = formatBalancePlain(sats, newUnit, false);
-    console.log('and in', newUnit, 'its', newInputValue);
-
-    if (newUnit === BitcoinUnit.LOCAL_CURRENCY && previousUnit === BitcoinUnit.SATS) {
-      // we cache conversion, so when we will need reverse conversion there wont be a rounding error
-      AmountInput.conversionCache[newInputValue + newUnit] = amount;
-    }
-    this.props.onChangeText(newInputValue);
-    this.props.onAmountUnitChange(newUnit);
-  }
+  
 
   /**
    * responsible for cycling currently selected denomination, BTC->SAT->LOCAL_CURRENCY->BTC
@@ -103,7 +63,6 @@ class AmountInput extends Component {
       newUnit = BitcoinUnit.BTC;
       previousUnit = BitcoinUnit.SATS;
     }
-    this.onAmountUnitChange(previousUnit, newUnit);
   };
 
   maxLength = () => {
