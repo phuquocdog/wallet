@@ -274,8 +274,6 @@ PODS:
     - React
   - react-native-fingerprint-scanner (6.0.0):
     - React
-  - react-native-idle-timer (2.1.6):
-    - React-Core
   - react-native-image-picker (4.0.6):
     - React-Core
   - react-native-randombytes (3.6.1):
@@ -423,9 +421,6 @@ PODS:
     - React-RCTImage
   - RNSecureKeyStore (1.0.0):
     - React
-  - RNSentry (3.1.1):
-    - React-Core
-    - Sentry (= 7.3.0)
   - RNShare (7.0.0):
     - React-Core
   - RNSVG (12.1.1):
@@ -434,9 +429,6 @@ PODS:
     - React-Core
   - RNWatch (1.0.3):
     - React
-  - Sentry (7.3.0):
-    - Sentry/Core (= 7.3.0)
-  - Sentry/Core (7.3.0)
   - SwiftSocket (2.0.2)
   - ToolTipMenu (5.2.0):
     - React
@@ -489,7 +481,6 @@ DEPENDENCIES:
   - react-native-camera (from `../node_modules/react-native-camera`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-fingerprint-scanner (from `../node_modules/react-native-fingerprint-scanner`)
-  - react-native-idle-timer (from `../node_modules/react-native-idle-timer`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-randombytes (from `../node_modules/react-native-randombytes`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -529,7 +520,6 @@ DEPENDENCIES:
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSecureKeyStore (from `../node_modules/react-native-secure-key-store/ios`)
-  - "RNSentry (from `../node_modules/@sentry/react-native`)"
   - RNShare (from `../node_modules/react-native-share`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -551,7 +541,6 @@ SPEC REPOS:
     - FlipperKit
     - libevent
     - OpenSSL-Universal
-    - Sentry
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -601,8 +590,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-document-picker"
   react-native-fingerprint-scanner:
     :path: "../node_modules/react-native-fingerprint-scanner"
-  react-native-idle-timer:
-    :path: "../node_modules/react-native-idle-timer"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
   react-native-randombytes:
@@ -681,8 +668,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNSecureKeyStore:
     :path: "../node_modules/react-native-secure-key-store/ios"
-  RNSentry:
-    :path: "../node_modules/@sentry/react-native"
   RNShare:
     :path: "../node_modules/react-native-share"
   RNSVG:
@@ -739,7 +724,6 @@ SPEC CHECKSUMS:
   react-native-camera: 11166fe7e3a673493c152f52966e8ab1c5cdcacc
   react-native-document-picker: 4921045c5c6c78243010f784eae0a3f4b2af7799
   react-native-fingerprint-scanner: ac6656f18c8e45a7459302b84da41a44ad96dbbe
-  react-native-idle-timer: f7f651542b39dce9b9473e4578cb64a255075f17
   react-native-image-picker: a6e56460d34905c849ada551db30897dc7f3d535
   react-native-randombytes: 421f1c7d48c0af8dbcd471b0324393ebf8fe7846
   react-native-safe-area-context: 61c8c484a3a9e7d1fda19f7b1794b35bbfd2262a
@@ -779,12 +763,10 @@ SPEC CHECKSUMS:
   RNReanimated: 9c13c86454bfd54dab7505c1a054470bfecd2563
   RNScreens: 01ab149b5dd5c27f5ff26741b1d2bdf2cee1af35
   RNSecureKeyStore: f1ad870e53806453039f650720d2845c678d89c8
-  RNSentry: 49abc89b0190b4c8afe0fa5d065f98e36cb53233
   RNShare: 00e7409201e3cab13e0febc41fd4465a83ae8225
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
   RNWatch: e4c5d19506c94506860032fb68aedd5991beb985
-  Sentry: 9a4e621430e2dae4477d791f2f7e905720b6efbf
   SwiftSocket: c8d482e867ae4d3eb4c769e9382e123c1f1f833b
   ToolTipMenu: 665b2ce108bb3a0b13ea2c220226991435e9c9e3
   Yoga: 575c581c63e0d35c9a83f4b46d01d63abc1100ac

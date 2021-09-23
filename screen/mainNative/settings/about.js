@@ -73,9 +73,6 @@ const About = () => {
     navigate('ReleaseNotes');
   };
 
-  const handleOnSelfTestPress = () => {
-    navigate('Selftest');
-  };
 
   const handleOnLicensingPress = () => {
     navigate('Licensing');

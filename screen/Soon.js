@@ -72,10 +72,6 @@ const Soon = () => {
     navigate('ReleaseNotes');
   };
 
-  const handleOnSelfTestPress = () => {
-    navigate('Selftest');
-  };
-
   const handleOnLicensingPress = () => {
     navigate('Licensing');
   };

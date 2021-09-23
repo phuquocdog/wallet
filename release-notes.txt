@@ -1,3 +1,4 @@
+* Cleanup 
 * Setup sentry 
 * Update build android 
 * CLean code 
