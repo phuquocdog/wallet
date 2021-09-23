@@ -29,7 +29,6 @@ import navigationStyle from '../../components/navigationStyle';
 import BottomModal from '../../components/BottomModal';
 import Privacy from '../../blue_modules/Privacy';
 import { Chain, BitcoinUnit } from '../../models/bitcoinUnits';
-import HandoffComponent from '../../components/handoff';
 import AmountInput from '../../components/AmountInput';
 import DeeplinkSchemaMatch from '../../class/deeplink-schema-match';
 import loc from '../../loc';
@@ -342,13 +341,6 @@ const ReceiveDetails = () => {
   return (
     <View style={styles.root}>
       <StatusBar barStyle="light-content" />
-      {address !== undefined && (
-        <HandoffComponent
-          title={`Bitcoin Transaction ${address}`}
-          type="io.bluewallet.bluewallet"
-          url={`https://blockstream.info/address/${address}`}
-        />
-      )}
       {renderReceiveDetails()}
     </View>
   );

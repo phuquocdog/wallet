@@ -1,6 +1,5 @@
 /* global alert */
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import RNSecureKeyStore, { ACCESSIBLE } from 'react-native-secure-key-store';
 import * as Keychain from 'react-native-keychain';
 import {PhuquocdogWallet} from './wallets/phuquocdog-wallet';
 
@@ -29,16 +28,7 @@ export class AppStorage {
   }
 
   async migrateKeys() {
-    if (!(typeof navigator !== 'undefined' && navigator.product === 'ReactNative')) return;
-    for (const key of this.constructor.keys2migrate) {
-      try {
-        const value = await RNSecureKeyStore.get(key);
-        if (value) {
-          await AsyncStorage.setItem(key, value);
-          await RNSecureKeyStore.remove(key);
-        }
-      } catch (_) {}
-    }
+    
   }
 
   /**

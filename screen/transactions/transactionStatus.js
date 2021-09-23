@@ -18,7 +18,6 @@ import {
 import navigationStyle from '../../components/navigationStyle';
 import { HDSegwitBech32Transaction } from '../../class';
 import { BitcoinUnit } from '../../models/bitcoinUnits';
-import HandoffComponent from '../../components/handoff';
 import loc, { formatBalanceWithoutSuffix } from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 
@@ -277,12 +276,7 @@ const TransactionsStatus = () => {
   }
   return (
     <SafeBlueArea>
-      <HandoffComponent
-        title={`Bitcoin Transaction ${tx.hash}`}
-        type="io.bluewallet.bluewallet"
-        url={`https://blockstream.info/tx/${tx.hash}`}
-      />
-
+      
       <StatusBar barStyle="default" />
       <View style={styles.container}>
         <BlueCard>

@@ -4,7 +4,6 @@ import { View, ScrollView, TouchableOpacity, Text, TextInput, Linking, StatusBar
 import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
 import { BlueCard, BlueCopyToClipboardButton, BlueLoading, BlueSpacing20, BlueText, SafeBlueArea } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
-import HandoffComponent from '../../components/handoff';
 import loc from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 import Clipboard from '@react-native-clipboard/clipboard';
@@ -147,11 +146,6 @@ const TransactionsDetails = () => {
 
   return (
     <SafeBlueArea>
-      <HandoffComponent
-        title={`Bitcoin Transaction ${tx.hash}`}
-        type="io.bluewallet.bluewallet"
-        url={`https://blockstream.info/tx/${tx.hash}`}
-      />
       <StatusBar barStyle="default" />
       <ScrollView style={styles.scroll}>
         <BlueCard>
