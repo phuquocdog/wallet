@@ -20,7 +20,10 @@ class AmountInput extends Component {
      * (btc, sat, fiat)
      */
     onChangeText: PropTypes.func.isRequired,
-    
+    /**
+     * callback thats fired to notify of currently selected denomination, returns <BitcoinUnit.*>
+     */
+    onAmountUnitChange: PropTypes.func.isRequired,
     disabled: PropTypes.bool,
     colors: PropTypes.object.isRequired,
     pointerEvents: PropTypes.string,
@@ -36,12 +39,29 @@ class AmountInput extends Component {
   static conversionCache = {};
 
   static getCachedSatoshis = amount => {
+    return AmountInput.conversionCache[amount  || false];
   };
 
   static setCachedSatoshis = (amount, sats) => {
+    AmountInput.conversionCache[amount] = sats;
   };
 
-  
+  /**
+   * here we must recalculate old amont value (which was denominated in `previousUnit`) to new denomination `newUnit`
+   * and fill this value in input box, so user can switch between, for example, 0.001 BTC <=> 100000 sats
+   *
+   * @param previousUnit {string} one of {BitcoinUnit.*}
+   * @param newUnit {string} one of {BitcoinUnit.*}
+   */
+  onAmountUnitChange(previousUnit, newUnit) {
+    const amount = this.props.amount || '0';
+    console.log('was:', amount, previousUnit, '; converting to', newUnit);
+    let sats = 0;
+    
+    
+    this.props.onChangeText(newInputValue);
+    this.props.onAmountUnitChange(newUnit);
+  }
 
   /**
    * responsible for cycling currently selected denomination, BTC->SAT->LOCAL_CURRENCY->BTC
@@ -50,10 +70,11 @@ class AmountInput extends Component {
     let previousUnit = this.props.unit;
     let newUnit;
     
+    this.onAmountUnitChange(previousUnit, newUnit);
   };
 
   maxLength = () => {
-    return 10
+    return 15;
   };
 
   textInput = React.createRef();
@@ -75,7 +96,7 @@ class AmountInput extends Component {
 
 
     const stylesHook = StyleSheet.create({
-      center: { padding: amount ===  15 },
+      center: { padding: amount === 1 ? 0 : 15 },
       localCurrency: { color: disabled ? colors.buttonDisabledTextColor : colors.alternativeTextColor2 },
       input: { color: disabled ? colors.buttonDisabledTextColor : colors.alternativeTextColor2, fontSize: amount.length > 10 ? 20 : 36 },
       cryptoCurrency: { color: disabled ? colors.buttonDisabledTextColor : colors.alternativeTextColor2 },
@@ -87,7 +108,6 @@ class AmountInput extends Component {
           {!disabled && <View style={[styles.center, stylesHook.center]} />}
           <View style={styles.flex}>
             <View style={styles.container}>
-              <Text style={[styles.localCurrency, stylesHook.localCurrency]}>{' $USD '}</Text>
               <TextInput
                 {...this.props}
                 testID="BitcoinAmountInput"
@@ -113,14 +133,20 @@ class AmountInput extends Component {
             </View>
             <View style={styles.secondaryRoot}>
               <Text style={styles.secondaryText}>
-                {unit === 1
-                  ? removeTrailingZeros(secondaryDisplayCurrency)
-                  : secondaryDisplayCurrency}
-                {unit ===  null}
+                { secondaryDisplayCurrency}
               </Text>
             </View>
           </View>
-          
+          {!disabled  && (
+            <TouchableOpacity
+              accessibilityRole="button"
+              testID="changeAmountUnitButton"
+              style={styles.changeAmountUnit}
+              onPress={this.changeAmountUnit}
+            >
+              <Image source={require('../img/round-compare-arrows-24-px.png')} />
+            </TouchableOpacity>
+          )}
         </View>
       </TouchableWithoutFeedback>
     );

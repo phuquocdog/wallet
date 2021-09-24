@@ -48,9 +48,9 @@ const UnlockWith = () => {
 
   const initialRender = async () => {
     let biometricType = false;
-    if (await Biometric.isBiometricUseCapableAndEnabled()) {
-      biometricType = await Biometric.biometricType();
-    }
+    // if (await Biometric.isBiometricUseCapableAndEnabled()) {
+    //   biometricType = await Biometric.biometricType();
+    // }
 
     setBiometricType(biometricType);
   };

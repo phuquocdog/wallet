@@ -190,7 +190,6 @@ const About = () => {
           color: '#FC0D44',
         }}
         chevron
-        onPress={handleOnSelfTestPress}
         testID="RunSelfTestButton"
         title={loc.settings.about_selftest}
       />
@@ -222,5 +221,5 @@ const About = () => {
   );
 };
 
-About.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.settings.about }));
+// About.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.settings.about }));
 export default About;

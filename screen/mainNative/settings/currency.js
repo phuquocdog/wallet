@@ -6,7 +6,6 @@ import navigationStyle from '../../components/navigationStyle';
 import { SafeBlueArea, BlueListItem, BlueText, BlueCard } from '../../BlueComponents';
 import loc from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
-const currency = require('../../blue_modules/currency');
 
 const data = Object.values('');
 
@@ -31,7 +30,7 @@ const Currency = () => {
   useEffect(() => {
     const fetchCurrency = async () => {
       try {
-        const preferredCurrency = await currency.getPreferredCurrency();
+        const preferredCurrency = 'USD'
         if (preferredCurrency === null) {
           throw Error();
         }
@@ -59,11 +58,7 @@ const Currency = () => {
                 title={`${item.endPointKey} (${item.symbol})`}
                 checkmark={selectedCurrency.endPointKey === item.endPointKey}
                 onPress={async () => {
-                  setIsSavingNewPreferredCurrency(true);
-                  setSelectedCurrency(item);
-                  await currency.setPrefferedCurrency(item);
-                  await currency.startUpdater();
-                  setIsSavingNewPreferredCurrency(false);
+                  
                   setPreferredFiatCurrency();
                 }}
               />

@@ -49,7 +49,7 @@ const MainTabs = () => {
         }}
 
     >
-    	<Tab.Screen component={HomeStack} name="Home" options={{ headerShown: false }} />
+    	<Tab.Screen component={HomeStack} name="Home" options={{ headerShown: true }} />
       <Tab.Screen component={DappStack} name="Dapp" options={{ headerShown: false }} />
       <Tab.Screen component={AppStack}  name="Apps" options={{ headerShown: false }} />
     	<Tab.Screen component={StakingStack} name="Staking" options={{ headerShown: false }} />
