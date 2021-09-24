@@ -215,9 +215,6 @@ export class AppStorage {
 
     try {
       const walletsToSave = [];
-      console.log('saveToDisk')
-
-      console.log(this.wallets);
       for (const key of this.wallets) {
         w = new PhuquocdogWallet(key.props);
         walletsToSave.push(w)

@@ -69,7 +69,7 @@ const App = () => {
     if (notification.data && notification.data.data) Object.assign(payload, notification.data.data);
     payload.foreground = true;
 
-    await Notifications.addNotification(payload);
+    //await Notifications.addNotification(payload);
     // if user is staring at the app when he receives the notification we process it instantly
     // so app refetches related wallet
     if (payload.foreground) await processPushNotifications();
@@ -185,102 +185,12 @@ const App = () => {
    * @private
    */
   const processPushNotifications = async () => {
-    await new Promise(resolve => setTimeout(resolve, 200));
-    // sleep needed as sometimes unsuspend is faster than notification module actually saves notifications to async storage
-    const notifications2process = await Notifications.getStoredNotifications();
-
-    await Notifications.clearStoredNotifications();
-    Notifications.setApplicationIconBadgeNumber(0);
-    const deliveredNotifications = await Notifications.getDeliveredNotifications();
-    setTimeout(() => Notifications.removeAllDeliveredNotifications(), 5000); // so notification bubble wont disappear too fast
-
-    for (const payload of notifications2process) {
-      const wasTapped = payload.foreground === false || (payload.foreground === true && payload.userInteraction);
-
-      console.log('processing push notification:', payload);
-      let wallet;
-      switch (+payload.type) {
-        case 2:
-        case 3:
-          wallet = wallets.find(w => w.weOwnAddress(payload.address));
-          break;
-        case 1:
-        case 4:
-          wallet = wallets.find(w => w.weOwnTransaction(payload.txid || payload.hash));
-          break;
-      }
-
-      if (wallet) {
-        const walletID = wallet.getID();
-        fetchAndSaveWalletTransactions(walletID);
-        if (wasTapped) {
-          NavigationService.dispatch(
-            CommonActions.navigate({
-              name: 'WalletTransactions',
-              key: `WalletTransactions-${wallet.getID()}`,
-              params: {
-                walletID,
-                walletType: wallet.type,
-              },
-            }),
-          );
-
-          return true;
-        }
-      } else {
-        console.log('could not find wallet while processing push notification, NOP');
-      }
-    } // end foreach notifications loop
-
-    if (deliveredNotifications.length > 0) {
-      // notification object is missing userInfo. We know we received a notification but don't have sufficient
-      // data to refresh 1 wallet. let's refresh all.
-      refreshAllWalletTransactions();
-    }
-
     // if we are here - we did not act upon any push
     return false;
   };
 
   const handleAppStateChange = async nextAppState => {
     return;
-    if (wallets.length > 0) {
-      if ((appState.current.match(/background/) && nextAppState) === 'active' || nextAppState === undefined) {
-        const processed = await processPushNotifications();
-        if (processed) return;
-        const clipboard = await BlueClipboard.getClipboardContent();
-        const isAddressFromStoredWallet = wallets.some(wallet => {
-          if (wallet.chain === Chain.ONCHAIN) {
-            // checking address validity is faster than unwrapping hierarchy only to compare it to garbage
-            return wallet.isAddressValid && wallet.isAddressValid(clipboard) && wallet.weOwnAddress(clipboard);
-          } else {
-            return wallet.isInvoiceGeneratedByWallet(clipboard) || wallet.weOwnAddress(clipboard);
-          }
-        });
-        const isBitcoinAddress = DeeplinkSchemaMatch.isBitcoinAddress(clipboard);
-        const isLightningInvoice = DeeplinkSchemaMatch.isLightningInvoice(clipboard);
-        const isLNURL = DeeplinkSchemaMatch.isLnUrl(clipboard);
-        const isBothBitcoinAndLightning = DeeplinkSchemaMatch.isBothBitcoinAndLightning(clipboard);
-        if (
-          !isAddressFromStoredWallet &&
-          clipboardContent.current !== clipboard &&
-          (isBitcoinAddress || isLightningInvoice || isLNURL || isBothBitcoinAndLightning)
-        ) {
-          if (isBitcoinAddress) {
-            setClipboardContentType(ClipboardContentType.BITCOIN);
-          } else if (isLightningInvoice || isLNURL) {
-            setClipboardContentType(ClipboardContentType.LIGHTNING);
-          } else if (isBothBitcoinAndLightning) {
-            setClipboardContentType(ClipboardContentType.BITCOIN);
-          }
-          setIsClipboardContentModalVisible(true);
-        }
-        clipboardContent.current = clipboard;
-      }
-      if (nextAppState) {
-        appState.current = nextAppState;
-      }
-    }
   };
 
   const handleOpenURL = event => {

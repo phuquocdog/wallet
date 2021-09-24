@@ -14,19 +14,16 @@ import {
 import navigationStyle from '../../components/navigationStyle';
 import Privacy from '../../blue_modules/Privacy';
 import loc from '../../loc';
-import { isDesktop, isMacCatalina } from '../../blue_modules/environment';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 
-import { keyring } from '@polkadot/ui-keyring';
-import { mnemonicGenerate } from '@polkadot/util-crypto';
 import { PhuquocdogWallet } from '../../class/wallets/phuquocdog-wallet';
+import { Keyring } from '@polkadot/keyring';
 
-const fs = require('../../blue_modules/fs');
 
 const WalletsImport = () => {
   const [isToolbarVisibleForAndroid, setIsToolbarVisibleForAndroid] = useState(false);
   const route = useRoute();
-  const { isImportingWallet, addWallet,saveToDisk,setIsImportingWallet } = useContext(BlueStorageContext);
+  const {addWallet,saveToDisk} = useContext(BlueStorageContext);
   const label = (route.params && route.params.label) || '';
   const triggerImport = (route.params && route.params.triggerImport) || false;
   const [importText, setImportText] = useState(label);
@@ -67,7 +64,7 @@ const WalletsImport = () => {
 
   const importButtonPressed = () => {
     setIsLoading(true);
-    if (importText.trim().length === 0) {
+    if (importText.split(" ").filter((x) => x !== "").length < 11) {
       return;
     }
     importMnemonic(importText);
@@ -79,9 +76,8 @@ const WalletsImport = () => {
    */
   const importMnemonic = async importText => {
     setIsLoading(true);
-    console.log('importMnemonic', isLoading)
-
     try {
+      const keyring = new Keyring({ type: 'sr25519' });
       const { address } = keyring.createFromUri(importText);
 
       const w = {
@@ -113,18 +109,14 @@ const WalletsImport = () => {
   };
 
   const importScan = () => {
-    if (isMacCatalina) {
-      fs.showActionSheet().then(onBarScanned);
-    } else {
-      navigation.navigate('ScanQRCodeRoot', {
-        screen: 'ScanQRCode',
-        params: {
-          launchedBy: route.name,
-          onBarScanned: onBarScanned,
-          showFileImportButton: true,
-        },
-      });
-    }
+    navigation.navigate('ScanQRCodeRoot', {
+      screen: 'ScanQRCode',
+      params: {
+        launchedBy: route.name,
+        onBarScanned: onBarScanned,
+        showFileImportButton: true,
+      },
+    });
   };
 
   return (
@@ -136,7 +128,6 @@ const WalletsImport = () => {
       <BlueFormMultiInput
         testID="MnemonicInput"
         value={importText}
-        contextMenuHidden={!isDesktop}
         onChangeText={setImportText}
         inputAccessoryViewID={BlueDoneAndDismissKeyboardInputAccessory.InputAccessoryViewID}
       />

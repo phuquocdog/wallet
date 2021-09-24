@@ -4,7 +4,7 @@ import { useTheme } from '@react-navigation/native';
 
 import navigationStyle from '../../components/navigationStyle';
 import { SafeBlueArea, BlueListItem, BlueText, BlueCard } from '../../BlueComponents';
-import { FiatUnit, FiatUnitSource } from '../../models/fiatUnit';
+import { FiatUnit } from '../../models/fiatUnit';
 import loc from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 const currency = require('../../blue_modules/currency');
@@ -73,7 +73,7 @@ const Currency = () => {
         />
         <BlueCard>
           <BlueText>
-            {loc.settings.currency_source} {selectedCurrency.source ?? FiatUnitSource.CoinDesk}
+            {loc.settings.currency_source} {selectedCurrency.source}
           </BlueText>
         </BlueCard>
       </SafeBlueArea>

@@ -11,6 +11,7 @@ import {
   StatusBar,
   TextInput,
   StyleSheet,
+  AppState
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
@@ -23,6 +24,7 @@ import {
   BlueButton,
   BlueButtonLink,
   BlueSpacing20,
+  BlueLoading
 } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
 import { HDSegwitBech32Wallet, SegwitP2SHWallet, HDSegwitP2SHWallet, LightningCustodianWallet, AppStorage } from '../../class';
@@ -30,13 +32,11 @@ import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { useTheme, useNavigation } from '@react-navigation/native';
 import loc from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
-import { keyring } from '@polkadot/ui-keyring';
 import { mnemonicGenerate } from '@polkadot/util-crypto';
-import { ApiPromise, WsProvider} from '@polkadot/api';
+import { Keyring } from '@polkadot/keyring';
 
 import { PhuquocdogWallet } from '../../class/wallets/phuquocdog-wallet';
 
-const A = require('../../blue_modules/analytics');
 
 const ButtonSelected = Object.freeze({
   PQD: 'phuquocdog',
@@ -47,8 +47,7 @@ const ButtonSelected = Object.freeze({
 const WalletsAdd = () => {
   const { colors } = useTheme();
   const { addWallet, saveToDisk, isAdancedModeEnabled } = useContext(BlueStorageContext);
-  const [isKeyring, setIsKeyring] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [walletBaseURI, setWalletBaseURI] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -82,56 +81,25 @@ const WalletsAdd = () => {
 
   useEffect(() => {
     setWalletBaseURI('https://node.phuquoc.dog');
-    setIsLoading(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading]);
+  });  
 
-  // if (isKeyring) {
-  //     initialize();
-  // }
-  // const initialize = async (): Promise<void> => {
-  //   try {
-  //     keyring.loadAll({ ss58Format: 42, type: 'sr25519' });
-  //   } catch (e) {
-  //     console.log('Error loading keyring ', e);
-  //   }
 
-  //   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  //   //await globalAny.localStorage.init();
-  //   await cryptoWaitReady();
-  // };
-
-  
-
-  const entropyGenerated = newEntropy => {
-    let entropyTitle;
-    if (!newEntropy) {
-      entropyTitle = loc.wallets.add_entropy_provide;
-    } else if (newEntropy.length < 32) {
-      entropyTitle = loc.formatString(loc.wallets.add_entropy_remain, {
-        gen: newEntropy.length,
-        rem: 32 - newEntropy.length,
-      });
-    } else {
-      entropyTitle = loc.formatString(loc.wallets.add_entropy_generated, {
-        gen: newEntropy.length,
-      });
-    }
-    setEntropy(newEntropy);
-    setEntropyButtonText(entropyTitle);
-  };
-
-  const createWallet = async () => {
+  const createWallet = () => {
     setIsLoading(true);
+    
     if (selectedWalletType === ButtonSelected.BTC) {
         alert('We have not supported at the moment!')
         return;
     }
+    createWalletPQD();
+  };
 
-    
+  const createWalletPQD = async () => {
+
     const phrase = mnemonicGenerate(12);
-    const { address } = keyring.createFromUri(phrase);
-    
+    const keyring = new Keyring({ type: 'sr25519' });
+    const {address} = keyring.addFromUri(phrase);
+    console.log('Addddd', address)
     const w = {
       'label': label,
       'chain': 'phuquocdog',
@@ -139,26 +107,16 @@ const WalletsAdd = () => {
       'secret': phrase,
       'type': 'phuquocdog'
     }
-
     let pqd = new PhuquocdogWallet(w);
     addWallet(pqd);
-
     await saveToDisk();
     navigate('PleaseBackup', {
         walletID: address,
     });
-
-    // //ReactNativeHapticFeedback.trigger('notificationSuccess', { ignoreAndroidSystemSettings: false });
-    
-    // setIsLoading(false);
-    
-  };
-
-
-
+  }
 
   const navigateToEntropy = () => {
-    navigate('ProvideEntropy', { onGenerated: entropyGenerated });
+    navigate('ProvideEntropy');
   };
 
   const navigateToImportWallet = () => {
@@ -176,6 +134,16 @@ const WalletsAdd = () => {
     Keyboard.dismiss();
     setSelectedWalletType(ButtonSelected.PQD);
   };
+
+  console.log('------------>', isLoading)
+
+  // if (isLoading) {
+  //   return (
+  //     <View>
+  //       <BlueLoading />
+  //     </View>
+  //   );
+  // }
 
   return (
     <ScrollView style={stylesHook.root}>

@@ -1,3 +1,4 @@
+* Fix send PQD on android 
 * Cleanup again 
 * Cleanup 
 * Cleanup 

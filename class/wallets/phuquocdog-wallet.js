@@ -36,10 +36,8 @@ export class PhuquocdogWallet {
       let b = await AsyncStorage.getItem(this.getAddress());
       if (b !== null) {
         b = JSON.parse(b)
-        console.log('get data cache',b);
         this.setBalanceHuman(b.balanceHuman);
       } else {
-        console.log('set data cache');
         const c = await this.connect();
         const { nonce, data: balance } = await c.query.system.account(this.props.address);
         if (balance) {

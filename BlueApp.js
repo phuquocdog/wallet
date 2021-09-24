@@ -4,8 +4,6 @@ import { Platform } from 'react-native';
 import loc from './loc';
 const prompt = require('./blue_modules/prompt');
 const BlueApp = new AppStorage();
-import { cryptoWaitReady, mnemonicGenerate } from '@polkadot/util-crypto';
-import { keyring } from '@polkadot/ui-keyring';
 
 // If attempt reaches 10, a wipe keychain option will be provided to the user.
 let unlockAttempt = 0;
@@ -16,9 +14,6 @@ const startAndDecrypt = async retry => {
     console.log('App already has some wallets, so we are in already started state, exiting startAndDecrypt');
     return true;
   }
-  // Load lib polkadot
-  await cryptoWaitReady();
-  keyring.loadAll({ ss58Format: 42, type: 'sr25519' });
 
   await BlueApp.migrateKeys();
   let password = false;
