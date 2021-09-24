@@ -23,7 +23,6 @@ import {
 import { launchImageLibrary } from 'react-native-image-picker';
 import { Icon } from 'react-native-elements';
 import { useRoute, useNavigation, useTheme, useFocusEffect } from '@react-navigation/native';
-import { Chain } from '../../models/bitcoinUnits';
 import { BlueTransactionListItem, BlueWalletNavigationHeader, BlueAlertWalletExportReminder, BlueListItem } from '../../BlueComponents';
 import WalletGradient from '../../class/wallet-gradient';
 import navigationStyle from '../../components/navigationStyle';
@@ -39,6 +38,7 @@ import BlueClipboard from '../../blue_modules/clipboard';
 
 const fs = require('../../blue_modules/fs');
 const LocalQRCode = require('@remobile/react-native-qrcode-local-image');
+
 
 const buttonFontSize =
   PixelRatio.roundToNearestPixel(Dimensions.get('window').width / 26) > 22
@@ -158,11 +158,7 @@ const WalletTransactions = ({navigation}) => {
   );
 
   const isLightning = () => {
-    const w = wallet;
-    if (w && w.chain === Chain.OFFCHAIN) {
-      return true;
-    }
-
+  
     return false;
   };
 
@@ -278,12 +274,12 @@ const WalletTransactions = ({navigation}) => {
               hideChevron
               component={TouchableOpacity}
               onPress={() => {
-                const availableWallets = [...wallets.filter(item => item.chain === Chain.ONCHAIN && item.allowSend())];
+                const availableWallets = [...wallets.filter(item => item.allowSend())];
                 if (availableWallets.length === 0) {
                   alert(loc.lnd.refill_create);
                 } else {
                   setIsManageFundsModalVisible(false);
-                  navigate('SelectWallet', { onWalletSelect, chainType: Chain.ONCHAIN });
+                  navigate('SelectWallet', { onWalletSelect, chainType: 'phuquocdog' });
                 }
               }}
               title={loc.lnd.refill}
@@ -438,18 +434,6 @@ const WalletTransactions = ({navigation}) => {
 
   const onBarCodeRead = ret => {
     console.log('Recevied')
-    if (!isLoading) {
-      setIsLoading(true);
-      const params = {
-        walletID: wallet.getID(),
-        uri: ret.data ? ret.data : ret,
-      };
-      if (wallet.chain === Chain.ONCHAIN) {
-        navigate('SendDetailsRoot', { screen: 'SendDetails', params });
-      } else {
-        navigate('ScanLndInvoiceRoot', { screen: 'ScanLndInvoice', params });
-      }
-    }
     setIsLoading(false);
   };
 

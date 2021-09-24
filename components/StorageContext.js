@@ -2,11 +2,8 @@
 import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 import React, { createContext, useEffect, useState } from 'react';
 import { LayoutAnimation } from 'react-native';
-import { FiatUnit } from '../models/fiatUnit';
 import loc from '../loc';
 const BlueApp = require('../BlueApp');
-const BlueElectrum = require('./BlueElectrum');
-const currency = require('../blue_modules/currency');
 
 const _lastTimeTriedToRefetchWallet = {}; // hashmap of timestamps we _started_ refetching some wallet
 
@@ -18,9 +15,9 @@ export const BlueStorageProvider = ({ children }) => {
   const [selectedWallet, setSelectedWallet] = useState('');
   const [walletTransactionUpdateStatus, setWalletTransactionUpdateStatus] = useState(WalletTransactionsStatus.NONE);
   const [walletsInitialized, setWalletsInitialized] = useState(false);
-  const [preferredFiatCurrency, _setPreferredFiatCurrency] = useState(FiatUnit.USD);
+  const [preferredFiatCurrency, _setPreferredFiatCurrency] = useState('');
   const [language, _setLanguage] = useState();
-  const getPreferredCurrencyAsyncStorage = useAsyncStorage(currency.PREFERRED_CURRENCY).getItem;
+  const getPreferredCurrencyAsyncStorage = useAsyncStorage('USD').getItem;
   const getLanguageAsyncStorage = useAsyncStorage(loc.LANG).getItem;
   const [isHandOffUseEnabled, setIsHandOffUseEnabled] = useState(false);
   const [isDrawerListBlurred, _setIsDrawerListBlurred] = useState(false);
@@ -90,57 +87,11 @@ export const BlueStorageProvider = ({ children }) => {
   };
 
   const refreshAllWalletTransactions = async (lastSnappedTo, showUpdateStatusIndicator = true) => {
-    let noErr = true;
-    try {
-      if (showUpdateStatusIndicator) {
-        setWalletTransactionUpdateStatus(WalletTransactionsStatus.ALL);
-      }
-      await BlueElectrum.waitTillConnected();
-      const balanceStart = +new Date();
-      await fetchWalletBalances(lastSnappedTo);
-      const balanceEnd = +new Date();
-      console.log('fetch balance took', (balanceEnd - balanceStart) / 1000, 'sec');
-      const start = +new Date();
-      await fetchWalletTransactions(lastSnappedTo);
-      const end = +new Date();
-      console.log('fetch tx took', (end - start) / 1000, 'sec');
-    } catch (err) {
-      noErr = false;
-      console.warn(err);
-    } finally {
-      setWalletTransactionUpdateStatus(WalletTransactionsStatus.NONE);
-    }
-    if (noErr) await saveToDisk(); // caching
+   
   };
 
   const fetchAndSaveWalletTransactions = async walletID => {
-    const index = wallets.findIndex(wallet => wallet.getID() === walletID);
-    let noErr = true;
-    try {
-      // 5sec debounce:
-      setWalletTransactionUpdateStatus(walletID);
-      if (+new Date() - _lastTimeTriedToRefetchWallet[walletID] < 5000) {
-        console.log('re-fetch wallet happens too fast; NOP');
-        return;
-      }
-      _lastTimeTriedToRefetchWallet[walletID] = +new Date();
-
-      await BlueElectrum.waitTillConnected();
-      const balanceStart = +new Date();
-      await fetchWalletBalances(index);
-      const balanceEnd = +new Date();
-      console.log('fetch balance took', (balanceEnd - balanceStart) / 1000, 'sec');
-      const start = +new Date();
-      await fetchWalletTransactions(index);
-      const end = +new Date();
-      console.log('fetch tx took', (end - start) / 1000, 'sec');
-    } catch (err) {
-      noErr = false;
-      console.warn(err);
-    } finally {
-      setWalletTransactionUpdateStatus(WalletTransactionsStatus.NONE);
-    }
-    if (noErr) await saveToDisk(); // caching
+    
   };
 
   const addWallet = wallet => {

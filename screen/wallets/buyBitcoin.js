@@ -8,7 +8,6 @@ import { LightningCustodianWallet, WatchOnlyWallet } from '../../class';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 import * as NavigationService from '../../NavigationService';
 
-const currency = require('../../blue_modules/currency');
 
 export default class BuyBitcoin extends Component {
   static contextType = BlueStorageContext;
@@ -25,7 +24,7 @@ export default class BuyBitcoin extends Component {
   }
 
   static async generateURL(wallet) {
-    let preferredCurrency = await currency.getPreferredCurrency();
+    let preferredCurrency = 'USD'
     preferredCurrency = preferredCurrency.endPointKey;
 
     /**  @type {AbstractHDWallet|WatchOnlyWallet|LightningCustodianWallet}   */

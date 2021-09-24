@@ -27,7 +27,6 @@ import {
 } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import LinearGradient from 'react-native-linear-gradient';
-import { BitcoinUnit } from './models/bitcoinUnits';
 import * as NavigationService from './NavigationService';
 import WalletGradient from './class/wallet-gradient';
 import { BlurView } from '@react-native-community/blur';
@@ -267,19 +266,7 @@ export class BlueWalletNavigationHeader extends Component {
   changeWalletBalanceUnit = () => {
     let walletPreviousPreferredUnit = this.state.wallet.getPreferredBalanceUnit();
     const wallet = this.state.wallet;
-    if (walletPreviousPreferredUnit === BitcoinUnit.BTC) {
-      wallet.preferredBalanceUnit = BitcoinUnit.SATS;
-      walletPreviousPreferredUnit = BitcoinUnit.BTC;
-    } else if (walletPreviousPreferredUnit === BitcoinUnit.SATS) {
-      wallet.preferredBalanceUnit = BitcoinUnit.LOCAL_CURRENCY;
-      walletPreviousPreferredUnit = BitcoinUnit.SATS;
-    } else if (walletPreviousPreferredUnit === BitcoinUnit.LOCAL_CURRENCY) {
-      wallet.preferredBalanceUnit = BitcoinUnit.BTC;
-      walletPreviousPreferredUnit = BitcoinUnit.BTC;
-    } else {
-      wallet.preferredBalanceUnit = BitcoinUnit.BTC;
-      walletPreviousPreferredUnit = BitcoinUnit.BTC;
-    }
+    
 
     this.setState({ wallet, walletPreviousPreferredUnit: walletPreviousPreferredUnit }, () => {
       this.props.onWalletUnitChange(wallet);

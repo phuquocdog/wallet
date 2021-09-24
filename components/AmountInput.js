@@ -5,9 +5,7 @@ import { Text } from 'react-native-elements';
 import { Image, StyleSheet, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 
-import { BitcoinUnit } from '../models/bitcoinUnits';
 import loc, { formatBalanceWithoutSuffix, formatBalancePlain, removeTrailingZeros } from '../loc';
-const currency = require('../blue_modules/currency');
 
 class AmountInput extends Component {
 
@@ -38,11 +36,9 @@ class AmountInput extends Component {
   static conversionCache = {};
 
   static getCachedSatoshis = amount => {
-    return AmountInput.conversionCache[amount + BitcoinUnit.LOCAL_CURRENCY] || false;
   };
 
   static setCachedSatoshis = (amount, sats) => {
-    AmountInput.conversionCache[amount + BitcoinUnit.LOCAL_CURRENCY] = sats;
   };
 
   
@@ -53,27 +49,11 @@ class AmountInput extends Component {
   changeAmountUnit = () => {
     let previousUnit = this.props.unit;
     let newUnit;
-    if (previousUnit === BitcoinUnit.BTC) {
-      newUnit = BitcoinUnit.SATS;
-    } else if (previousUnit === BitcoinUnit.SATS) {
-      newUnit = BitcoinUnit.LOCAL_CURRENCY;
-    } else if (previousUnit === BitcoinUnit.LOCAL_CURRENCY) {
-      newUnit = BitcoinUnit.BTC;
-    } else {
-      newUnit = BitcoinUnit.BTC;
-      previousUnit = BitcoinUnit.SATS;
-    }
+    
   };
 
   maxLength = () => {
-    switch (this.props.unit) {
-      case BitcoinUnit.BTC:
-        return 10;
-      case BitcoinUnit.SATS:
-        return 15;
-      default:
-        return 15;
-    }
+    return 10
   };
 
   textInput = React.createRef();
@@ -95,7 +75,7 @@ class AmountInput extends Component {
 
 
     const stylesHook = StyleSheet.create({
-      center: { padding: amount === BitcoinUnit.MAX ? 0 : 15 },
+      center: { padding: amount ===  15 },
       localCurrency: { color: disabled ? colors.buttonDisabledTextColor : colors.alternativeTextColor2 },
       input: { color: disabled ? colors.buttonDisabledTextColor : colors.alternativeTextColor2, fontSize: amount.length > 10 ? 20 : 36 },
       cryptoCurrency: { color: disabled ? colors.buttonDisabledTextColor : colors.alternativeTextColor2 },
@@ -107,9 +87,7 @@ class AmountInput extends Component {
           {!disabled && <View style={[styles.center, stylesHook.center]} />}
           <View style={styles.flex}>
             <View style={styles.container}>
-              {unit === BitcoinUnit.LOCAL_CURRENCY && amount !== BitcoinUnit.MAX && (
-                <Text style={[styles.localCurrency, stylesHook.localCurrency]}>{currency.getCurrencySymbol() + ' '}</Text>
-              )}
+              <Text style={[styles.localCurrency, stylesHook.localCurrency]}>{' $USD '}</Text>
               <TextInput
                 {...this.props}
                 testID="BitcoinAmountInput"
@@ -135,23 +113,14 @@ class AmountInput extends Component {
             </View>
             <View style={styles.secondaryRoot}>
               <Text style={styles.secondaryText}>
-                {unit === BitcoinUnit.LOCAL_CURRENCY && amount !== BitcoinUnit.MAX
+                {unit === 1
                   ? removeTrailingZeros(secondaryDisplayCurrency)
                   : secondaryDisplayCurrency}
-                {unit === BitcoinUnit.LOCAL_CURRENCY && amount !== BitcoinUnit.MAX ? ` ${loc.units[BitcoinUnit.BTC]}` : null}
+                {unit ===  null}
               </Text>
             </View>
           </View>
-          {!disabled && amount !== BitcoinUnit.MAX && (
-            <TouchableOpacity
-              accessibilityRole="button"
-              testID="changeAmountUnitButton"
-              style={styles.changeAmountUnit}
-              onPress={this.changeAmountUnit}
-            >
-              <Image source={require('../img/round-compare-arrows-24-px.png')} />
-            </TouchableOpacity>
-          )}
+          
         </View>
       </TouchableWithoutFeedback>
     );

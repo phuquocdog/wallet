@@ -24,12 +24,10 @@ import BigNumber from 'bignumber.js';
 import { SafeBlueArea, BlueCard, BlueText } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
 import Privacy from '../../blue_modules/Privacy';
-import { BitcoinUnit } from '../../models/bitcoinUnits';
 import loc from '../../loc';
 import { BlueCurrentTheme } from '../../components/themes';
 import { DynamicQRCode } from '../../components/DynamicQRCode';
 import { isDesktop } from '../../blue_modules/environment';
-const currency = require('../../blue_modules/currency');
 
 export default class SendCreate extends Component {
   constructor(props) {
@@ -120,7 +118,7 @@ export default class SendCreate extends Component {
           <Text style={styles.transactionDetailsSubtitle}>{item.address}</Text>
           <Text style={styles.transactionDetailsTitle}>{loc.send.create_amount}</Text>
           <Text style={styles.transactionDetailsSubtitle}>
-            {currency.satoshiToBTC(item.value)} PQD
+            {item.value} PQD
           </Text>
           {this.state.recipients.length > 1 && (
             <BlueText style={styles.itemOf}>
@@ -167,10 +165,7 @@ export default class SendCreate extends Component {
                 ItemSeparatorComponent={this.renderSeparator}
               />
               <Text style={styles.transactionDetailsTitle}>{loc.send.create_fee}</Text>
-              <Text style={styles.transactionDetailsSubtitle}>
-                {new BigNumber(this.state.fee).toFixed()} {BitcoinUnit.BTC}
-              </Text>
-
+              
               <Text style={styles.transactionDetailsTitle}>{loc.send.create_tx_size}</Text>
               <Text style={styles.transactionDetailsSubtitle}>{this.state.size} bytes</Text>
 

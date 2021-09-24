@@ -4,12 +4,11 @@ import { useTheme } from '@react-navigation/native';
 
 import navigationStyle from '../../components/navigationStyle';
 import { SafeBlueArea, BlueListItem, BlueText, BlueCard } from '../../BlueComponents';
-import { FiatUnit } from '../../models/fiatUnit';
 import loc from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 const currency = require('../../blue_modules/currency');
 
-const data = Object.values(FiatUnit);
+const data = Object.values('');
 
 const Currency = () => {
   const { setPreferredFiatCurrency } = useContext(BlueStorageContext);

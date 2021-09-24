@@ -35,7 +35,6 @@ import AddressInput from '../../components/AddressInput';
 import AmountInput from '../../components/AmountInput';
 import InputAccessoryAllFunds from '../../components/InputAccessoryAllFunds';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
-const currency = require('../../blue_modules/currency');
 const prompt = require('../../blue_modules/prompt');
 const fs = require('../../blue_modules/fs');
 const scanqr = require('../../helpers/scan-qr');

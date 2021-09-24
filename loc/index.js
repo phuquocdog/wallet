@@ -6,10 +6,8 @@ import localizedFormat from 'dayjs/plugin/localizedFormat';
 import * as RNLocalize from 'react-native-localize';
 import BigNumber from 'bignumber.js';
 
-import { BitcoinUnit } from '../models/bitcoinUnits';
 import { AvailableLanguages } from './languages';
 import { I18nManager } from 'react-native';
-const currency = require('../blue_modules/currency');
 
 const LANG = 'lang';
 
@@ -292,19 +290,8 @@ export function formatBalance(balance, toUnit, withFormatting = false) {
  * @returns {string}
  */
 export function formatBalanceWithoutSuffix(balance = 0, toUnit, withFormatting = false) {
-  if (toUnit === undefined) {
-    return balance;
-  }
-  if (balance !== 0) {
-    if (toUnit === BitcoinUnit.BTC) {
-      const value = new BigNumber(balance).dividedBy(100000000).toFixed(8);
-      return removeTrailingZeros(value);
-    } else if (toUnit === BitcoinUnit.SATS) {
-      return withFormatting ? new Intl.NumberFormat().format(balance).toString() : String(balance);
-    } else if (toUnit === BitcoinUnit.LOCAL_CURRENCY) {
-      return currency.satoshiToLocalCurrency(balance);
-    }
-  }
+  
+
   return balance.toString();
 }
 

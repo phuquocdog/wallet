@@ -29,9 +29,7 @@ import { isDesktop, isMacCatalina, isTablet } from '../../blue_modules/environme
 import BlueClipboard from '../../blue_modules/clipboard';
 import navigationStyle from '../../components/navigationStyle';
 
-const BlueElectrum = require('../../blue_modules/BlueElectrum');
 const scanqrHelper = require('../../helpers/scan-qr');
-const A = require('../../blue_modules/analytics');
 const fs = require('../../blue_modules/fs');
 const WalletsListSections = { CAROUSEL: 'CAROUSEL', LOCALTRADER: 'LOCALTRADER', TRANSACTIONS: 'TRANSACTIONS' };
 
@@ -139,7 +137,7 @@ const WalletsList = () => {
    * Triggered manually by user on pull-to-refresh.
    */
   const refreshTransactions = async (showLoadingIndicator = true, showUpdateStatusIndicator = false) => {
-    if (await BlueElectrum.isDisabled()) return setIsLoading(false);
+    
     setIsLoading(showLoadingIndicator);
     refreshAllWalletTransactions(showLoadingIndicator, showUpdateStatusIndicator).finally(() => setIsLoading(false));
   };
@@ -238,7 +236,7 @@ const WalletsList = () => {
   };
 
   const renderWalletsCarousel = () => {
-    console.log('renderWalletsCarousel---------')
+    console.log('renderWalletsCarousel--')
     return (
       <WalletsCarousel
         data={wallets.concat(false)}

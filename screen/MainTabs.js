@@ -5,7 +5,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context'
-import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated'
 
 import HomeStack from './mainNative//home/HomeStack';
 import AppStack from './mainNative//app/AppStack';
