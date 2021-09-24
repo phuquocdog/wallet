@@ -27,7 +27,6 @@ import {
   BlueLoading
 } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
-import { HDSegwitBech32Wallet, SegwitP2SHWallet, HDSegwitP2SHWallet, LightningCustodianWallet, AppStorage } from '../../class';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { useTheme, useNavigation } from '@react-navigation/native';
 import loc from '../../loc';
@@ -99,7 +98,6 @@ const WalletsAdd = () => {
     const phrase = mnemonicGenerate(12);
     const keyring = new Keyring({ type: 'sr25519' });
     const {address} = keyring.addFromUri(phrase);
-    console.log('Addddd', address)
     const w = {
       'label': label,
       'chain': 'phuquocdog',
@@ -134,8 +132,6 @@ const WalletsAdd = () => {
     Keyboard.dismiss();
     setSelectedWalletType(ButtonSelected.PQD);
   };
-
-  console.log('------------>', isLoading)
 
   // if (isLoading) {
   //   return (
@@ -192,22 +188,8 @@ const WalletsAdd = () => {
                     containerStyle={[styles.noPadding, stylesHook.noPadding]}
                     bottomDivider={false}
                     onPress={() => setSelectedIndex(0)}
-                    title={HDSegwitBech32Wallet.typeReadable}
+                    title="BTC wallets"
                     checkmark={selectedIndex === 0}
-                  />
-                  <BlueListItem
-                    containerStyle={[styles.noPadding, stylesHook.noPadding]}
-                    bottomDivider={false}
-                    onPress={() => setSelectedIndex(1)}
-                    title={SegwitP2SHWallet.typeReadable}
-                    checkmark={selectedIndex === 1}
-                  />
-                  <BlueListItem
-                    containerStyle={[styles.noPadding, stylesHook.noPadding]}
-                    bottomDivider={false}
-                    onPress={() => setSelectedIndex(2)}
-                    title={HDSegwitP2SHWallet.typeReadable}
-                    checkmark={selectedIndex === 2}
                   />
                 </View>
               );

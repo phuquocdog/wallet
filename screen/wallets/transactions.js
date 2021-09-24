@@ -174,23 +174,8 @@ const WalletTransactions = ({navigation}) => {
       
       /** @type {LegacyWallet} */
       const balanceStart = +new Date();
-      const oldBalance = wallet.getBalance();
-      await wallet.fetchBalance();
-      if (oldBalance !== wallet.getBalance()) smthChanged = true;
-      const balanceEnd = +new Date();
-      console.log(wallet.getLabel(), 'fetch balance took', (balanceEnd - balanceStart) / 1000, 'sec');
-      const start = +new Date();
-      const oldTxLen = wallet.getTransactions().length;
-      await wallet.fetchTransactions();
-      if (wallet.fetchPendingTransactions) {
-        await wallet.fetchPendingTransactions();
-      }
-      if (wallet.fetchUserInvoices) {
-        await wallet.fetchUserInvoices();
-      }
-      if (oldTxLen !== wallet.getTransactions().length) smthChanged = true;
-      const end = +new Date();
-      console.log(wallet.getLabel(), 'fetch tx took', (end - start) / 1000, 'sec');
+      const oldBalance = await wallet.refreshTransactions();
+      
     } catch (err) {
       noErr = false;
       alert(err.message);

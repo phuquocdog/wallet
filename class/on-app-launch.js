@@ -1,5 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const BlueApp = require('../BlueApp');
+
+import {AppStorage} from './app-storage';
+
+const BlueApp = new AppStorage();
 
 export default class OnAppLaunch {
   static STORAGE_KEY = 'ONAPP_LAUNCH_SELECTED_DEFAULT_WALLET_KEY';

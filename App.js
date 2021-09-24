@@ -20,7 +20,6 @@ import { navigationRef } from './NavigationService';
 import * as NavigationService from './NavigationService';
 import { BlueTextCentered, BlueButton, SecondButton } from './BlueComponents';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
-import { Chain } from './models/bitcoinUnits';
 import OnAppLaunch from './class/on-app-launch';
 import DeeplinkSchemaMatch from './class/deeplink-schema-match';
 import loc from './loc';
@@ -30,7 +29,6 @@ import InitRoot from './Navigation';
 import BlueClipboard from './blue_modules/clipboard';
 import { isDesktop } from './blue_modules/environment';
 import { BlueStorageContext } from './blue_modules/storage-context';
-import WatchConnectivity from './WatchConnectivity';
 import DeviceQuickActions from './class/quick-actions';
 import Notifications from './blue_modules/notifications';
 import Biometric from './class/biometrics';
@@ -240,7 +238,7 @@ const App = () => {
           <Notifications onProcessNotifications={processPushNotifications} />
           {renderClipboardContentModal()}
         </NavigationContainer>
-        {walletsInitialized && !isDesktop && <WatchConnectivity />}
+        {walletsInitialized && !isDesktop}
       </View>
       <DeviceQuickActions />
       <Biometric />

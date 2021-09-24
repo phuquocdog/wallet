@@ -56,6 +56,26 @@ export class PhuquocdogWallet {
   
     return this.balanceHuman;
   }
+  async refreshTransactions() {
+
+    try {
+      const c = await this.connect();
+      const { nonce, data: balance } = await c.query.system.account(this.getAddress());
+      if (balance) {
+        this.setBalanceHuman(balance.free.toHuman());
+
+        //Cache data to Store
+        await AsyncStorage.setItem(this.getAddress(), JSON.stringify({
+          'balanceHuman': balance.free.toHuman()
+        }));
+
+      }
+    } catch (e) {
+      console.log('error', e)
+    }
+  
+    return this.balanceHuman;
+  }
   async saveTransaction(id) {
 
     try {
