@@ -19,8 +19,7 @@ import {
   BlueTextCentered,
   SafeBlueArea,
 } from '../../BlueComponents';
-import BlueElectrum from '../../blue_modules/BlueElectrum';
-import Notifications from '../../blue_modules/notifications';
+\import Notifications from '../../blue_modules/notifications';
 
 const scanqr = require('../../helpers/scan-qr');
 
@@ -59,8 +58,7 @@ const Broadcast = () => {
     Keyboard.dismiss();
     setBroadcastResult(BROADCAST_RESULT.pending);
     try {
-      await BlueElectrum.ping();
-      await BlueElectrum.waitTillConnected();
+      
       const walletObj = new HDSegwitBech32Wallet();
       const result = await walletObj.broadcastTx(txHex);
       if (result) {

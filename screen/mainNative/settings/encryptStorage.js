@@ -120,7 +120,7 @@ const EncryptStorage = () => {
   };
 
   const navigateToPlausibleDeniability = () => {
-    navigate('PlausibleDeniability');
+    alert('Update soon!');
   };
 
   return isLoading ? (

@@ -61,7 +61,7 @@ PODS:
   - glog (0.3.5)
   - libevent (2.1.12)
   - lottie-ios (3.2.3)
-  - lottie-react-native (4.0.3):
+  - lottie-react-native (4.1.0):
     - lottie-ios (~> 3.2.3)
     - React-Core
   - OpenSSL-Universal (1.1.180)
@@ -274,25 +274,18 @@ PODS:
     - React
   - react-native-fingerprint-scanner (6.0.0):
     - React
-  - react-native-idle-timer (2.1.6):
-    - React-Core
   - react-native-image-picker (4.0.6):
+    - React-Core
+  - react-native-pager-view (5.4.4):
     - React-Core
   - react-native-randombytes (3.6.1):
     - React-Core
   - react-native-safe-area-context (3.3.0):
     - React-Core
-  - react-native-splash-screen (3.2.0):
-    - React
-  - react-native-tcp-socket (5.2.1):
-    - CocoaAsyncSocket
-    - React-Core
   - react-native-tor (0.1.7):
     - React
   - react-native-webview (11.13.0):
     - React-Core
-  - react-native-widget-center (0.0.7):
-    - React
   - React-perflogger (0.64.2)
   - React-RCTActionSheet (0.64.2):
     - React-Core/RCTActionSheetHeaders (= 0.64.2)
@@ -367,17 +360,11 @@ PODS:
     - React
   - RNCPushNotificationIOS (1.9.0):
     - React-Core
-  - RNDefaultPreference (1.4.3):
-    - React
   - RNDeviceInfo (8.1.3):
     - React-Core
   - RNFS (2.18.0):
     - React
   - RNGestureHandler (1.10.3):
-    - React-Core
-  - RNHandoff (0.0.3):
-    - React
-  - RNKeychain (7.0.0):
     - React-Core
   - RNLocalize (2.1.1):
     - React-Core
@@ -389,55 +376,15 @@ PODS:
     - React-Core
   - RNReactNativeHapticFeedback (1.11.0):
     - React-Core
-  - RNReanimated (2.2.0):
-    - DoubleConversion
-    - FBLazyVector
-    - FBReactNativeSpec
-    - glog
-    - RCT-Folly
-    - RCTRequired
-    - RCTTypeSafety
-    - React
-    - React-callinvoker
-    - React-Core
-    - React-Core/DevSupport
-    - React-Core/RCTWebSocket
-    - React-CoreModules
-    - React-cxxreact
-    - React-jsi
-    - React-jsiexecutor
-    - React-jsinspector
-    - React-RCTActionSheet
-    - React-RCTAnimation
-    - React-RCTBlob
-    - React-RCTImage
-    - React-RCTLinking
-    - React-RCTNetwork
-    - React-RCTSettings
-    - React-RCTText
-    - React-RCTVibration
-    - ReactCommon/turbomodule/core
-    - Yoga
   - RNScreens (3.5.0):
     - React-Core
     - React-RCTImage
-  - RNSecureKeyStore (1.0.0):
-    - React
-  - RNSentry (2.6.0):
-    - React-Core
-    - Sentry (= 7.0.0)
   - RNShare (7.0.0):
     - React-Core
   - RNSVG (12.1.1):
     - React
   - RNVectorIcons (8.1.0):
     - React-Core
-  - RNWatch (1.0.3):
-    - React
-  - Sentry (7.0.0):
-    - Sentry/Core (= 7.0.0)
-  - Sentry/Core (7.0.0)
-  - SwiftSocket (2.0.2)
   - ToolTipMenu (5.2.0):
     - React
   - Yoga (1.14.0)
@@ -489,15 +436,12 @@ DEPENDENCIES:
   - react-native-camera (from `../node_modules/react-native-camera`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-fingerprint-scanner (from `../node_modules/react-native-fingerprint-scanner`)
-  - react-native-idle-timer (from `../node_modules/react-native-idle-timer`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
+  - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-randombytes (from `../node_modules/react-native-randombytes`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
-  - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
-  - react-native-tcp-socket (from `../node_modules/react-native-tcp-socket`)
   - react-native-tor (from `../node_modules/react-native-tor`)
   - react-native-webview (from `../node_modules/react-native-webview`)
-  - react-native-widget-center (from `../node_modules/react-native-widget-center`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -515,26 +459,18 @@ DEPENDENCIES:
   - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNCPushNotificationIOS (from `../node_modules/@react-native-community/push-notification-ios`)"
-  - RNDefaultPreference (from `../node_modules/react-native-default-preference`)
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
-  - RNHandoff (from `../node_modules/react-native-handoff`)
-  - RNKeychain (from `../node_modules/react-native-keychain`)
   - RNLocalize (from `../node_modules/react-native-localize`)
   - RNPrivacySnapshot (from `../node_modules/react-native-privacy-snapshot`)
   - RNQuickAction (from `../node_modules/react-native-quick-actions`)
   - RNRate (from `../node_modules/react-native-rate`)
   - RNReactNativeHapticFeedback (from `../node_modules/react-native-haptic-feedback`)
-  - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
-  - RNSecureKeyStore (from `../node_modules/react-native-secure-key-store/ios`)
-  - "RNSentry (from `../node_modules/@sentry/react-native`)"
   - RNShare (from `../node_modules/react-native-share`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
-  - RNWatch (from `../node_modules/react-native-watch-connectivity`)
-  - SwiftSocket (from `https://github.com/swiftsocket/SwiftSocket.git`, branch `master`)
   - ToolTipMenu (from `../node_modules/react-native-tooltip`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -551,7 +487,6 @@ SPEC REPOS:
     - FlipperKit
     - libevent
     - OpenSSL-Universal
-    - Sentry
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -601,24 +536,18 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-document-picker"
   react-native-fingerprint-scanner:
     :path: "../node_modules/react-native-fingerprint-scanner"
-  react-native-idle-timer:
-    :path: "../node_modules/react-native-idle-timer"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
+  react-native-pager-view:
+    :path: "../node_modules/react-native-pager-view"
   react-native-randombytes:
     :path: "../node_modules/react-native-randombytes"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
-  react-native-splash-screen:
-    :path: "../node_modules/react-native-splash-screen"
-  react-native-tcp-socket:
-    :path: "../node_modules/react-native-tcp-socket"
   react-native-tor:
     :path: "../node_modules/react-native-tor"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
-  react-native-widget-center:
-    :path: "../node_modules/react-native-widget-center"
   React-perflogger:
     :path: "../node_modules/react-native/ReactCommon/reactperflogger"
   React-RCTActionSheet:
@@ -653,18 +582,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/masked-view"
   RNCPushNotificationIOS:
     :path: "../node_modules/@react-native-community/push-notification-ios"
-  RNDefaultPreference:
-    :path: "../node_modules/react-native-default-preference"
   RNDeviceInfo:
     :path: "../node_modules/react-native-device-info"
   RNFS:
     :path: "../node_modules/react-native-fs"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
-  RNHandoff:
-    :path: "../node_modules/react-native-handoff"
-  RNKeychain:
-    :path: "../node_modules/react-native-keychain"
   RNLocalize:
     :path: "../node_modules/react-native-localize"
   RNPrivacySnapshot:
@@ -675,34 +598,18 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-rate"
   RNReactNativeHapticFeedback:
     :path: "../node_modules/react-native-haptic-feedback"
-  RNReanimated:
-    :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
-  RNSecureKeyStore:
-    :path: "../node_modules/react-native-secure-key-store/ios"
-  RNSentry:
-    :path: "../node_modules/@sentry/react-native"
   RNShare:
     :path: "../node_modules/react-native-share"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
-  RNWatch:
-    :path: "../node_modules/react-native-watch-connectivity"
-  SwiftSocket:
-    :branch: master
-    :git: https://github.com/swiftsocket/SwiftSocket.git
   ToolTipMenu:
     :path: "../node_modules/react-native-tooltip"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
-
-CHECKOUT OPTIONS:
-  SwiftSocket:
-    :commit: 4a3af2cbbaef5b2fddbaff80f6767fecc0ce5fe2
-    :git: https://github.com/swiftsocket/SwiftSocket.git
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
@@ -721,7 +628,7 @@ SPEC CHECKSUMS:
   glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   lottie-ios: c058aeafa76daa4cf64d773554bccc8385d0150e
-  lottie-react-native: 96361a9891cf651534ea35c4f85f33d4cf14ed13
+  lottie-react-native: 9c11659dfd571028a2233fa53e332110651c4b25
   OpenSSL-Universal: 1aa4f6a6ee7256b83db99ec1ccdaa80d10f9af9b
   PasscodeAuth: 3e88093ff46c31a952d8b36c488240de980517be
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
@@ -739,15 +646,12 @@ SPEC CHECKSUMS:
   react-native-camera: 11166fe7e3a673493c152f52966e8ab1c5cdcacc
   react-native-document-picker: 4921045c5c6c78243010f784eae0a3f4b2af7799
   react-native-fingerprint-scanner: ac6656f18c8e45a7459302b84da41a44ad96dbbe
-  react-native-idle-timer: f7f651542b39dce9b9473e4578cb64a255075f17
   react-native-image-picker: a6e56460d34905c849ada551db30897dc7f3d535
+  react-native-pager-view: 5ab4d0b4b44d89f77310cb3eb8129745f274ce55
   react-native-randombytes: 421f1c7d48c0af8dbcd471b0324393ebf8fe7846
   react-native-safe-area-context: 61c8c484a3a9e7d1fda19f7b1794b35bbfd2262a
-  react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
-  react-native-tcp-socket: d05b8acbf1c045ff5b6a92ec6ca91960c94387d1
   react-native-tor: 6a64351e96ccd6a49941989703f63ec81fc1ae7c
   react-native-webview: 133a6a5149f963259646e710b4545c67ef35d7c9
-  react-native-widget-center: 5e63193fce272aa3c2aa4f1a33e129b06a962f47
   React-perflogger: 25373e382fed75ce768a443822f07098a15ab737
   React-RCTActionSheet: af7796ba49ffe4ca92e7277a5d992d37203f7da5
   React-RCTAnimation: 6a2e76ab50c6f25b428d81b76a5a45351c4d77aa
@@ -765,31 +669,22 @@ SPEC CHECKSUMS:
   RNCClipboard: ddd4d291537f1667209c9c405aaa4307297e252e
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPushNotificationIOS: 5bffde624d1fd15bfc8b2fd202b012a517a6dc9b
-  RNDefaultPreference: 2f8d6d54230edbd78708ada8d63bb275e5a8415b
   RNDeviceInfo: 8d3a29207835f972bce883723882980143270d55
   RNFS: 3ab21fa6c56d65566d1fb26c2228e2b6132e5e32
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
-  RNHandoff: d3b0754cca3a6bcd9b25f544f733f7f033ccf5fa
-  RNKeychain: f75b8c8b2f17d3b2aa1f25b4a0ac5b83d947ff8f
   RNLocalize: 82a569022724d35461e2dc5b5d015a13c3ca995b
   RNPrivacySnapshot: 71919dde3c6a29dd332115409c2aec564afee8f4
   RNQuickAction: 6d404a869dc872cde841ad3147416a670d13fa93
   RNRate: cb88d5a0aa7be8bfae67dafbbbba2c9cd5e6faf2
   RNReactNativeHapticFeedback: 653a8c126a0f5e88ce15ffe280b3ff37e1fbb285
-  RNReanimated: 9c13c86454bfd54dab7505c1a054470bfecd2563
   RNScreens: 01ab149b5dd5c27f5ff26741b1d2bdf2cee1af35
-  RNSecureKeyStore: f1ad870e53806453039f650720d2845c678d89c8
-  RNSentry: a2b02b326ae4fce91ce7c57d3f7dcf8df4f72269
   RNShare: 00e7409201e3cab13e0febc41fd4465a83ae8225
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
-  RNWatch: e4c5d19506c94506860032fb68aedd5991beb985
-  Sentry: 89d26e036063b9cb9caa59b6951dd2f8277aa13b
-  SwiftSocket: c8d482e867ae4d3eb4c769e9382e123c1f1f833b
   ToolTipMenu: 665b2ce108bb3a0b13ea2c220226991435e9c9e3
   Yoga: 575c581c63e0d35c9a83f4b46d01d63abc1100ac
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: d244ee572c2181d3fab4c0ae05c11d9118ff3fa0
+PODFILE CHECKSUM: 7c77c616d6fd0423eb8c973e637e8b808be2ad8f
 
 COCOAPODS: 1.10.1

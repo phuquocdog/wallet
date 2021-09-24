@@ -4,12 +4,10 @@ import { useTheme } from '@react-navigation/native';
 
 import navigationStyle from '../../components/navigationStyle';
 import { SafeBlueArea, BlueListItem, BlueText, BlueCard } from '../../BlueComponents';
-import { FiatUnit, FiatUnitSource } from '../../models/fiatUnit';
 import loc from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
-const currency = require('../../blue_modules/currency');
 
-const data = Object.values(FiatUnit);
+const data = Object.values('');
 
 const Currency = () => {
   const { setPreferredFiatCurrency } = useContext(BlueStorageContext);
@@ -32,7 +30,7 @@ const Currency = () => {
   useEffect(() => {
     const fetchCurrency = async () => {
       try {
-        const preferredCurrency = await currency.getPreferredCurrency();
+        const preferredCurrency = 'USD'
         if (preferredCurrency === null) {
           throw Error();
         }
@@ -60,11 +58,7 @@ const Currency = () => {
                 title={`${item.endPointKey} (${item.symbol})`}
                 checkmark={selectedCurrency.endPointKey === item.endPointKey}
                 onPress={async () => {
-                  setIsSavingNewPreferredCurrency(true);
-                  setSelectedCurrency(item);
-                  await currency.setPrefferedCurrency(item);
-                  await currency.startUpdater();
-                  setIsSavingNewPreferredCurrency(false);
+                  
                   setPreferredFiatCurrency();
                 }}
               />
@@ -73,7 +67,7 @@ const Currency = () => {
         />
         <BlueCard>
           <BlueText>
-            {loc.settings.currency_source} {selectedCurrency.source ?? FiatUnitSource.CoinDesk}
+            {loc.settings.currency_source} {selectedCurrency.source}
           </BlueText>
         </BlueCard>
       </SafeBlueArea>

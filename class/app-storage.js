@@ -1,11 +1,8 @@
 /* global alert */
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import RNSecureKeyStore, { ACCESSIBLE } from 'react-native-secure-key-store';
-import * as Keychain from 'react-native-keychain';
 import {PhuquocdogWallet} from './wallets/phuquocdog-wallet';
 
 const createHash = require('create-hash');
-const encryption = require('../blue_modules/encryption');
 let usedBucketNum = false;
 let savingInProgress = 0; // its both a flag and a counter of attempts to write to disk
 
@@ -29,16 +26,7 @@ export class AppStorage {
   }
 
   async migrateKeys() {
-    if (!(typeof navigator !== 'undefined' && navigator.product === 'ReactNative')) return;
-    for (const key of this.constructor.keys2migrate) {
-      try {
-        const value = await RNSecureKeyStore.get(key);
-        if (value) {
-          await AsyncStorage.setItem(key, value);
-          await RNSecureKeyStore.remove(key);
-        }
-      } catch (_) {}
-    }
+    
   }
 
   /**
@@ -90,18 +78,7 @@ export class AppStorage {
    */
   decryptData(data, password) {
     data = JSON.parse(data);
-    let decrypted;
-    let num = 0;
-    for (const value of data) {
-      decrypted = encryption.decrypt(value, password);
-
-      if (decrypted) {
-        usedBucketNum = num;
-        return decrypted;
-      }
-      num++;
-    }
-
+    
     return false;
   }
 
@@ -121,15 +98,7 @@ export class AppStorage {
     // assuming the storage is not yet encrypted
     await this.saveToDisk();
     let data = await this.getItem('data');
-    // TODO: refactor ^^^ (should not save & load to fetch data)
-
-    const encrypted = encryption.encrypt(data, password);
-    data = [];
-    data.push(encrypted); // putting in array as we might have many buckets with storages
-    data = JSON.stringify(data);
-    this.cachedPassword = password;
-    await this.setItem('data', data);
-    await this.setItem(AppStorage.FLAG_ENCRYPTED, '1');
+    
   };
 
   /**
@@ -225,9 +194,6 @@ export class AppStorage {
 
     try {
       const walletsToSave = [];
-      console.log('saveToDisk')
-
-      console.log(this.wallets);
       for (const key of this.wallets) {
         w = new PhuquocdogWallet(key.props);
         walletsToSave.push(w)

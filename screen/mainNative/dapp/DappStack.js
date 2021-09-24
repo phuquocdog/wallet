@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Text, Platform, Linking, I18nManager,TouchableOpacity,StyleSheet } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import LappBrowser from '../../screen/lnd/browser';

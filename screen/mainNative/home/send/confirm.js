@@ -64,7 +64,7 @@ const SendConfirm = () => {
   const send = async () => {
     setIsLoading(true);
     try {
-            amount = params.amount;
+      amount = params.amount;
       let r = await wallet.transfer(amount, recipients[0].address);
       if (!r) {
         setIsLoading(false);
@@ -77,10 +77,9 @@ const SendConfirm = () => {
         txtUrl: 'https://block.phuquoc.dog/transfer/' + r.toHex()
       });
 
-      setIsLoading(false);
 
       wallet.saveTransaction(r.toHex())
-
+      setIsLoading(false);
       await new Promise(resolve => setTimeout(resolve, 3000)); // sleep to make sure network propagates
       fetchAndSaveWalletTransactions(walletID);
     } catch (error) {

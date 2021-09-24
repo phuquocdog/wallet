@@ -3,8 +3,8 @@ import Biometric from './class/biometrics';
 import { Platform } from 'react-native';
 import loc from './loc';
 const prompt = require('./blue_modules/prompt');
-const currency = require('./blue_modules/currency');
 const BlueApp = new AppStorage();
+
 // If attempt reaches 10, a wipe keychain option will be provided to the user.
 let unlockAttempt = 0;
 
@@ -14,6 +14,7 @@ const startAndDecrypt = async retry => {
     console.log('App already has some wallets, so we are in already started state, exiting startAndDecrypt');
     return true;
   }
+
   await BlueApp.migrateKeys();
   let password = false;
   if (await BlueApp.storageIsEncrypted()) {
@@ -48,6 +49,8 @@ const startAndDecrypt = async retry => {
     return true;
   }
 
+  
+
   if (password) {
     // we had password and yet could not load/decrypt
     unlockAttempt++;
@@ -67,6 +70,5 @@ const startAndDecrypt = async retry => {
 };
 
 BlueApp.startAndDecrypt = startAndDecrypt;
-currency.startUpdater();
 
 module.exports = BlueApp;

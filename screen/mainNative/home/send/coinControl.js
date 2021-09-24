@@ -19,7 +19,6 @@ import {
 import { useRoute, useTheme, useNavigation } from '@react-navigation/native';
 
 import loc, { formatBalance } from '../../loc';
-import { BitcoinUnit } from '../../models/bitcoinUnits';
 import { SafeBlueArea, BlueSpacing10, BlueSpacing20, BlueButton, BlueListItem } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
 import BottomModal from '../../components/BottomModal';

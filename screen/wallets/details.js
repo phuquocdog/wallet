@@ -186,7 +186,7 @@ const WalletDetails = () => {
 
   const navigateToOverviewAndDeleteWallet = () => {
     setIsLoading(true);
-    Notifications.unsubscribe(wallet.getAllExternalAddresses(), [], []);
+    //Notifications.unsubscribe(wallet.getAllExternalAddresses(), [], []);
     popToTop();
     deleteWallet(wallet);
     saveToDisk();

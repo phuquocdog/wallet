@@ -23,7 +23,6 @@ import { HDSegwitBech32Transaction, HDSegwitBech32Wallet } from '../../class';
 import loc from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 import Notifications from '../../blue_modules/notifications';
-const BlueElectrum = require('../../blue_modules/BlueElectrum');
 
 const styles = StyleSheet.create({
   root: {
@@ -97,22 +96,7 @@ export default class CPFP extends Component {
 
   broadcast() {
     this.setState({ isLoading: true }, async () => {
-      try {
-        await BlueElectrum.ping();
-        await BlueElectrum.waitTillConnected();
-        const result = await this.state.wallet.broadcastTx(this.state.txhex);
-        if (result) {
-          this.onSuccessBroadcast();
-        } else {
-          ReactNativeHapticFeedback.trigger('notificationError', { ignoreAndroidSystemSettings: false });
-          this.setState({ isLoading: false });
-          alert(loc.errors.broadcast);
-        }
-      } catch (error) {
-        ReactNativeHapticFeedback.trigger('notificationError', { ignoreAndroidSystemSettings: false });
-        this.setState({ isLoading: false });
-        alert(error.message);
-      }
+      
     });
   }
 

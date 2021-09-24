@@ -23,11 +23,9 @@ import {
 import { launchImageLibrary } from 'react-native-image-picker';
 import { Icon } from 'react-native-elements';
 import { useRoute, useNavigation, useTheme, useFocusEffect } from '@react-navigation/native';
-import { Chain } from '../../models/bitcoinUnits';
 import { BlueTransactionListItem, BlueWalletNavigationHeader, BlueAlertWalletExportReminder, BlueListItem } from '../../BlueComponents';
 import WalletGradient from '../../class/wallet-gradient';
 import navigationStyle from '../../components/navigationStyle';
-import HandoffComponent from '../../components/handoff';
 import ActionSheet from '../ActionSheet';
 import loc from '../../loc';
 import { FContainer, FButton } from '../../components/FloatButtons';
@@ -41,6 +39,7 @@ import BlueClipboard from '../../blue_modules/clipboard';
 const fs = require('../../blue_modules/fs');
 const LocalQRCode = require('@remobile/react-native-qrcode-local-image');
 
+
 const buttonFontSize =
   PixelRatio.roundToNearestPixel(Dimensions.get('window').width / 26) > 22
     ? 22
@@ -53,7 +52,6 @@ const WalletTransactions = ({navigation}) => {
   const { walletID } = useRoute().params;
   const { name } = useRoute();
   const wallet = wallets.find(w => w.getID() === walletID);
-  const [itemPriceUnit, setItemPriceUnit] = useState(wallet.getPreferredBalanceUnit());
   const [dataSource, setDataSource] = useState([])
   const [timeElapsed, setTimeElapsed] = useState(0);
   const [limit, setLimit] = useState(15);
@@ -95,18 +93,10 @@ const WalletTransactions = ({navigation}) => {
    */
   const getTransactionsSliced = (limit = Infinity) => {
     return [];
-    let txs = wallet.getTransactions();
-    for (const tx of txs) {
-      tx.sort_ts = +new Date(tx.received);
-    }
-    txs = txs.sort(function (a, b) {
-      return b.sort_ts - a.sort_ts;
-    });
-    return txs.slice(0, limit);
   };
 
   useEffect(() => {
-    console.log('>>>>>>>>transactions.js')
+    console.log('--------->transactions.js')
     const interval = setInterval(() => setTimeElapsed(prev => prev + 1), 60000);
     return () => {
       clearInterval(interval);
@@ -124,15 +114,12 @@ const WalletTransactions = ({navigation}) => {
     setLimit(15);
     setPageSize(20);
     setTimeElapsed(0);
-    setItemPriceUnit(wallet.getPreferredBalanceUnit());
     setIsLoading(false);
     setSelectedWallet(wallet.getID());
 
     
     (async () => {
       let r = await wallet.getTransactions();
-          console.log('aaaaaarrr', r)
-
       setDataSource(r);
     })()
 
@@ -171,11 +158,7 @@ const WalletTransactions = ({navigation}) => {
   );
 
   const isLightning = () => {
-    const w = wallet;
-    if (w && w.chain === Chain.OFFCHAIN) {
-      return true;
-    }
-
+  
     return false;
   };
 
@@ -291,12 +274,12 @@ const WalletTransactions = ({navigation}) => {
               hideChevron
               component={TouchableOpacity}
               onPress={() => {
-                const availableWallets = [...wallets.filter(item => item.chain === Chain.ONCHAIN && item.allowSend())];
+                const availableWallets = [...wallets.filter(item => item.allowSend())];
                 if (availableWallets.length === 0) {
                   alert(loc.lnd.refill_create);
                 } else {
                   setIsManageFundsModalVisible(false);
-                  navigate('SelectWallet', { onWalletSelect, chainType: Chain.ONCHAIN });
+                  navigate('SelectWallet', { onWalletSelect, chainType: 'phuquocdog' });
                 }
               }}
               title={loc.lnd.refill}
@@ -445,24 +428,12 @@ const WalletTransactions = ({navigation}) => {
   };
   
 
-  const renderItem = item => <BlueTransactionListItem item={item.item} itemPriceUnit={itemPriceUnit} timeElapsed={timeElapsed} />;
+  const renderItem = item => <BlueTransactionListItem item={item.item}  timeElapsed={timeElapsed} />;
 
 
 
   const onBarCodeRead = ret => {
     console.log('Recevied')
-    if (!isLoading) {
-      setIsLoading(true);
-      const params = {
-        walletID: wallet.getID(),
-        uri: ret.data ? ret.data : ret,
-      };
-      if (wallet.chain === Chain.ONCHAIN) {
-        navigate('SendDetailsRoot', { screen: 'SendDetails', params });
-      } else {
-        navigate('ScanLndInvoiceRoot', { screen: 'ScanLndInvoice', params });
-      }
-    }
     setIsLoading(false);
   };
 
@@ -585,12 +556,6 @@ const WalletTransactions = ({navigation}) => {
       
       <BlueWalletNavigationHeader
         wallet={wallet}
-        onWalletUnitChange={passedWallet =>
-          InteractionManager.runAfterInteractions(async () => {
-            setItemPriceUnit(passedWallet.getPreferredBalanceUnit());
-            saveToDisk();
-          })
-        }
         onManageFundsPressed={() => {
           console.log('onManageFundsPressed')
           if (wallet.getUserHasSavedExport()) {

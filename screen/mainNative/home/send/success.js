@@ -9,7 +9,6 @@ import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
 
 import { BlueButton, BlueButtonLink, BlueCard, BlueLoading, BlueSpacing20, BlueText, SafeBlueArea } from '../../BlueComponents';
 
-import { BitcoinUnit } from '../../models/bitcoinUnits';
 import loc from '../../loc';
 
 const SendSuccess = ({navigation}) => {
@@ -18,7 +17,7 @@ const SendSuccess = ({navigation}) => {
   };
   const { colors } = useTheme();
   const { dangerouslyGetParent } = useNavigation();
-  const { amount, fee, txtUrl = BitcoinUnit.BTC, invoiceDescription = '', onDonePressed = pop } = useRoute().params;
+  const { amount, fee, txtUrl = '', invoiceDescription = '', onDonePressed = pop } = useRoute().params;
   const stylesHook = StyleSheet.create({
     root: {
       backgroundColor: colors.elevated,

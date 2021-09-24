@@ -1,3 +1,11 @@
+* Remove some package do not use 
+* Clean more 
+* Fix send PQD on android 
+* Cleanup again 
+* Cleanup 
+* Cleanup 
+* Setup sentry 
+* Update build android 
 * CLean code 
 * Fix update balance after send payment 
 * Fix list transaction 

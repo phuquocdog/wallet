@@ -23,7 +23,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import RNFS from 'react-native-fs';
 import BigNumber from 'bignumber.js';
-import * as bitcoin from 'bitcoinjs-lib';
 
 import { BlueButton, BlueDismissKeyboardInputAccessory, BlueListItem, BlueLoading } from '../../BlueComponents';
 import { navigationStyleTx } from '../../components/navigationStyle';
@@ -36,7 +35,6 @@ import AddressInput from '../../components/AddressInput';
 import AmountInput from '../../components/AmountInput';
 import InputAccessoryAllFunds from '../../components/InputAccessoryAllFunds';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
-const currency = require('../../blue_modules/currency');
 const prompt = require('../../blue_modules/prompt');
 const fs = require('../../blue_modules/fs');
 const scanqr = require('../../helpers/scan-qr');
@@ -65,16 +63,12 @@ const SendDetails = () => {
   const [networkTransactionFeesIsLoading, setNetworkTransactionFeesIsLoading] = useState(false);
   const [customFee, setCustomFee] = useState(null);
   const [feePrecalc, setFeePrecalc] = useState({ current: null, slowFee: null, mediumFee: null, fastestFee: null });
-  const [feeUnit, setFeeUnit] = useState();
   const [amountUnit, setAmountUnit] = useState();
-  const [utxo, setUtxo] = useState(null);
-  const [payjoinUrl, setPayjoinUrl] = useState(null);
   const [changeAddress, setChangeAddress] = useState();
-  const [dumb, setDumb] = useState(false);
   const [balance, setBalance] = useState('');
 
   const [amount, setAmount] = useState('0');
-
+  const mountedRef = useRef(true)
 
   // if cutomFee is not set, we need to choose highest possible fee for wallet balance
   // if there are no funds for even Slow option, use 1 sat/byte fee
@@ -101,26 +95,24 @@ const SendDetails = () => {
       Keyboard.removeListener('keyboardDidShow', _keyboardDidShow);
       Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const wallet = (routeParams.walletID && wallets.find(w => w.getID() === routeParams.walletID));
     setWallet(wallet);
     setBalance(wallet.balanceHuman);
     setAddresses([{ address: '', key: String(Math.random()) }]); // key is for the FlatList
-  
-    // we are ready!
-    setIsLoading(false);    
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    return () => {
+      mountedRef.current = false;
+    };
+  }, [balance]); // eslint-disable-line react-hooks/exhaustive-deps
 
   
 
-  const processAddressData = () => {
-  }
 
   const createTransaction = async () => {
-    Keyboard.dismiss();
-    setIsLoading(true);
+    //Keyboard.dismiss();
+    //setIsLoading(true);
 
     //alert('createTransaction');
     let recipients = addresses;
@@ -164,27 +156,7 @@ const SendDetails = () => {
   };
 
   const importQrTransactionOnBarScanned = ret => {
-    navigation.dangerouslyGetParent().pop();
-    if (!ret.data) ret = { data: ret };
-    if (ret.data.toUpperCase().startsWith('UR')) {
-      Alert.alert(loc.errors.error, 'BC-UR not decoded. This should never happen');
-    } else if (ret.data.indexOf('+') === -1 && ret.data.indexOf('=') === -1 && ret.data.indexOf('=') === -1) {
-      // this looks like NOT base64, so maybe its transaction's hex
-      // we dont support it in this flow
-    } else {
-      // psbt base64?
-
-      // we construct PSBT object and pass to next screen
-      // so user can do smth with it:
-      const psbt = bitcoin.Psbt.fromBase64(ret.data);
-      navigation.navigate('PsbtWithHardwareWallet', {
-        memo,
-        fromWallet: wallet,
-        psbt,
-      });
-      setIsLoading(false);
-      setOptionsVisible(false);
-    }
+    
   };
 
   /**
@@ -196,122 +168,22 @@ const SendDetails = () => {
    * @returns {Promise<void>}
    */
   const importTransaction = async () => {
-    if (wallet.type !== WatchOnlyWallet.type) {
-      return Alert.alert(loc.errors.error, 'Importing transaction in non-watchonly wallet (this should never happen)');
-    }
-
-    try {
-      const res = await DocumentPicker.pick({
-        type:
-          Platform.OS === 'ios'
-            ? ['io.bluewallet.psbt', 'io.bluewallet.psbt.txn', DocumentPicker.types.plainText, 'public.json']
-            : [DocumentPicker.types.allFiles],
-      });
-
-      if (DeeplinkSchemaMatch.isPossiblySignedPSBTFile(res.uri)) {
-        // we assume that transaction is already signed, so all we have to do is get txhex and pass it to next screen
-        // so user can broadcast:
-        const file = await RNFS.readFile(res.uri, 'ascii');
-        const psbt = bitcoin.Psbt.fromBase64(file);
-        const txhex = psbt.extractTransaction().toHex();
-        navigation.navigate('PsbtWithHardwareWallet', { memo, fromWallet: wallet, txhex });
-        setIsLoading(false);
-        setOptionsVisible(false);
-        return;
-      }
-
-      if (DeeplinkSchemaMatch.isPossiblyPSBTFile(res.uri)) {
-        // looks like transaction is UNsigned, so we construct PSBT object and pass to next screen
-        // so user can do smth with it:
-        const file = await RNFS.readFile(res.uri, 'ascii');
-        const psbt = bitcoin.Psbt.fromBase64(file);
-        navigation.navigate('PsbtWithHardwareWallet', { memo, fromWallet: wallet, psbt });
-        setIsLoading(false);
-        setOptionsVisible(false);
-        return;
-      }
-
-      if (DeeplinkSchemaMatch.isTXNFile(res.uri)) {
-        // plain text file with txhex ready to broadcast
-        const file = (await RNFS.readFile(res.uri, 'ascii')).replace('\n', '').replace('\r', '');
-        navigation.navigate('PsbtWithHardwareWallet', { memo, fromWallet: wallet, txhex: file });
-        setIsLoading(false);
-        setOptionsVisible(false);
-        return;
-      }
-
-      Alert.alert(loc.errors.error, loc.send.details_unrecognized_file_format);
-    } catch (err) {
-      if (!DocumentPicker.isCancel(err)) {
-        Alert.alert(loc.errors.error, loc.send.details_no_signed_tx);
-      }
-    }
+    console.log('importTransaction');
+    
   };
 
   const askCosignThisTransaction = async () => {
-    return new Promise(resolve => {
-      Alert.alert(
-        '',
-        loc.multisig.cosign_this_transaction,
-        [
-          {
-            text: loc._.no,
-            style: 'cancel',
-            onPress: () => resolve(false),
-          },
-          {
-            text: loc._.yes,
-            onPress: () => resolve(true),
-          },
-        ],
-        { cancelable: false },
-      );
-    });
+    console.log('askCosignThisTransaction');
   };
 
-  const _importTransactionMultisig = async base64arg => {
-    try {
-      const base64 = base64arg || (await fs.openSignedTransaction());
-      if (!base64) return;
-      const psbt = bitcoin.Psbt.fromBase64(base64); // if it doesnt throw - all good, its valid
-
-      if (wallet.howManySignaturesCanWeMake() > 0 && (await askCosignThisTransaction())) {
-        hideOptions();
-        setIsLoading(true);
-        await sleep(100);
-        wallet.cosignPsbt(psbt);
-        setIsLoading(false);
-        await sleep(100);
-      }
-
-      navigation.navigate('PsbtMultisig', {
-        memo,
-        psbtBase64: psbt.toBase64(),
-        walletID: wallet.getID(),
-      });
-    } catch (error) {
-      Alert.alert(loc.send.problem_with_psbt, error.message);
-    }
-    setIsLoading(false);
-    setOptionsVisible(false);
-  };
+  
 
   const importTransactionMultisig = () => {
-    return _importTransactionMultisig();
+    console.log('importTransactionMultisig')
   };
 
   const onBarScanned = ret => {
-    navigation.dangerouslyGetParent().pop();
-    if (!ret.data) ret = { data: ret };
-    if (ret.data.toUpperCase().startsWith('UR')) {
-      Alert.alert(loc.errors.error, 'BC-UR not decoded. This should never happen');
-    } else if (ret.data.indexOf('+') === -1 && ret.data.indexOf('=') === -1 && ret.data.indexOf('=') === -1) {
-      // this looks like NOT base64, so maybe its transaction's hex
-      // we dont support it in this flow
-    } else {
-      // psbt base64?
-      return _importTransactionMultisig(ret.data);
-    }
+    console.log('onBarScanned')
   };
 
   const importTransactionMultisigScanQr = () => {
@@ -325,42 +197,7 @@ const SendDetails = () => {
     });
   };
 
-  const handleAddRecipient = async () => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut, () => scrollView.current.scrollToEnd());
-    setAddresses(addresses => [...addresses, { address: '', key: String(Math.random()) }]);
-    setOptionsVisible(false);
-    scrollView.current.scrollToEnd();
-    if (addresses.length === 0) return;
-    await sleep(200); // wait for animation
-    scrollView.current.flashScrollIndicators();
-  };
-
-  const handleRemoveRecipient = async () => {
-    const last = scrollIndex.current === addresses.length - 1;
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setAddresses(addresses => {
-      addresses.splice(scrollIndex.current, 1);
-      return [...addresses];
-    });
-    setOptionsVisible(false);
-    if (addresses.length === 0) return;
-    await sleep(200); // wait for animation
-    scrollView.current.flashScrollIndicators();
-    if (last && Platform.OS === 'android') scrollView.current.scrollToEnd(); // fix white screen on android
-  };
-
-  const handleCoinControl = () => {
-    setOptionsVisible(false);
-    navigation.navigate('CoinControl', {
-      walletID: wallet.getID(),
-      onUTXOChoose: utxo => setUtxo(utxo),
-    });
-  };
-
-  const handlePsbtSign = async () => {
-    
-  };
-
+  
   const hideOptions = () => {
     Keyboard.dismiss();
     setOptionsVisible(false);
@@ -370,52 +207,12 @@ const SendDetails = () => {
     setIsTransactionReplaceable(value);
   };
 
-  // because of https://github.com/facebook/react-native/issues/21718 we use
-  // onScroll for android and onMomentumScrollEnd for iOS
-  const handleRecipientsScrollEnds = e => {
-    if (Platform.OS === 'android') return; // for android we use handleRecipientsScroll
-    const contentOffset = e.nativeEvent.contentOffset;
-    const viewSize = e.nativeEvent.layoutMeasurement;
-    const index = Math.floor(contentOffset.x / viewSize.width);
-    scrollIndex.current = index;
-  };
-
-  const handleRecipientsScroll = e => {
-    if (Platform.OS === 'ios') return; // for iOS we use handleRecipientsScrollEnds
-    const contentOffset = e.nativeEvent.contentOffset;
-    const viewSize = e.nativeEvent.layoutMeasurement;
-    const index = Math.floor(contentOffset.x / viewSize.width);
-    scrollIndex.current = index;
-  };
+  
 
   const onUseAllPressed = () => {
     ReactNativeHapticFeedback.trigger('notificationWarning');
-    Alert.alert(
-      loc.send.details_adv_full,
-      loc.send.details_adv_full_sure,
-      [
-        {
-          text: loc._.ok,
-          onPress: () => {
-            Keyboard.dismiss();
-            setAddresses(addresses => {
-              addresses[scrollIndex.current].amount = BitcoinUnit.MAX;
-              addresses[scrollIndex.current].amountSats = BitcoinUnit.MAX;
-              return [...addresses];
-            });
-            
-            LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-            setOptionsVisible(false);
-          },
-          style: 'default',
-        },
-        { text: loc._.cancel, onPress: () => {}, style: 'cancel' },
-      ],
-      { cancelable: false },
-    );
   };
 
-  const formatFee = fee => formatBalance(fee, feeUnit, true);
 
   const stylesHook = StyleSheet.create({
     loading: {
@@ -506,7 +303,7 @@ const SendDetails = () => {
         isVisible={isFeeSelectionModalVisible}
         onClose={() => setIsFeeSelectionModalVisible(false)}
       >
-        <KeyboardAvoidingView enabled={!Platform.isPad} behavior={Platform.OS === 'ios' ? 'position' : null}>
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : null}>
           <View style={[styles.modalContent, stylesHook.modalContent]}>
             {options.map(({ label, time, fee, rate, active }, index) => (
               <TouchableOpacity
@@ -526,7 +323,7 @@ const SendDetails = () => {
                   </View>
                 </View>
                 <View style={styles.feeModalRow}>
-                  <Text style={stylesHook.feeModalValue}>{fee && formatFee(fee)}</Text>
+                  <Text style={stylesHook.feeModalValue}>{fee}</Text>
                   <Text style={stylesHook.feeModalValue}>
                     {rate} {loc.units.sat_byte}
                   </Text>
@@ -568,6 +365,9 @@ const SendDetails = () => {
       </BottomModal>
     );
   };
+  const processAddressData = () => {
+    console.log('processAddressData')
+  }
 
 
   const renderCreateButton = () => {
@@ -582,9 +382,8 @@ const SendDetails = () => {
     );
   };
 
-
+  // 
   const renderBitcoinTransactionInfoFields = params => {
-    console.log('renderBitcoinTransactionInfoFields')
     const { item, index } = params;
 
     return (
@@ -592,9 +391,7 @@ const SendDetails = () => {
         <AmountInput
           isLoading={isLoading}
           amount={item.amount ? item.amount.toString() : null}
-          onAmountUnitChange={unit => {
-            
-          }}
+          
           onChangeText={text => {
             setAddresses(addresses => {
               item.amount = text;
@@ -646,7 +443,7 @@ const SendDetails = () => {
       <View style={[styles.root, stylesHook.root]} onLayout={e => setWidth(e.nativeEvent.layout.width)}>
         <StatusBar barStyle="light-content" />
         <View>
-          <KeyboardAvoidingView enabled={!Platform.isPad} behavior="position">
+          <KeyboardAvoidingView behavior="position">
             <FlatList
               keyboardShouldPersistTaps="always"
               scrollEnabled={addresses.length > 1}
@@ -657,8 +454,6 @@ const SendDetails = () => {
               pagingEnabled
               removeClippedSubviews={false}
               onMomentumScrollBegin={Keyboard.dismiss}
-              onMomentumScrollEnd={handleRecipientsScrollEnds}
-              onScroll={handleRecipientsScroll}
               scrollEventThrottle={200}
               scrollIndicatorInsets={styles.scrollViewIndicator}
               contentContainerStyle={styles.scrollViewContent}
@@ -690,7 +485,7 @@ const SendDetails = () => {
               ) : (
                 <View style={[styles.feeRow, stylesHook.feeRow]}>
                   <Text style={stylesHook.feeValue}>
-                    {feePrecalc.current ? formatFee(feePrecalc.current) : '1525392.0' + ' ' + loc.units.winston}
+                    0.01 PQD
                   </Text>
                 </View>
               )}

@@ -29,11 +29,5 @@ target 'phuquocdogWallet' do
             end
           end
       end
-  end
-
-  
-end
-
-target 'WidgetsExtension' do
-  pod 'SwiftSocket', :git => 'https://github.com/swiftsocket/SwiftSocket.git', :branch => 'master'
+  end 
 end

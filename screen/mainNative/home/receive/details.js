@@ -28,8 +28,6 @@ import {
 import navigationStyle from '../../components/navigationStyle';
 import BottomModal from '../../components/BottomModal';
 import Privacy from '../../blue_modules/Privacy';
-import { Chain, BitcoinUnit } from '../../models/bitcoinUnits';
-import HandoffComponent from '../../components/handoff';
 import AmountInput from '../../components/AmountInput';
 import DeeplinkSchemaMatch from '../../class/deeplink-schema-match';
 import loc from '../../loc';
@@ -37,7 +35,6 @@ import { BlueStorageContext } from '../../blue_modules/storage-context';
 import Notifications from '../../blue_modules/notifications';
 import ToolTipMenu from '../../components/TooltipMenu';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-const currency = require('../../blue_modules/currency');
 
 const ReceiveDetails = () => {
   const { walletID, address } = useRoute().params;
@@ -45,7 +42,7 @@ const ReceiveDetails = () => {
   const wallet = wallets.find(w => w.getID() === walletID);
   const [customLabel, setCustomLabel] = useState();
   const [customAmount, setCustomAmount] = useState();
-  const [customUnit, setCustomUnit] = useState(BitcoinUnit.BTC);
+  const [customUnit, setCustomUnit] = useState();
   const [isCustom, setIsCustom] = useState(false);
   const [isCustomModalVisible, setIsCustomModalVisible] = useState(false);
   const { navigate, goBack, setParams } = useNavigation();
@@ -267,23 +264,7 @@ const ReceiveDetails = () => {
     setIsCustom(true);
     setIsCustomModalVisible(false);
     let amount = customAmount;
-    switch (customUnit) {
-      case BitcoinUnit.BTC:
-        // nop
-        break;
-      case BitcoinUnit.SATS:
-        amount = currency.satoshiToBTC(customAmount);
-        break;
-      case BitcoinUnit.LOCAL_CURRENCY:
-        if (AmountInput.conversionCache[amount + BitcoinUnit.LOCAL_CURRENCY]) {
-          // cache hit! we reuse old value that supposedly doesnt have rounding errors
-          amount = currency.satoshiToBTC(AmountInput.conversionCache[amount + BitcoinUnit.LOCAL_CURRENCY]);
-        } else {
-          amount = currency.fiatToBTC(customAmount);
-        }
-        break;
-    }
-    setBip21encoded(DeeplinkSchemaMatch.bip21encode(address, { amount, label: customLabel }));
+    
   };
 
   const renderCustomAmountModal = () => {
@@ -328,27 +309,13 @@ const ReceiveDetails = () => {
    * @returns {string} BTC amount, accounting for current `customUnit` and `customUnit`
    */
   const getDisplayAmount = () => {
-    switch (customUnit) {
-      case BitcoinUnit.BTC:
-        return customAmount + ' BTC';
-      case BitcoinUnit.SATS:
-        return currency.satoshiToBTC(customAmount) + ' BTC';
-      case BitcoinUnit.LOCAL_CURRENCY:
-        return currency.fiatToBTC(customAmount) + ' BTC';
-    }
+    
     return customAmount + ' ' + customUnit;
   };
 
   return (
     <View style={styles.root}>
       <StatusBar barStyle="light-content" />
-      {address !== undefined && (
-        <HandoffComponent
-          title={`Bitcoin Transaction ${address}`}
-          type="io.bluewallet.bluewallet"
-          url={`https://blockstream.info/address/${address}`}
-        />
-      )}
       {renderReceiveDetails()}
     </View>
   );

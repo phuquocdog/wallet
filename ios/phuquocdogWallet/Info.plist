@@ -4,12 +4,12 @@
 <dict>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
-		<string>io.bluewallet.bluewallet.fetchTxsForWallet</string>
+		<string>dog.phuquoc.wallet.fetchTxsForWallet</string>
 	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>phuquocdogWallet</string>
+	<string>PQD Wallet</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -150,7 +150,7 @@
 	<key>NSCalendarsUsageDescription</key>
 	<string>This alert should not show up as we do not require this data</string>
 	<key>NSCameraUsageDescription</key>
-	<string>In order to quickly scan the recipient&apos;s address, we need your permission to use the camera to scan their QR Code.</string>
+	<string>In order to quickly scan the recipient's address, we need your permission to use the camera to scan their QR Code.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>In order to use FaceID please confirm your permission.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
@@ -168,31 +168,13 @@
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>This alert should not show up as we do not require this data</string>
 	<key>UIAppFonts</key>
-	<array>
-		<string>AntDesign.ttf</string>
-		<string>Entypo.ttf</string>
-		<string>EvilIcons.ttf</string>
-		<string>Feather.ttf</string>
-		<string>FontAwesome.ttf</string>
-		<string>FontAwesome5_Brands.ttf</string>
-		<string>FontAwesome5_Regular.ttf</string>
-		<string>FontAwesome5_Solid.ttf</string>
-		<string>Foundation.ttf</string>
-		<string>Ionicons.ttf</string>
-		<string>MaterialCommunityIcons.ttf</string>
-		<string>MaterialIcons.ttf</string>
-		<string>Octicons.ttf</string>
-		<string>SimpleLineIcons.ttf</string>
-		<string>Zocial.ttf</string>
-	</array>
+	<array/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
 		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
-	
-	
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

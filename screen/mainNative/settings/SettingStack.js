@@ -29,7 +29,7 @@ const SettingStack = ({navigation, route}) => {
     if ('WalletsList' == routeName) {
       //navigation.setOptions({ tabBarVisible: true })
     } else {
-      //navigation.setOptions({ tabBarVisible: false })
+      navigation.setOptions({ tabBarVisible: false })
     }
     //return () => { mountedRef.current = false }
   }, [navigation, route])
@@ -38,7 +38,7 @@ const SettingStack = ({navigation, route}) => {
     <Stack.Navigator>
       <Stack.Screen name="Settings" component={Settings} options={Settings.navigationOptions(theme)} />
       <Stack.Screen name="GeneralSettings" component={GeneralSettings}  />
-      <Stack.Screen name="About" component={About} options={About.navigationOptions(theme)} />
+      <Stack.Screen name="About" component={About} />
       <Stack.Screen name="SettingsPrivacy" component={SettingsPrivacy} />
       <Stack.Screen name="Currency" component={Currency} />
       <Stack.Screen name="Language" component={Language} />

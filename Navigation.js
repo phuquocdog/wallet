@@ -1,6 +1,5 @@
 import React from 'react';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Platform, useWindowDimensions, Dimensions, I18nManager } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 

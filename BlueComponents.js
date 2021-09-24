@@ -27,7 +27,6 @@ import {
 } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import LinearGradient from 'react-native-linear-gradient';
-import { BitcoinUnit } from './models/bitcoinUnits';
 import * as NavigationService from './NavigationService';
 import WalletGradient from './class/wallet-gradient';
 import { BlurView } from '@react-native-community/blur';
@@ -38,7 +37,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useTheme } from '@react-navigation/native';
 import { BlueCurrentTheme } from './components/themes';
 import loc, { formatBalance, formatStringAddTwoWhiteSpaces, formatBalanceWithoutSuffix, transactionTimeToReadable } from './loc';
-import Lnurl from './class/lnurl';
 import { BlueStorageContext } from './blue_modules/storage-context';
 import ToolTipMenu from './components/TooltipMenu';
 
@@ -268,19 +266,7 @@ export class BlueWalletNavigationHeader extends Component {
   changeWalletBalanceUnit = () => {
     let walletPreviousPreferredUnit = this.state.wallet.getPreferredBalanceUnit();
     const wallet = this.state.wallet;
-    if (walletPreviousPreferredUnit === BitcoinUnit.BTC) {
-      wallet.preferredBalanceUnit = BitcoinUnit.SATS;
-      walletPreviousPreferredUnit = BitcoinUnit.BTC;
-    } else if (walletPreviousPreferredUnit === BitcoinUnit.SATS) {
-      wallet.preferredBalanceUnit = BitcoinUnit.LOCAL_CURRENCY;
-      walletPreviousPreferredUnit = BitcoinUnit.SATS;
-    } else if (walletPreviousPreferredUnit === BitcoinUnit.LOCAL_CURRENCY) {
-      wallet.preferredBalanceUnit = BitcoinUnit.BTC;
-      walletPreviousPreferredUnit = BitcoinUnit.BTC;
-    } else {
-      wallet.preferredBalanceUnit = BitcoinUnit.BTC;
-      walletPreviousPreferredUnit = BitcoinUnit.BTC;
-    }
+    
 
     this.setState({ wallet, walletPreviousPreferredUnit: walletPreviousPreferredUnit }, () => {
       this.props.onWalletUnitChange(wallet);
@@ -1126,7 +1112,8 @@ export const BlueReceiveButtonIcon = props => {
   );
 };
 
-export const BlueTransactionListItem = React.memo(({ item, itemPriceUnit = BitcoinUnit.BTC, timeElapsed }) => {
+//
+export const BlueTransactionListItem = React.memo(({ item, timeElapsed }) => {
   const [subtitleNumberOfLines, setSubtitleNumberOfLines] = useState(1);
   const { colors } = useTheme();
   const { navigate } = useNavigation();
@@ -1162,29 +1149,11 @@ export const BlueTransactionListItem = React.memo(({ item, itemPriceUnit = Bitco
     return sub || null;
   }, [txMemo, item.confirmations, item.memo]);
 
-  const rowTitle = useMemo(() => {
-    if (item.type === 'user_invoice' || item.type === 'payment_request') {
-      if (isNaN(item.value)) {
-        item.value = '0';
-      }
-      const currentDate = new Date();
-      const now = (currentDate.getTime() / 1000) | 0;
-      const invoiceExpiration = item.timestamp + item.expire_time;
 
-      if (invoiceExpiration > now) {
-        return formatBalanceWithoutSuffix(item.value && item.value, itemPriceUnit, true).toString();
-      } else if (invoiceExpiration < now) {
-        if (item.ispaid) {
-          return formatBalanceWithoutSuffix(item.value && item.value, itemPriceUnit, true).toString();
-        } else {
-          return loc.lnd.expired;
-        }
-      }
-    } else {
-      return formatBalanceWithoutSuffix(item.value && item.value, itemPriceUnit, true).toString();
-    }
+  const rowTitle = useMemo(() => {
+    return 'rowTitle';
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [item, itemPriceUnit, preferredFiatCurrency]);
+  }, []);
 
   const rowTitleStyle = useMemo(() => {
     let color = colors.successColor;
@@ -1289,43 +1258,10 @@ export const BlueTransactionListItem = React.memo(({ item, itemPriceUnit = Bitco
   }, [subtitle]);
 
   const onPress = useCallback(async () => {
-    if (item.hash) {
-      navigate('TransactionStatus', { hash: item.hash });
-    } else if (item.type === 'user_invoice' || item.type === 'payment_request' || item.type === 'paid_invoice') {
-      const lightningWallet = wallets.filter(wallet => wallet?.getID() === item.walletID);
-      if (lightningWallet.length === 1) {
-        try {
-          // is it a successful lnurl-pay?
-          const LN = new Lnurl(false, AsyncStorage);
-          let paymentHash = item.payment_hash;
-          if (typeof paymentHash === 'object') {
-            paymentHash = Buffer.from(paymentHash.data).toString('hex');
-          }
-          const loaded = await LN.loadSuccessfulPayment(paymentHash);
-          if (loaded) {
-            NavigationService.navigate('ScanLndInvoiceRoot', {
-              screen: 'LnurlPaySuccess',
-              params: {
-                paymentHash,
-                justPaid: false,
-                fromWalletID: lightningWallet[0].getID(),
-              },
-            });
-            return;
-          }
-        } catch (e) {
-          console.log(e);
-        }
 
-        navigate('LNDViewInvoice', {
-          invoice: item,
-          walletID: lightningWallet[0].getID(),
-          isModal: false,
-        });
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [item, wallets]);
+
+    
+  }, []);
 
   const onLongPress = useCallback(() => {
     toolTip.current.showMenu();

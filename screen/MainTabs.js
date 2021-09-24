@@ -5,7 +5,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context'
-import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated'
 
 import HomeStack from './mainNative//home/HomeStack';
 import AppStack from './mainNative//app/AppStack';
@@ -50,7 +49,7 @@ const MainTabs = () => {
         }}
 
     >
-    	<Tab.Screen component={HomeStack} name="Home" options={{ headerShown: false }} />
+    	<Tab.Screen component={HomeStack} name="Home" options={{ headerShown: true }} />
       <Tab.Screen component={DappStack} name="Dapp" options={{ headerShown: false }} />
       <Tab.Screen component={AppStack}  name="Apps" options={{ headerShown: false }} />
     	<Tab.Screen component={StakingStack} name="Staking" options={{ headerShown: false }} />

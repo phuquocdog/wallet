@@ -11,7 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const PleaseBackup = () => {
   const { wallets } = useContext(BlueStorageContext);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const { walletID } = useRoute().params;
   //const [wallet, setWallet] = useState();
   const wallet = wallets.find(w => w.getID() === walletID);
@@ -44,7 +44,6 @@ const PleaseBackup = () => {
 
   useEffect(() => {
     Privacy.enableBlur();
-    setIsLoading(false);
     BackHandler.addEventListener('hardwareBackPress', handleBackButton);
     return () => {
       Privacy.disableBlur();

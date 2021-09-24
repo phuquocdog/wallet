@@ -2,10 +2,8 @@
 import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 import React, { createContext, useEffect, useState } from 'react';
 import { LayoutAnimation } from 'react-native';
-import { FiatUnit } from '../models/fiatUnit';
 import loc from '../loc';
 const BlueApp = require('../BlueApp');
-const currency = require('../blue_modules/currency');
 
 const _lastTimeTriedToRefetchWallet = {}; // hashmap of timestamps we _started_ refetching some wallet
 
@@ -17,9 +15,9 @@ export const BlueStorageProvider = ({ children }) => {
   const [selectedWallet, setSelectedWallet] = useState('');
   const [walletTransactionUpdateStatus, setWalletTransactionUpdateStatus] = useState(WalletTransactionsStatus.NONE);
   const [walletsInitialized, setWalletsInitialized] = useState(false);
-  const [preferredFiatCurrency, _setPreferredFiatCurrency] = useState(FiatUnit.USD);
+  const [preferredFiatCurrency, _setPreferredFiatCurrency] = useState('USD');
   const [language, _setLanguage] = useState();
-  const getPreferredCurrencyAsyncStorage = useAsyncStorage(currency.PREFERRED_CURRENCY).getItem;
+  const getPreferredCurrencyAsyncStorage = useAsyncStorage('USD').getItem;
   const getLanguageAsyncStorage = useAsyncStorage(loc.LANG).getItem;
   const [isHandOffUseEnabled, setIsHandOffUseEnabled] = useState(false);
   const [isDrawerListBlurred, _setIsDrawerListBlurred] = useState(false);
