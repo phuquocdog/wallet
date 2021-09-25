@@ -391,7 +391,6 @@ const SendDetails = () => {
         <AmountInput
           isLoading={isLoading}
           amount={item.amount ? item.amount.toString() : null}
-          
           onChangeText={text => {
             setAddresses(addresses => {
               item.amount = text;
@@ -401,6 +400,7 @@ const SendDetails = () => {
             });
             setAmount(text)
           }}
+
           unit={units[index] || amountUnit}
           inputAccessoryViewID={InputAccessoryAllFunds.InputAccessoryViewID}
         />

@@ -93,14 +93,9 @@ const NewWalletPanel = ({ onPress }) => {
   const { colors } = useTheme();
   const { width } = useWindowDimensions();
   const itemWidth = width * 0.82 > 375 ? 375 : width * 0.82;
-  const isLargeScreen = Platform.OS === 'android' ? isTablet() : width >= Dimensions.get('screen').width / 2 && (isTablet() || isDesktop);
   const nStylesHooks = StyleSheet.create({
-    container: isLargeScreen
-      ? {
-          paddingHorizontal: 24,
-          marginVertical: 16,
-        }
-      : { paddingVertical: 16, paddingHorizontal: 24 },
+    container: { paddingVertical: 16, paddingHorizontal: 24 }
+      
   });
 
   return (
@@ -108,14 +103,14 @@ const NewWalletPanel = ({ onPress }) => {
       accessibilityRole="button"
       testID="CreateAWallet"
       onPress={onPress}
-      style={isLargeScreen ? {} : { width: itemWidth * 1.2 }}
+      style={{ width: itemWidth * 1.2 }}
     >
       <View
         style={[
           nStyles.container,
           nStylesHooks.container,
           { backgroundColor: WalletGradient.createWallet() },
-          isLargeScreen ? {} : { width: itemWidth },
+          { width: itemWidth }
         ]}
       >
         <Text style={[nStyles.addAWAllet, { color: colors.foregroundColor }]}>{loc.wallets.list_create_a_wallet}</Text>
@@ -183,6 +178,7 @@ const iStyles = StyleSheet.create({
   },
 });
 
+// WalletCarouselItem to display home
 const WalletCarouselItem = ({ item, index, onPress, handleLongPress, isSelectedWallet }) => {
   const scaleValue = new Animated.Value(1.0);
   const { colors } = useTheme();
@@ -246,14 +242,6 @@ const WalletCarouselItem = ({ item, index, onPress, handleLongPress, isSelectedW
       //image = I18nManager.isRTL ? require('../img/btc-shape-rtl.png') : require('../img/btc-shape.png');
   }
 
-  // const latestTransactionText =
-  //   walletTransactionUpdateStatus === true || walletTransactionUpdateStatus === item.getID()
-  //     ? loc.transactions.updating
-  //     : item.getBalance() !== 0 && item.getLatestTransactionTime() === 0
-  //     ? loc.wallets.pull_to_refresh
-  //     : item.getTransactions().find(tx => tx.confirmations === 0)
-  //     ? loc.transactions.pending
-  //     : transactionTimeToReadable(item.getLatestTransactionTime());
   const latestTransactionText = item.latestTransactionText();
   return (
     <Animated.View
@@ -308,6 +296,7 @@ const WalletCarouselItem = ({ item, index, onPress, handleLongPress, isSelectedW
   );
 };
 
+
 WalletCarouselItem.propTypes = {
   item: PropTypes.any,
   index: PropTypes.number.isRequired,
@@ -330,6 +319,7 @@ const cStyles = StyleSheet.create({
   separatorStyle: { width: 16, height: 20 },
 });
 
+//
 const WalletsCarousel = forwardRef((props, ref) => {
   console.log('--------WalletsCarousel')
   

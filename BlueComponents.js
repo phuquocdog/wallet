@@ -208,6 +208,7 @@ export const PQDButton = props => {
     </TouchableOpacity>
   );
 };
+// Display header detail wallet
 export class BlueWalletNavigationHeader extends Component {
   static propTypes = {
     wallet: PropTypes.shape().isRequired,
@@ -269,7 +270,8 @@ export class BlueWalletNavigationHeader extends Component {
     
 
     this.setState({ wallet, walletPreviousPreferredUnit: walletPreviousPreferredUnit }, () => {
-      this.props.onWalletUnitChange(wallet);
+        console.log('TODO onWalletUnitChange')
+      // this.props.onWalletUnitChange(wallet);
     });
   };
 

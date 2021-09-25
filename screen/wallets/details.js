@@ -33,7 +33,6 @@ import { BlueStorageContext } from '../../blue_modules/storage-context';
 import Notifications from '../../blue_modules/notifications';
 import { isDesktop } from '../../blue_modules/environment';
 
-const prompt = require('../../blue_modules/prompt');
 
 const styles = StyleSheet.create({
   root: {
@@ -117,6 +116,7 @@ const WalletDetails = () => {
   const { colors } = useTheme();
   const [masterFingerprint, setMasterFingerprint] = useState();
   useEffect(() => {
+    console.log('wallet detail');
     if (isAdvancedModeEnabledRender && wallet.allowMasterFingerprint()) {
       InteractionManager.runAfterInteractions(() => {
         setMasterFingerprint(wallet.getMasterFingerprintHex());
@@ -194,23 +194,7 @@ const WalletDetails = () => {
   };
 
   const presentWalletHasBalanceAlert = useCallback(async () => {
-    ReactNativeHapticFeedback.trigger('notificationWarning', { ignoreAndroidSystemSettings: false });
-    try {
-      const walletBalanceConfirmation = await prompt(
-        loc.wallets.details_del_wb,
-        loc.formatString(loc.wallets.details_del_wb_q, { balance: wallet.getBalance() }),
-        true,
-        'plain-text',
-        true,
-      );
-      if (Number(walletBalanceConfirmation) === wallet.getBalance()) {
-        navigateToOverviewAndDeleteWallet();
-      } else {
-        ReactNativeHapticFeedback.trigger('notificationError', { ignoreAndroidSystemSettings: false });
-        setIsLoading(false);
-        alert(loc.wallets.details_del_wb_err);
-      }
-    } catch (_) {}
+    console.log('presentWalletHasBalanceAlert')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
