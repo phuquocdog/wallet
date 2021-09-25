@@ -164,9 +164,9 @@ android {
             keyPassword 'phuquocdog'
         }
         release {
-            storeFile file('../debug.keystore')
+            storeFile file('../phuquocdog.keystore')
             storePassword 'phuquocdog'
-            keyAlias 'debug-alias'
+            keyAlias 'pqd-alias'
             keyPassword 'phuquocdog'
         }
     }
