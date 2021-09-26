@@ -96,7 +96,6 @@ const WalletTransactions = ({navigation}) => {
   };
 
   useEffect(() => {
-    console.log('--------->transactions.js')
     const interval = setInterval(() => setTimeElapsed(prev => prev + 1), 60000);
     return () => {
       clearInterval(interval);
@@ -399,7 +398,7 @@ const WalletTransactions = ({navigation}) => {
   };
   
 
-  const renderItem = item => <BlueTransactionListItem item={item.item}  timeElapsed={timeElapsed} />;
+  const renderItem = item => <BlueTransactionListItem item={item.item} />;
 
 
 

@@ -29,7 +29,7 @@ const WalletsImport = () => {
   const [importText, setImportText] = useState(label);
   const navigation = useNavigation();
   const { colors } = useTheme();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const styles = StyleSheet.create({
     root: {
@@ -53,12 +53,6 @@ const WalletsImport = () => {
       Privacy.disableBlur();
     };
   }, []);
-
-  useEffect(() => {
-    setIsLoading(false)
-    console.log('setIsLoadinguseEffect', isLoading);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading]);
 
   
 

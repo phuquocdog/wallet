@@ -355,7 +355,6 @@ const WalletsCarousel = forwardRef((props, ref) => {
 
   const onScrollToIndexFailed = error => {
     console.log('onScrollToIndexFailed');
-    console.log(error);
     flatListRef.current.scrollToOffset({ offset: error.averageItemLength * error.index, animated: true });
     setTimeout(() => {
       if (props.data.length !== 0 && flatListRef.current !== null) {

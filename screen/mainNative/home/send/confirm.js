@@ -77,10 +77,9 @@ const SendConfirm = () => {
         txtUrl: 'https://block.phuquoc.dog/transfer/' + r.toHex()
       });
 
-
-      wallet.saveTransaction(r.toHex())
+      await new Promise(resolve => setTimeout(resolve, 6000)); // sleep to make sure network propagates
+      wallet.saveTransaction(r.toHex(),params)
       setIsLoading(false);
-      await new Promise(resolve => setTimeout(resolve, 3000)); // sleep to make sure network propagates
       fetchAndSaveWalletTransactions(walletID);
     } catch (error) {
       ReactNativeHapticFeedback.trigger('notificationError', {

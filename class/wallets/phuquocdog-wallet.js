@@ -56,6 +56,7 @@ export class PhuquocdogWallet {
   
     return this.balanceHuman;
   }
+
   async refreshTransactions() {
 
     try {
@@ -63,7 +64,6 @@ export class PhuquocdogWallet {
       const { nonce, data: balance } = await c.query.system.account(this.getAddress());
       if (balance) {
         this.setBalanceHuman(balance.free.toHuman());
-
         //Cache data to Store
         await AsyncStorage.setItem(this.getAddress(), JSON.stringify({
           'balanceHuman': balance.free.toHuman()
@@ -76,38 +76,42 @@ export class PhuquocdogWallet {
   
     return this.balanceHuman;
   }
-  async saveTransaction(id) {
+  async saveTransaction(id, params) {
 
     try {
       let b = await AsyncStorage.getItem(this.getAddress());
-      let txt = [id];
-      if (b !== null) {
-        data = JSON.parse(b);
-        transactions = data.transactions;
+      let data = JSON.parse(b);
 
-        if (data.transactions) {
-          txt.push(id);
-          
-        }
-        data.transactions = txt;
-        
-        //Update balance
-        const c = await this.connect();
-        const { nonce, data: balance } = await c.query.system.account(this.getAddress());
-        data.balanceHuman = balance.free.toHuman();
-        
-        //Cache data to Store
-        await AsyncStorage.setItem(this.getAddress(), JSON.stringify(data));
+      let transactions = [];
+      if (data.transactions) {
+        transactions = data.transactions;
       }
+      transaction = {
+        data: id,
+        createdAt: new Date().toLocaleString(),
+        memo: params.memo
+      }
+
+      transactions.push(transaction);
+      
+      //Update balance
+      const c = await this.connect();
+      const { nonce, data: balance } = await c.query.system.account(this.getAddress());
+      data.balanceHuman = balance.free.toHuman();
+      data.transactions = transactions;
+
+      //Cache data to Store
+      await AsyncStorage.setItem(this.getAddress(), JSON.stringify(data));
+      
     } catch (e) {
       console.log('saveTransaction error', e)
     }
 
   }
   latestTransactionText() {
-    this.getTransactions(1).then(data => {
-      if (data) {
-        this.latestTransaction = data;
+    this.getTransactions(1).then(r => {
+      if (r) {
+        this.latestTransaction = r[0].data;
       }
     })
     return this.latestTransaction;
