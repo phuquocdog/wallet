@@ -118,6 +118,7 @@ const WalletTransactions = ({navigation}) => {
 
     
     (async () => {
+      await wallet.refreshTransactions();
       let r = await wallet.getTransactions();
       setDataSource(r);
     })()

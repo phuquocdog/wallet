@@ -64,10 +64,11 @@ export class PhuquocdogWallet {
       const { nonce, data: balance } = await c.query.system.account(this.getAddress());
       if (balance) {
         this.setBalanceHuman(balance.free.toHuman());
-        //Cache data to Store
-        await AsyncStorage.setItem(this.getAddress(), JSON.stringify({
-          'balanceHuman': balance.free.toHuman()
-        }));
+        let b = await AsyncStorage.getItem(this.getAddress());
+        let data = JSON.parse(b);
+        data.balanceHuman = balance.free.toHuman();
+        
+        await AsyncStorage.setItem(this.getAddress(), JSON.stringify(data));
 
       }
     } catch (e) {
