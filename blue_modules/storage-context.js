@@ -3,7 +3,9 @@ import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 import React, { createContext, useEffect, useState } from 'react';
 import { LayoutAnimation } from 'react-native';
 import loc from '../loc';
-const BlueApp = require('../BlueApp');
+import {AppStorage} from '../class/app-storage';
+const BlueApp = new AppStorage();
+
 
 const _lastTimeTriedToRefetchWallet = {}; // hashmap of timestamps we _started_ refetching some wallet
 

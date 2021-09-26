@@ -2,7 +2,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {PhuquocdogWallet} from './wallets/phuquocdog-wallet';
 
-const createHash = require('create-hash');
 let usedBucketNum = false;
 let savingInProgress = 0; // its both a flag and a counter of attempts to write to disk
 
@@ -135,6 +134,7 @@ export class AppStorage {
 
   resetData() {
     AsyncStorage.setItem('data', '');
+    AsyncStorage.clear();
   }
   /**
    * Loads from storage all wallets and
@@ -184,14 +184,7 @@ export class AppStorage {
    * @returns {Promise} Result of storage save
    */
   async saveToDisk() {
-    if (savingInProgress) {
-      console.warn('saveToDisk is in progress');
-      if (++savingInProgress > 10) alert('Critical error. Last actions were not saved'); // should never happen
-      await new Promise(resolve => setTimeout(resolve, 1000 * savingInProgress)); // sleep
-      return this.saveToDisk();
-    }
-    savingInProgress = 1;
-
+   
     try {
       const walletsToSave = [];
       for (const key of this.wallets) {
@@ -201,7 +194,7 @@ export class AppStorage {
        
       let data = {
         wallets: walletsToSave,
-        tx_metadata: this.tx_metadata,
+        txMetadata: this.tx_metadata,
       };
       //console.log(JSON.stringify(data));
      
@@ -400,4 +393,19 @@ export class AppStorage {
   sleep = ms => {
     return new Promise(resolve => setTimeout(resolve, ms));
   };
+  startAndDecrypt = async retry => {
+    console.log('startAndDecrypt');
+
+    if (this.getWallets().length > 0) {
+      console.log('App already has some wallets');
+      return true;
+    }
+    let password = false;
+    await this.loadFromDisk(password);
+    return true;
+  };
+
+  async test() {
+    console.log('test-app-store');
+  }
 }

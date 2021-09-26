@@ -23,7 +23,7 @@ class AmountInput extends Component {
     /**
      * callback thats fired to notify of currently selected denomination, returns <BitcoinUnit.*>
      */
-    onAmountUnitChange: PropTypes.func.isRequired,
+    //onAmountUnitChange: PropTypes.func.isRequired,
     disabled: PropTypes.bool,
     colors: PropTypes.object.isRequired,
     pointerEvents: PropTypes.string,
@@ -53,15 +53,15 @@ class AmountInput extends Component {
    * @param previousUnit {string} one of {BitcoinUnit.*}
    * @param newUnit {string} one of {BitcoinUnit.*}
    */
-  onAmountUnitChange(previousUnit, newUnit) {
-    const amount = this.props.amount || '0';
-    console.log('was:', amount, previousUnit, '; converting to', newUnit);
-    let sats = 0;
+  // onAmountUnitChange(previousUnit, newUnit) {
+  //   const amount = this.props.amount || '0';
+  //   console.log('was:', amount, previousUnit, '; converting to', newUnit);
+  //   let sats = 0;
     
     
-    this.props.onChangeText(newInputValue);
-    this.props.onAmountUnitChange(newUnit);
-  }
+  //   this.props.onChangeText(newInputValue);
+  //   this.props.onAmountUnitChange(newUnit);
+  // }
 
   /**
    * responsible for cycling currently selected denomination, BTC->SAT->LOCAL_CURRENCY->BTC
@@ -70,7 +70,7 @@ class AmountInput extends Component {
     let previousUnit = this.props.unit;
     let newUnit;
     
-    this.onAmountUnitChange(previousUnit, newUnit);
+    //this.onAmountUnitChange(previousUnit, newUnit);
   };
 
   maxLength = () => {

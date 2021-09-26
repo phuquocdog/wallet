@@ -96,7 +96,6 @@ const WalletTransactions = ({navigation}) => {
   };
 
   useEffect(() => {
-    console.log('--------->transactions.js')
     const interval = setInterval(() => setTimeElapsed(prev => prev + 1), 60000);
     return () => {
       clearInterval(interval);
@@ -119,6 +118,7 @@ const WalletTransactions = ({navigation}) => {
 
     
     (async () => {
+      await wallet.refreshTransactions();
       let r = await wallet.getTransactions();
       setDataSource(r);
     })()
@@ -174,23 +174,8 @@ const WalletTransactions = ({navigation}) => {
       
       /** @type {LegacyWallet} */
       const balanceStart = +new Date();
-      const oldBalance = wallet.getBalance();
-      await wallet.fetchBalance();
-      if (oldBalance !== wallet.getBalance()) smthChanged = true;
-      const balanceEnd = +new Date();
-      console.log(wallet.getLabel(), 'fetch balance took', (balanceEnd - balanceStart) / 1000, 'sec');
-      const start = +new Date();
-      const oldTxLen = wallet.getTransactions().length;
-      await wallet.fetchTransactions();
-      if (wallet.fetchPendingTransactions) {
-        await wallet.fetchPendingTransactions();
-      }
-      if (wallet.fetchUserInvoices) {
-        await wallet.fetchUserInvoices();
-      }
-      if (oldTxLen !== wallet.getTransactions().length) smthChanged = true;
-      const end = +new Date();
-      console.log(wallet.getLabel(), 'fetch tx took', (end - start) / 1000, 'sec');
+      const oldBalance = await wallet.refreshTransactions();
+      
     } catch (err) {
       noErr = false;
       alert(err.message);
@@ -228,21 +213,6 @@ const WalletTransactions = ({navigation}) => {
     return (
       <View style={styles.flex}>
         <View style={styles.listHeader}>
-          {/*
-            Current logic - Onchain:
-            - Shows buy button on middle when empty
-            - Show buy button on top when not empty
-            - Shows Marketplace button on details screen, open in browser (iOS)
-            - Shows Marketplace button on details screen, open in in-app (android)
-            Current logic - Offchain:
-            - Shows Lapp Browser empty (iOS)
-            - Shows Lapp Browser with marketplace (android)
-            - Shows Marketplace button to open in browser (iOS)
-
-            The idea is to avoid showing on iOS an appstore/market style app that goes against the TOS.
-
-           */}
-          {wallet.getTransactions().length > 0 && wallet.getType() !== LightningCustodianWallet.type && renderSellFiat()}
         </View>
         <View style={[styles.listHeaderTextRow, stylesHook.listHeaderTextRow]}>
           <Text style={[styles.listHeaderText, stylesHook.listHeaderText]}>{loc.transactions.list_title}</Text>
@@ -397,6 +367,7 @@ const WalletTransactions = ({navigation}) => {
     );
   };
 
+  //
   const onWalletSelect = async selectedWallet => {
     if (selectedWallet) {
       navigate('WalletTransactions', {
@@ -428,7 +399,7 @@ const WalletTransactions = ({navigation}) => {
   };
   
 
-  const renderItem = item => <BlueTransactionListItem item={item.item}  timeElapsed={timeElapsed} />;
+  const renderItem = item => <BlueTransactionListItem item={item.item} />;
 
 
 
@@ -637,6 +608,7 @@ const WalletTransactions = ({navigation}) => {
   );
 };
 
+//
 export default WalletTransactions;
 
 const styles = StyleSheet.create({

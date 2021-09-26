@@ -181,8 +181,8 @@
     "_stream_duplex": "readable-stream/duplex",
     "_stream_passthrough": "readable-stream/passthrough",
     "stream": "stream-browserify",
-    "crypto": "react-native-crypto",
-    "path": "path-browserify"
+    "path": "path-browserify",
+    "crypto": "react-native-crypto"
   },
   "detox": {
     "configurations": {
@@ -222,7 +222,7 @@
     "_stream_duplex": "readable-stream/duplex",
     "_stream_passthrough": "readable-stream/passthrough",
     "stream": "stream-browserify",
-    "crypto": "react-native-crypto",
-    "path": "path-browserify"
+    "path": "path-browserify",
+    "crypto": "react-native-crypto"
   }
 }

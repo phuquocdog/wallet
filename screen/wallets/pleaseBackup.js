@@ -37,17 +37,19 @@ const PleaseBackup = () => {
   });
 
 
-  const handleBackButton = useCallback(() => {
+  // const handleBackButton = useCallback(() => {
+  //   navigation.popToTop();
+  //   return true;
+  // }, [navigation]);
+
+  const handleBackButton = () => {
     navigation.popToTop();
     return true;
-  }, [navigation]);
-
+  }
   useEffect(() => {
     Privacy.enableBlur();
-    BackHandler.addEventListener('hardwareBackPress', handleBackButton);
     return () => {
       Privacy.disableBlur();
-      BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

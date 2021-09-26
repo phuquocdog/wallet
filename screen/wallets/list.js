@@ -129,7 +129,8 @@ const WalletsList = () => {
   }, [colors]);
 
   const navigateToSettings = () => {
-    navigate('Settings');
+    //navigate('Settings');
+    console.log('navigateToSettings')
   };
 
   /**
@@ -219,7 +220,7 @@ const WalletsList = () => {
         <TouchableOpacity
           accessibilityRole="button"
           onPress={() => {
-            navigate('HodlHodl', { screen: 'HodlHodl' });
+            alert('Update soon')
           }}
           style={[styles.ltRoot, stylesHook.ltRoot]}
         >

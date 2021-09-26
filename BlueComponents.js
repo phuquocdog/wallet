@@ -208,6 +208,7 @@ export const PQDButton = props => {
     </TouchableOpacity>
   );
 };
+// Display header detail wallet
 export class BlueWalletNavigationHeader extends Component {
   static propTypes = {
     wallet: PropTypes.shape().isRequired,
@@ -269,7 +270,8 @@ export class BlueWalletNavigationHeader extends Component {
     
 
     this.setState({ wallet, walletPreviousPreferredUnit: walletPreviousPreferredUnit }, () => {
-      this.props.onWalletUnitChange(wallet);
+        console.log('TODO onWalletUnitChange')
+      // this.props.onWalletUnitChange(wallet);
     });
   };
 
@@ -1113,11 +1115,12 @@ export const BlueReceiveButtonIcon = props => {
 };
 
 //
-export const BlueTransactionListItem = React.memo(({ item, timeElapsed }) => {
+export const BlueTransactionListItem = React.memo(({ item }) => {
   const [subtitleNumberOfLines, setSubtitleNumberOfLines] = useState(1);
   const { colors } = useTheme();
   const { navigate } = useNavigation();
   const { txMetadata, wallets, preferredFiatCurrency, language } = useContext(BlueStorageContext);
+
   const containerStyle = useMemo(
     () => ({
       backgroundColor: 'transparent',
@@ -1151,7 +1154,7 @@ export const BlueTransactionListItem = React.memo(({ item, timeElapsed }) => {
 
 
   const rowTitle = useMemo(() => {
-    return 'rowTitle';
+    return subtitle;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
