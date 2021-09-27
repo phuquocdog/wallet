@@ -91,10 +91,10 @@ const SendDetails = () => {
 
     Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
     Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
-    return () => {
-      Keyboard.removeListener('keyboardDidShow', _keyboardDidShow);
-      Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
-    };
+    // return () => {
+    //   Keyboard.remove('keyboardDidShow', _keyboardDidShow);
+    //   Keyboard.remove('keyboardDidHide', _keyboardDidHide);
+    // };
   }); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {

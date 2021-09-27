@@ -29,7 +29,6 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import LinearGradient from 'react-native-linear-gradient';
 import * as NavigationService from '../NavigationService';
 import WalletGradient from '../class/wallet-gradient';
-import { BlurView } from '@react-native-community/blur';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useTheme } from '@react-navigation/native';
 import { BlueCurrentTheme } from './themes';

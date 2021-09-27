@@ -95,14 +95,7 @@ const WalletTransactions = ({navigation}) => {
     return [];
   };
 
-  useEffect(() => {
-    const interval = setInterval(() => setTimeElapsed(prev => prev + 1), 60000);
-    return () => {
-      clearInterval(interval);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+  
   useEffect(() => {
     setOptions({ headerTitle: walletTransactionUpdateStatus === walletID ? loc.transactions.updating : '' });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -150,12 +143,7 @@ const WalletTransactions = ({navigation}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // if description of transaction has been changed we want to show new one
-  useFocusEffect(
-    useCallback(() => {
-      setTimeElapsed(prev => prev + 1);
-    }, []),
-  );
+  
 
   const isLightning = () => {
   

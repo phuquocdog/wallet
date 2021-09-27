@@ -9,7 +9,6 @@ import { BlueHeaderDefaultMain, BlueSpacing20 } from '../../BlueComponents';
 import WalletsCarousel from '../../components/WalletsCarousel';
 import loc from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
-import { BlurView } from '@react-native-community/blur';
 
 const DrawerList = props => {
   console.log('drawerList rendering...');
@@ -94,9 +93,7 @@ const DrawerList = props => {
         <StatusBar barStyle="default" />
         {renderWalletsCarousel}
       </View>
-      {isDrawerListBlurred && (
-        <BlurView style={styles.absolute} blurType="light" blurAmount={10} reducedTransparencyFallbackColor="white" />
-      )}
+      
     </DrawerContentScrollView>
   );
 };

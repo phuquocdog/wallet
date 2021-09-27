@@ -4,7 +4,6 @@ import {
   AppState,
   DeviceEventEmitter,
   NativeModules,
-  NativeEventEmitter,
   KeyboardAvoidingView,
   Linking,
   Platform,
@@ -34,7 +33,7 @@ import Notifications from './blue_modules/notifications';
 import Biometric from './class/biometrics';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
 
-const eventEmitter = new NativeEventEmitter(NativeModules.EventEmitter);
+//const eventEmitter = new NativeEventEmitter(NativeModules.EventEmitter);
 
 const ClipboardContentType = Object.freeze({
   BITCOIN: 'BITCOIN',
@@ -92,8 +91,8 @@ const App = () => {
     return () => {
       Linking.removeEventListener('url', handleOpenURL);
       //AppState.removeEventListener('change', handleAppStateChange);
-      eventEmitter.removeAllListeners('onNotificationReceived');
-      eventEmitter.removeAllListeners('openSettings');
+      //eventEmitter.removeAllListeners('onNotificationReceived');
+      //eventEmitter.removeAllListeners('openSettings');
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -110,17 +109,17 @@ const App = () => {
   }, [colorScheme]);
 
   const addListeners = () => {
-    Linking.addEventListener('url', handleOpenURL);
-    AppState.addEventListener('change', handleAppStateChange);
-    DeviceEventEmitter.addListener('quickActionShortcut', walletQuickActions);
+    //Linking.addEventListener('url', handleOpenURL);
+    //AppState.addEventListener('change', handleAppStateChange);
+    //DeviceEventEmitter.addListener('quickActionShortcut', walletQuickActions);
     DeviceQuickActions.popInitialAction().then(popInitialAction);
     handleAppStateChange(undefined);
     /*
       When a notification on iOS is shown while the app is on foreground;
       On willPresent on AppDelegate.m
      */
-    eventEmitter.addListener('onNotificationReceived', onNotificationReceived);
-    eventEmitter.addListener('openSettings', openSettings);
+    //eventEmitter.addListener('onNotificationReceived', onNotificationReceived);
+    //eventEmitter.addListener('openSettings', openSettings);
   };
 
   const popInitialAction = async data => {

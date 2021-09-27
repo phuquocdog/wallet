@@ -29,7 +29,6 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import LinearGradient from 'react-native-linear-gradient';
 import * as NavigationService from './NavigationService';
 import WalletGradient from './class/wallet-gradient';
-import { BlurView } from '@react-native-community/blur';
 import NetworkTransactionFees, { NetworkTransactionFee, NetworkTransactionFeeType } from './models/networkTransactionFees';
 import Biometric from './class/biometrics';
 import QRCode from 'react-native-qrcode-svg';
@@ -49,7 +48,7 @@ if (aspectRatio > 1.6) {
   isIpad = true;
 }
 // eslint-disable-next-line no-unused-expressions
-Platform.OS === 'android' ? (ActivityIndicator.defaultProps.color = PlatformColor('?attr/colorControlActivated')) : null;
+//Platform.OS === 'android' ? (ActivityIndicator.defaultProps.color = PlatformColor('?attr/colorControlActivated')) : null;
 
 export const BlueButton = props => {
   const { colors } = useTheme();
@@ -412,20 +411,7 @@ export const BlueAlertWalletExportReminder = ({ onSuccess = () => {}, onFailure 
 };
 
 export const BluePrivateBalance = () => {
-  return Platform.select({
-    ios: (
-      <View style={{ flexDirection: 'row', marginTop: 13 }}>
-        <BlurView style={styles.balanceBlur} blurType="light" blurAmount={25} />
-        <Icon name="eye-slash" type="font-awesome" color="#FFFFFF" />
-      </View>
-    ),
-    android: (
-      <View style={{ flexDirection: 'row', marginTop: 13 }}>
-        <View style={{ backgroundColor: '#FFFFFF', opacity: 0.5, height: 30, width: 100, marginRight: 8 }} />
-        <Icon name="eye-slash" type="font-awesome" color="#FFFFFF" />
-      </View>
-    ),
-  });
+  return null;
 };
 
 export const BlueCopyToClipboardButton = ({ stringToCopy, displayText = false }) => {

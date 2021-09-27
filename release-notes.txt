@@ -1,3 +1,11 @@
+* Configure EAS Build for Android 
+* Fix build abb 
+* Update version 
+* Fix display when received coin 
+* Fix update balance when transfer; 
+* Update build 
+* Fix status bar and convert to fiat 
+* Pull transaction 
 * Finish v1 for android 
 * Remove some package do not use 
 * Clean more 

@@ -6,7 +6,6 @@ import navigationStyle from '../../components/navigationStyle';
 import { BlueButton, BlueCard, BlueLoading, BlueSpacing20, BlueText, SafeBlueArea } from '../../BlueComponents';
 import loc from '../../loc';
 
-const torrific = require('../../blue_modules/torrific');
 
 const styles = StyleSheet.create({
   torSupported: {
@@ -27,11 +26,11 @@ const TorSettings = () => {
   };
 
   const startIfNotStarted = async () => {
-    await torrific.startIfNotStarted();
+    
   };
 
   const stopIfRunning = async () => {
-    await torrific.stopIfRunning();
+    
   };
 
   const testSocket = async () => {
