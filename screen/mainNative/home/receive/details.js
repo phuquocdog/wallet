@@ -32,7 +32,6 @@ import AmountInput from '../../components/AmountInput';
 import DeeplinkSchemaMatch from '../../class/deeplink-schema-match';
 import loc from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
-import Notifications from '../../blue_modules/notifications';
 import ToolTipMenu from '../../components/TooltipMenu';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
@@ -132,12 +131,6 @@ const ReceiveDetails = () => {
     },
   });
 
-  
-  useEffect(() => {
-    (async () => {
-      console.log(address)
-    })();
-  }, []);
 
 
   const handleShareQRCode = () => {
@@ -213,7 +206,6 @@ const ReceiveDetails = () => {
 
   const obtainWalletAddress = useCallback(async () => {
     Privacy.enableBlur();
-    console.log('receive/details - componentDidMount');
         
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -221,35 +213,7 @@ const ReceiveDetails = () => {
   const setAddressBIP21Encoded = address => {
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      const task = InteractionManager.runAfterInteractions(async () => {
-        if (wallet) {
-          if (!wallet.getUserHasSavedExport()) {
-            BlueAlertWalletExportReminder({
-              onSuccess: obtainWalletAddress,
-              onFailure: () => {
-                goBack();
-                navigate('WalletExportRoot', {
-                  screen: 'WalletExport',
-                  params: {
-                    walletID: wallet.getID(),
-                  },
-                });
-              },
-            });
-          } else {
-            obtainWalletAddress();
-          }
-        }
-      });
-      return () => {
-        task.cancel();
-        Privacy.disableBlur();
-      };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [wallet]),
-  );
+ 
 
   const dismissCustomAmountModal = () => {
     Keyboard.dismiss();
