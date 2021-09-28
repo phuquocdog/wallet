@@ -4,26 +4,19 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { useTheme } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import styled from 'styled-components/native'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 
 
-import Merchant from './Merchant';
-import IpfsUser from './IpfsUser';
-import StorageUser from './StorageUser';
+
 import Soon from '../Soon';
 
-const Container = styled(SafeAreaView)`
-  flex: 1;
-  background-color: white;
-`
+
 const Tab = createMaterialTopTabNavigator();
 
 const AppTabs = () => {
 
   return (
-    <Container edges={['top']}>
-      <Tab.Navigator
+    <Tab.Navigator
         tabBarOptions={{
           labelStyle: { textTransform: 'capitalize' },
           indicatorStyle: {
@@ -38,7 +31,6 @@ const AppTabs = () => {
         <Tab.Screen component={StorageUser} name="Order" />
 
       </Tab.Navigator>
-    </Container>
   )
   
 }

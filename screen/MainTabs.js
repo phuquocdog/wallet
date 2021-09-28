@@ -8,7 +8,6 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 import HomeStack from './mainNative//home/HomeStack';
 import AppStack from './mainNative//app/AppStack';
-import DappStack from './mainNative//dapp/DappStack';
 import StakingStack from './mainNative/staking/StakingStack';
 import SettingStack from './mainNative/settings/SettingStack';
 
@@ -25,9 +24,7 @@ const MainTabs = () => {
 	              iconName = 'home';
 	            } 
 
-	            if (route.name === 'Dapp') {
-	              iconName = 'md-logo-firefox';
-	            }
+	           
 	            if (route.name === 'Staking') {
 	              iconName = 'file-tray-stacked';
 	            }
@@ -43,14 +40,8 @@ const MainTabs = () => {
 	            return <Ionicons name={iconName} size={size} color={color} />;
 	          },
         })} 
-        tabBarOptions={{
-          activeTintColor: '#080808',
-          inactiveTintColor: '#909090',
-        }}
-
     >
     	<Tab.Screen component={HomeStack} name="Home" options={{ headerShown: true }} />
-      <Tab.Screen component={DappStack} name="Dapp" options={{ headerShown: false }} />
       <Tab.Screen component={AppStack}  name="Apps" options={{ headerShown: false }} />
     	<Tab.Screen component={StakingStack} name="Staking" options={{ headerShown: false }} />
     	<Tab.Screen component={SettingStack} name="Setting" options={{ headerShown: false }} />

@@ -30,7 +30,6 @@ import ActionSheet from '../ActionSheet';
 import loc from '../../loc';
 import { FContainer, FButton } from '../../components/FloatButtons';
 import BottomModal from '../../components/BottomModal';
-import BuyBitcoin from './buyBitcoin';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 import { isDesktop, isMacCatalina } from '../../blue_modules/environment';
 import BlueClipboard from '../../blue_modules/clipboard';
@@ -223,137 +222,8 @@ const WalletTransactions = ({navigation}) => {
     setIsManageFundsModalVisible(false);
   };
 
-  const renderManageFundsModal = () => {
-    return (
-      <BottomModal isVisible={isManageFundsModalVisible} onClose={hideManageFundsModal}>
-        <KeyboardAvoidingView enabled={!Platform.isPad} behavior={Platform.OS === 'ios' ? 'position' : null}>
-          <View style={[styles.advancedTransactionOptionsModalContent, stylesHook.advancedTransactionOptionsModalContent]}>
-            <BlueListItem
-              hideChevron
-              component={TouchableOpacity}
-              onPress={() => {
-                const availableWallets = [...wallets.filter(item => item.allowSend())];
-                if (availableWallets.length === 0) {
-                  alert(loc.lnd.refill_create);
-                } else {
-                  setIsManageFundsModalVisible(false);
-                  navigate('SelectWallet', { onWalletSelect, chainType: 'phuquocdog' });
-                }
-              }}
-              title={loc.lnd.refill}
-            />
-            <BlueListItem
-              hideChevron
-              component={TouchableOpacity}
-              onPress={() => {
-                setIsManageFundsModalVisible(false);
 
-                navigate('ReceiveDetailsRoot', {
-                  screen: 'ReceiveDetails',
-                  params: {
-                    walletID: wallet.getID(),
-                  },
-                });
-              }}
-              title={loc.lnd.refill_external}
-            />
 
-            <BlueListItem
-              hideChevron
-              component={TouchableOpacity}
-              onPress={() => {
-                setIsManageFundsModalVisible(false);
-                setTimeout(() => navigateToBuyBitcoin(), 500);
-              }}
-              title={loc.lnd.refill_card}
-            />
-
-            <BlueListItem
-              title={loc.lnd.exchange}
-              hideChevron
-              component={TouchableOpacity}
-              onPress={() => {
-                setIsManageFundsModalVisible(false);
-                Linking.openURL('https://zigzag.io/?utm_source=integration&utm_medium=bluewallet&utm_campaign=withdrawLink');
-              }}
-            />
-          </View>
-        </KeyboardAvoidingView>
-      </BottomModal>
-    );
-  };
-
-  const navigateToBuyBitcoin = () => {
-    BuyBitcoin.navigate(wallet);
-  };
-
-  const renderMarketplaceButton = () => {
-    return Platform.select({
-      android: (
-        <TouchableOpacity
-          accessibilityRole="button"
-          onPress={() => {
-            if (wallet.getType() === LightningCustodianWallet.type) {
-              navigate('LappBrowserRoot', {
-                screen: 'LappBrowser',
-                params: { walletID },
-              });
-            } else {
-              navigate('Marketplace', { walletID });
-            }
-          }}
-          style={[styles.marketplaceButton1, stylesHook.marketplaceButton1]}
-        >
-          <Text style={[styles.marketpalceText1, stylesHook.marketpalceText1]}>{loc.wallets.list_marketplace}</Text>
-        </TouchableOpacity>
-      ),
-      ios:
-        wallet.getBalance() > 0 ? (
-          <TouchableOpacity
-            accessibilityRole="button"
-            onPress={async () => {
-              Linking.openURL('https://bluewallet.io/marketplace/');
-            }}
-            style={[styles.marketplaceButton1, stylesHook.marketplaceButton1]}
-          >
-            <Icon name="external-link" size={18} type="font-awesome" color="#9aa0aa" />
-            <Text style={[styles.marketpalceText2, stylesHook.marketpalceText2]}>{loc.wallets.list_marketplace}</Text>
-          </TouchableOpacity>
-        ) : null,
-    });
-  };
-
-  const renderLappBrowserButton = () => {
-    return (
-      <TouchableOpacity
-        accessibilityRole="button"
-        onPress={() => {
-          navigate('LappBrowserRoot', {
-            screen: 'LappBrowser',
-            params: {
-              walletID,
-              url: 'https://duckduckgo.com',
-            },
-          });
-        }}
-        style={[styles.marketplaceButton2, stylesHook.marketplaceButton2]}
-      >
-        <Text style={[styles.marketpalceText1, stylesHook.marketpalceText1]}>{loc.wallets.list_ln_browser}</Text>
-      </TouchableOpacity>
-    );
-  };
-
-  const renderSellFiat = () => {
-    return (
-      <TouchableOpacity
-        accessibilityRole="button"
-        onPress={navigateToBuyBitcoin}
-        style={[styles.marketplaceButton2, stylesHook.marketplaceButton2]}
-      >
-        <Text style={[styles.marketpalceText1, stylesHook.marketpalceText1]}>{loc.wallets.list_tap_here_to_buy}</Text>
-      </TouchableOpacity>
-    );
-  };
 
   //
   const onWalletSelect = async selectedWallet => {
@@ -560,7 +430,6 @@ const WalletTransactions = ({navigation}) => {
           renderItem={renderItem}
           contentInset={{ top: 0, left: 0, bottom: 90, right: 0 }}
         />
-        {renderManageFundsModal()}
       </View>
 
       <FContainer ref={walletActionButtonsRef}>
