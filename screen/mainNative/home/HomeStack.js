@@ -26,18 +26,19 @@ const Stack = createStackNavigator()
 
 const HomeStack = ({navigation, route}) => {
   const theme = useTheme();
-  
-
   useEffect(() => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? 'WalletsList';
-    
-    if ('WalletsList' == routeName) {
-      navigation.setOptions({ tabBarVisible: true })
+        if ('WalletsList' == routeName) {
+      navigation.setOptions({
+        tabBarStyle: { position: 'absolute'  }
+        
+      })
     } else {
-      navigation.setOptions({ tabBarVisible: false })
+      navigation.setOptions({
+        tabBarStyle: { display: 'none' }
+      })
     }
-    //return () => { mountedRef.current = false }
-  }, [navigation, route])
+  });
 
   return (
     <Stack.Navigator>

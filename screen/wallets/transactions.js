@@ -98,13 +98,6 @@ const WalletTransactions = ({navigation}) => {
     setIsLoading(false);
     setSelectedWallet(wallet.getID());
 
-    
-    (async () => {
-      await wallet.refreshTransactions();
-      let r = await wallet.getTransactions();
-      setDataSource(r);
-    })()
-
 
     setOptions({
       headerStyle: {
@@ -114,15 +107,17 @@ const WalletTransactions = ({navigation}) => {
       headerTintColor: '#fff'
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [wallets, wallet]);
+  },[wallet]);
 
   useEffect(() => {
-    const newWallet = wallets.find(w => w.getID() === walletID);
-    if (newWallet) {
-      setParams({ walletID, isLoading: false });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [walletID]);
+     const init = async () => {
+      await wallet.refreshTransactions();
+      let r = await wallet.getTransactions();
+      setDataSource(r);
+
+     }
+     init();
+  },[wallet]);
 
   const isLightning = () => {
   
