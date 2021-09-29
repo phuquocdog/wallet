@@ -52,9 +52,7 @@ const WalletTransactions = ({navigation}) => {
   const { name } = useRoute();
   const wallet = wallets.find(w => w.getID() === walletID);
   const [dataSource, setDataSource] = useState([])
-  const [timeElapsed, setTimeElapsed] = useState(0);
   const [limit, setLimit] = useState(15);
-  const [pageSize, setPageSize] = useState(20);
   const { setParams, setOptions, navigate } = useNavigation();
   const { colors } = useTheme();
   const walletActionButtonsRef = useRef();
@@ -94,17 +92,9 @@ const WalletTransactions = ({navigation}) => {
     return [];
   };
 
-  
-  useEffect(() => {
-    setOptions({ headerTitle: walletTransactionUpdateStatus === walletID ? loc.transactions.updating : '' });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [walletTransactionUpdateStatus]);
-
   useEffect(() => {
     setIsLoading(true);
     setLimit(15);
-    setPageSize(20);
-    setTimeElapsed(0);
     setIsLoading(false);
     setSelectedWallet(wallet.getID());
 
@@ -124,7 +114,7 @@ const WalletTransactions = ({navigation}) => {
       headerTintColor: '#fff'
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [wallets, wallet, walletID]);
+  }, [wallets, wallet]);
 
   useEffect(() => {
     const newWallet = wallets.find(w => w.getID() === walletID);
@@ -133,16 +123,6 @@ const WalletTransactions = ({navigation}) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walletID]);
-
-  // refresh transactions if it never hasn't been done. It could be a fresh imported wallet
-  useEffect(() => {
-    if (wallet.getLastTxFetch() === 0) {
-      refreshTransactions();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  
 
   const isLightning = () => {
   
@@ -153,29 +133,21 @@ const WalletTransactions = ({navigation}) => {
    * Forcefully fetches TXs and balance for wallet
    */
   const refreshTransactions = async () => {
+    console.log('refreshTransactions pull', isLoading)
     if (isLoading) return;
     setIsLoading(true);
     let noErr = true;
     let smthChanged = false;
     try {
       
-      /** @type {LegacyWallet} */
-      const balanceStart = +new Date();
       const oldBalance = await wallet.refreshTransactions();
       
     } catch (err) {
       noErr = false;
       alert(err.message);
       setIsLoading(false);
-      setTimeElapsed(prev => prev + 1);
-    }
-    if (noErr && smthChanged) {
-      console.log('saving to disk');
-      await saveToDisk(); // caching
-      setDataSource([...getTransactionsSliced(limit)]);
     }
     setIsLoading(false);
-    setTimeElapsed(prev => prev + 1);
   };
 
   const _keyExtractor = (_item, index) => index.toString();
@@ -425,7 +397,7 @@ const WalletTransactions = ({navigation}) => {
           onRefresh={refreshTransactions}
           refreshing={isLoading}
           data={dataSource}
-          extraData={[timeElapsed, dataSource, wallets]}
+          extraData={[dataSource, wallets]}
           keyExtractor={_keyExtractor}
           renderItem={renderItem}
           contentInset={{ top: 0, left: 0, bottom: 90, right: 0 }}

@@ -12,7 +12,6 @@ import {
   BlueSpacing20,
 } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
-import Privacy from '../../blue_modules/Privacy';
 import loc from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 
@@ -42,19 +41,6 @@ const WalletsImport = () => {
       backgroundColor: colors.elevated,
     },
   });
-
-  useEffect(() => {
-    Privacy.enableBlur();
-    Keyboard.addListener(Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow', () => setIsToolbarVisibleForAndroid(true));
-    Keyboard.addListener(Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide', () => setIsToolbarVisibleForAndroid(false));
-    return () => {
-      Keyboard.removeListener(Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide');
-      Keyboard.removeListener(Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow');
-      Privacy.disableBlur();
-    };
-  }, []);
-
-  
 
   const importButtonPressed = () => {
     setIsLoading(true);

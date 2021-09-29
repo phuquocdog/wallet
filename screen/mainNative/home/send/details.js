@@ -62,7 +62,6 @@ const SendDetails = () => {
   const [networkTransactionFees, setNetworkTransactionFees] = useState(new NetworkTransactionFee(3, 2, 1));
   const [networkTransactionFeesIsLoading, setNetworkTransactionFeesIsLoading] = useState(false);
   const [customFee, setCustomFee] = useState(null);
-  const [feePrecalc, setFeePrecalc] = useState({ current: null, slowFee: null, mediumFee: null, fastestFee: null });
   const [amountUnit, setAmountUnit] = useState();
   const [changeAddress, setChangeAddress] = useState();
   const [balance, setBalance] = useState('');
@@ -75,28 +74,9 @@ const SendDetails = () => {
   //@TODO
   const feeRate = useMemo(() => {
     return '0.01'
-  }, []);
+  });
 
-  // keyboad effects
-  useEffect(() => {
-    const _keyboardDidShow = () => {
-      setWalletSelectionOrCoinsSelectedHidden(true);
-      setIsAmountToolbarVisibleForAndroid(true);
-    };
-
-    const _keyboardDidHide = () => {
-      setWalletSelectionOrCoinsSelectedHidden(false);
-      setIsAmountToolbarVisibleForAndroid(false);
-    };
-
-    Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
-    Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
-    // return () => {
-    //   Keyboard.remove('keyboardDidShow', _keyboardDidShow);
-    //   Keyboard.remove('keyboardDidHide', _keyboardDidHide);
-    // };
-  }); // eslint-disable-line react-hooks/exhaustive-deps
-
+  
   useEffect(() => {
     const wallet = (routeParams.walletID && wallets.find(w => w.getID() === routeParams.walletID));
     setWallet(wallet);
@@ -111,10 +91,6 @@ const SendDetails = () => {
 
 
   const createTransaction = async () => {
-    //Keyboard.dismiss();
-    //setIsLoading(true);
-
-    //alert('createTransaction');
     let recipients = addresses;
     navigation.navigate('SendConfirm', {
       fee:feeRate,
@@ -272,26 +248,28 @@ const SendDetails = () => {
   });
 
   const renderFeeSelectionModal = () => {
+
+    let fee = feeRate;
     const nf = networkTransactionFees;
     const options = [
       {
         label: loc.send.fee_fast,
         time: loc.send.fee_10m,
-        fee: feePrecalc.fastestFee,
+        fee: fee,
         rate: nf.fastestFee,
         active: Number(feeRate) === nf.fastestFee,
       },
       {
         label: loc.send.fee_medium,
         time: loc.send.fee_3h,
-        fee: feePrecalc.mediumFee,
+        fee: fee,
         rate: nf.mediumFee,
         active: Number(feeRate) === nf.mediumFee,
       },
       {
         label: loc.send.fee_slow,
         time: loc.send.fee_1d,
-        fee: feePrecalc.slowFee,
+        fee: fee,
         rate: nf.slowFee,
         active: Number(feeRate) === nf.slowFee,
       },
@@ -310,7 +288,6 @@ const SendDetails = () => {
                 accessibilityRole="button"
                 key={label}
                 onPress={() => {
-                  setFeePrecalc(fp => ({ ...fp, current: fee }));
                   setIsFeeSelectionModalVisible(false);
                   setCustomFee(rate.toString());
                 }}
