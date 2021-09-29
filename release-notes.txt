@@ -1,3 +1,5 @@
+* Update samll send 
+* Update version react native modal 
 * Clean up 
 * Configure EAS Build for Android 
 * Fix build abb 

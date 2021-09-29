@@ -24,7 +24,6 @@ const MainTabs = () => {
 	              iconName = 'home';
 	            } 
 
-	           
 	            if (route.name === 'Staking') {
 	              iconName = 'file-tray-stacked';
 	            }
@@ -34,14 +33,14 @@ const MainTabs = () => {
 	            if (route.name === 'Setting') {
 	              iconName = 'settings-outline';
 	            }
-	            size = 24;
+	            size = 25;
 
 	            // You can return any component that you like here!
 	            return <Ionicons name={iconName} size={size} color={color} />;
 	          },
         })} 
     >
-    	<Tab.Screen component={HomeStack} name="Home" options={{ headerShown: true }} />
+    	<Tab.Screen component={HomeStack} name="Home" options={{ headerShown: false }} />
       <Tab.Screen component={AppStack}  name="Apps" options={{ headerShown: false }} />
     	<Tab.Screen component={StakingStack} name="Staking" options={{ headerShown: false }} />
     	<Tab.Screen component={SettingStack} name="Setting" options={{ headerShown: false }} />

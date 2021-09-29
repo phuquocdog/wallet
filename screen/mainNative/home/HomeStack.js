@@ -41,7 +41,7 @@ const HomeStack = ({navigation, route}) => {
 
   return (
     <Stack.Navigator>
-      <Stack.Screen name="WalletsList" component={WalletsList}  />
+      <Stack.Screen name="WalletsList" component={WalletsList} options={{ headerShown: false }} />
       <Stack.Screen name="AddWalletRoot" component={AddWallet} options={ImportWallet.navigationOptions(theme)} />
       <Stack.Screen name="ImportWallet" component={ImportWallet} options={ImportWallet.navigationOptions(theme)} />
       <Stack.Screen name="PleaseBackup" component={PleaseBackup} options={PleaseBackup.navigationOptions(theme)} />

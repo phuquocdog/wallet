@@ -101,37 +101,7 @@ const WalletsList = () => {
     
   };
 
-  useEffect(() => {
-    setOptions({
-      title: '',
-      headerShown: !isDesktop,
-      headerStyle: {
-        backgroundColor: colors.customHeader,
-        borderBottomWidth: 0,
-        elevation: 0,
-        shadowOpacity: 0,
-        shadowOffset: { height: 0, width: 0 },
-      },
-      headerRight: () =>
-        I18nManager.isRTL ? null : (
-          <TouchableOpacity accessibilityRole="button" testID="SettingsButton" style={styles.headerTouch} onPress={navigateToSettings}>
-            <Icon size={22} name="kebab-horizontal" type="octicon" color={colors.foregroundColor} />
-          </TouchableOpacity>
-        ),
-      headerLeft: () =>
-        I18nManager.isRTL ? (
-          <TouchableOpacity accessibilityRole="button" testID="SettingsButton" style={styles.headerTouch} onPress={navigateToSettings}>
-            <Icon size={22} name="kebab-horizontal" type="octicon" color={colors.foregroundColor} />
-          </TouchableOpacity>
-        ) : null,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [colors]);
-
-  const navigateToSettings = () => {
-    //navigate('Settings');
-    console.log('navigateToSettings')
-  };
+  
 
   /**
    * Forcefully fetches TXs and balance for ALL wallets.
@@ -374,16 +344,13 @@ const WalletsList = () => {
     }
   };
 
-  const onLayout = _e => {
-    setIsLargeScreen(Platform.OS === 'android' ? isTablet() : width >= Dimensions.get('screen').width / 2 && (isTablet() || isDesktop));
-  };
-
+  
   const onRefresh = () => {
     refreshTransactions(true, false);
   };
 
   return (
-    <View style={styles.root} onLayout={onLayout}>
+    <View style={styles.root}>
       <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} backgroundColor="transparent" translucent />
       <View style={[styles.walletsListWrapper, stylesHook.walletsListWrapper]}>
         <SectionList
@@ -407,11 +374,11 @@ const WalletsList = () => {
 };
 
 export default WalletsList;
-WalletsList.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: '' }));
 
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+    paddingTop: 90
   },
   scrollContent: {
     top: 0,
@@ -425,28 +392,8 @@ const styles = StyleSheet.create({
   walletsListWrapper: {
     flex: 1,
   },
-  headerStyle: {
-    ...Platform.select({
-      ios: {
-        marginTop: 44,
-        height: 32,
-        alignItems: 'flex-end',
-        justifyContent: 'center',
-      },
-      android: {
-        marginTop: 8,
-        height: 44,
-        alignItems: 'flex-end',
-        justifyContent: 'center',
-      },
-    }),
-  },
-  headerTouch: {
-    height: 48,
-    paddingRight: 16,
-    paddingLeft: 32,
-    paddingVertical: 10,
-  },
+  
+
   listHeaderBack: {
     flexDirection: 'row',
     justifyContent: 'space-between',
