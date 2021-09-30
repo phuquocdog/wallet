@@ -25,38 +25,7 @@ const EncryptStorage = () => {
     },
   });
 
-  const initialState = useCallback(async () => {
-    const isBiometricsEnabled = await Biometric.isBiometricUseEnabled();
-    const isDeviceBiometricCapable = await Biometric.isDeviceBiometricCapable();
-    const biometricsType = (await Biometric.biometricType()) || loc.settings.biometrics;
-    const isStorageEncryptedSwitchEnabled = await isStorageEncrypted();
-    // setStorageIsEncryptedSwitchEnabled(isStorageEncryptedSwitchEnabled);
-    // setBiometrics({ isBiometricsEnabled, isDeviceBiometricCapable, biometricsType });
-    setIsLoading(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  useEffect(() => {
-    initialState();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const handleDecryptStorage = async () => {
-    const password = await prompt(loc.settings.password, loc._.storage_is_encrypted).catch(() => {
-      setIsLoading(false);
-    });
-    try {
-      await decryptStorage(password);
-      await saveToDisk();
-      popToTop();
-    } catch (e) {
-      if (password) {
-        alert(loc._.bad_password);
-        ReactNativeHapticFeedback.trigger('notificationError', { ignoreAndroidSystemSettings: false });
-      }
-
-      setIsLoading(false);
-      setStorageIsEncryptedSwitchEnabled(await isStorageEncrypted());
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   };
 
