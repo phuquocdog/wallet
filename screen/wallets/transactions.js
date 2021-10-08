@@ -104,19 +104,24 @@ const WalletTransactions = ({navigation}) => {
         backgroundColor: WalletGradient.headerColorFor(wallet.getType()),
         shadowColor: 'transparent'
       },
-      headerTintColor: '#fff'
+      headerTintColor: '#fff',
+      title : 'Transactions'
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[wallet]);
 
   useEffect(() => {
-     const init = async () => {
-      await wallet.refreshTransactions();
-      let r = await wallet.getTransactions();
-      setDataSource(r);
+      let mounted = true
+      // const init = async () => {
+      //   await wallet.refreshTransactions();
+      //   let r = await wallet.getTransactions();
+      //   setDataSource(r);
 
-     }
-     init();
+      // }
+      wallet.getTransactions().then(r => {
+        setDataSource(r);
+      });
+      return () => {      mounted = false    }
   },[wallet]);
 
   const isLightning = () => {

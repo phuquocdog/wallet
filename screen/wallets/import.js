@@ -17,6 +17,8 @@ import { BlueStorageContext } from '../../blue_modules/storage-context';
 
 import { PhuquocdogWallet } from '../../class/wallets/phuquocdog-wallet';
 import { Keyring } from '@polkadot/keyring';
+import { ApiPromise, WsProvider } from '@polkadot/api';
+
 
 
 const WalletsImport = () => {
@@ -57,6 +59,8 @@ const WalletsImport = () => {
   const importMnemonic = async importText => {
     setIsLoading(true);
     try {
+      const provider = new WsProvider(process.env.WS || 'wss://rpc.phuquoc.dog');
+      await ApiPromise.create({provider});
       const keyring = new Keyring({ type: 'sr25519' });
       const { address } = keyring.createFromUri(importText);
 

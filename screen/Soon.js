@@ -80,6 +80,9 @@ const Soon = () => {
     Linking.openURL('https://twitter.com/phuquoc_dog');
   };
 
+  const handleOnAirdropPress = () => {
+    Linking.openURL('https://phuquoc.dog/participate-in-the-one-billion-pqd-airdrop/')
+  }
   const handleOnDiscordPress = () => {
     Linking.openURL('https://discord.com/invite/HJEadfBYf8');
   };
@@ -117,6 +120,15 @@ const Soon = () => {
           <BlueButton onPress={handleOnRatePress} title={loc.settings.about_review + ' ⭐🙏'} />
         </View>
       </BlueCard>
+      <BlueListItem
+        leftIcon={{
+          name: 'twitter',
+          type: 'font-awesome',
+          color: '#1da1f2',
+        }}
+        onPress={handleOnAirdropPress}
+        title="Airdrop coin"
+      />
       <BlueListItem
         leftIcon={{
           name: 'twitter',
