@@ -6,36 +6,6 @@ import { useTheme } from '@react-navigation/native';
 import UnlockWith from './UnlockWith';
 import MainTabs from './screen/MainTabs'
 
-
-const defaultScreenOptions =
-  Platform.OS === 'ios'
-    ? ({ route, navigation }) => ({
-        gestureEnabled: true,
-        cardOverlayEnabled: true,
-        headerStatusBarHeight: navigation.dangerouslyGetState().routes.indexOf(route) > 0 ? 10 : undefined,
-        ...TransitionPresets.ModalPresentationIOS,
-        gestureResponseDistance: { vertical: Dimensions.get('window').height, horizontal: 50 },
-      })
-    : {
-        gestureEnabled: true,
-        cardOverlayEnabled: true,
-        ...TransitionPresets.ScaleFromCenterAndroid,
-      };
-const defaultStackScreenOptions =
-  Platform.OS === 'ios'
-    ? {
-        gestureEnabled: true,
-        cardOverlayEnabled: true,
-        headerStatusBarHeight: 10,
-      }
-    : {
-        gestureEnabled: true,
-        cardOverlayEnabled: true,
-        ...TransitionPresets.ScaleFromCenterAndroid,
-      };
-
-
-
 const UnlockWithScreenStack = createStackNavigator();
 const UnlockWithScreenRoot = () => (
   <UnlockWithScreenStack.Navigator name="UnlockWithScreenRoot" screenOptions={{ headerShown: false }}>
@@ -47,7 +17,7 @@ const UnlockWithScreenRoot = () => (
 
 const InitStack = createStackNavigator();
 const InitRoot = () => (
-  <InitStack.Navigator screenOptions={defaultScreenOptions} initialRouteName="UnlockWithScreenRoot">
+  <InitStack.Navigator  initialRouteName="UnlockWithScreenRoot">
     <InitStack.Screen name="UnlockWithScreenRoot" component={UnlockWithScreenRoot} options={{ headerShown: false, animationEnabled: false }}/>
     <InitStack.Screen name="MainTabs" component={MainTabs} options={{ headerShown: false, animationEnabled: false }}/>
   </InitStack.Navigator>

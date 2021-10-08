@@ -12,9 +12,11 @@ export class PhuquocdogWallet {
     this.userHasSavedExport = false;
     this.latestTransaction = 'Never'
   }
-
+  setData(props) {
+    
+  }
   async connect () {
-    const provider = new WsProvider(process.env.WS || 'wss://node.phuquoc.dog');
+    const provider = new WsProvider(process.env.WS || 'wss://rpc.phuquoc.dog');
     return await ApiPromise.create({provider});
       
   }

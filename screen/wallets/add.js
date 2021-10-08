@@ -33,6 +33,8 @@ import loc from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 import { mnemonicGenerate } from '@polkadot/util-crypto';
 import { Keyring } from '@polkadot/keyring';
+import { ApiPromise, WsProvider } from '@polkadot/api';
+
 
 import { PhuquocdogWallet } from '../../class/wallets/phuquocdog-wallet';
 
@@ -88,12 +90,15 @@ const WalletsAdd = () => {
     
     if (selectedWalletType === ButtonSelected.BTC) {
         alert('We have not supported at the moment!')
+        setIsLoading(false);
         return;
     }
     createWalletPQD();
   };
 
   const createWalletPQD = async () => {
+    const provider = new WsProvider(process.env.WS || 'wss://rpc.phuquoc.dog');
+    await ApiPromise.create({provider});
 
     const phrase = mnemonicGenerate(12);
     const keyring = new Keyring({ type: 'sr25519' });

@@ -9,13 +9,11 @@ import loc from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const PleaseBackup = () => {
+const PleaseBackup = ({navigation}) => {
   const { wallets } = useContext(BlueStorageContext);
   const [isLoading, setIsLoading] = useState(false);
   const { walletID } = useRoute().params;
-  //const [wallet, setWallet] = useState();
   const wallet = wallets.find(w => w.getID() === walletID);
-  const navigation = useNavigation();
   const { colors } = useTheme();
   const stylesHook = StyleSheet.create({
     flex: {
@@ -44,32 +42,9 @@ const PleaseBackup = () => {
 
   const handleBackButton = () => {
     navigation.popToTop();
-    return true;
   }
-  useEffect(() => {
-    Privacy.enableBlur();
-    return () => {
-      Privacy.disableBlur();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+ 
 
-
-  useEffect(() => {
-    (async () => {
-      console.log(wallet);
-      try {
-        const value = await AsyncStorage.getItem(walletID);
-        if (value !== null) {
-          setWallet(new PhuquocdogWallet(value));
-        }
-      } catch (error) {
-        console.log(error)
-        console.log('error wallet id: ' + walletID)
-        // Error retrieving data
-      }
-    })();
-  }, []);
 
   const renderSecret = () => {
     const component = [];

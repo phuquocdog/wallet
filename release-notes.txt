@@ -1,3 +1,5 @@
+* Fix encryptStorage 
+* Optimize code 
 * ix display botton tab 
 * Upgrade to react navigation 6.x 
 * Update samll send 
