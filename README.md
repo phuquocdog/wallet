@@ -37,6 +37,16 @@ npx react-native run-ios
 ```
 You should see your new app running in the iOS Simulator shortly.
 
+## Set the app icon
+
+```
+react-native set-icon --platform android --path path-to-image
+
+
+```
+
+https://github.com/bamlab/react-native-make/blob/master/docs/set-icon.md
+
 ## Author
 
 👤 **Phu Quoc Dog Developers**

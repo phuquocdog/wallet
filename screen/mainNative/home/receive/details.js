@@ -231,6 +231,7 @@ const ReceiveDetails = () => {
     
   };
 
+  //
   const renderCustomAmountModal = () => {
     return (
       <BottomModal isVisible={isCustomModalVisible} onClose={dismissCustomAmountModal}>

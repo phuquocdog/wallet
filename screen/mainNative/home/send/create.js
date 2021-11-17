@@ -49,10 +49,7 @@ export default class SendCreate extends Component {
     };
   }
 
-  componentDidMount() {
-    Privacy.enableBlur();
-    console.log('send/create - componentDidMount');
-  }
+ 
 
   exportTXN = async () => {
     const fileName = `${Date.now()}.txn`;
@@ -104,13 +101,10 @@ export default class SendCreate extends Component {
     }
   };
 
-  componentWillUnmount() {
-    Privacy.disableBlur();
-  }
+ 
 
   _renderItem = ({ index, item }) => {
     console.log('create.js')
-    console.log(item);
     return (
       <>
         <View>

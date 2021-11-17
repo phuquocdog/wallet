@@ -73,7 +73,7 @@ const SendDetails = () => {
   // if there are no funds for even Slow option, use 1 sat/byte fee
   //@TODO
   const feeRate = useMemo(() => {
-    return '0.01'
+    return '0.02'
   });
 
   
@@ -462,7 +462,7 @@ const SendDetails = () => {
               ) : (
                 <View style={[styles.feeRow, stylesHook.feeRow]}>
                   <Text style={stylesHook.feeValue}>
-                    0.01 PQD
+                    {feeRate} PQD
                   </Text>
                 </View>
               )}

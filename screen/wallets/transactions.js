@@ -108,21 +108,15 @@ const WalletTransactions = ({navigation}) => {
       title : 'Transactions'
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[wallet]);
+  },[]);
 
   useEffect(() => {
       let mounted = true
-      // const init = async () => {
-      //   await wallet.refreshTransactions();
-      //   let r = await wallet.getTransactions();
-      //   setDataSource(r);
-
-      // }
       wallet.getTransactions().then(r => {
         setDataSource(r);
       });
       return () => {      mounted = false    }
-  },[wallet]);
+  },[]);
 
   const isLightning = () => {
   

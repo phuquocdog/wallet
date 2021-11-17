@@ -95,7 +95,7 @@ const Soon = () => {
   };
   const handleOnRatePress = () => {
     const options = {
-      AppleAppID: '1376878040',
+      AppleAppID: '1590267060',
       GooglePackageName: 'dog.phuquoc.wallet',
       preferredAndroidMarket: AndroidMarket.Google,
       preferInApp: true,
